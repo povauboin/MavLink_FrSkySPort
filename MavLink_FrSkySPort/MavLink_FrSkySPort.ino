@@ -73,6 +73,25 @@ AccZ            ( Z Axis average vibration m/s?)
 //#define DEBUG_AVERAGE_VOLTAGE
 #define DEBUG_PARSE_STATUS_TEXT
 
+/// Wolke lipo-single-cell-monitor
+/*
+ *
+ * this will monitor 1 - 8 cells of your lipo
+ * it display the low cell, the high cell and the difference between this cells
+ * this will give you a quick overview about your lipo status and if the lipo is well balanced
+ *
+ * detailed informations and schematics here
+ *
+ */
+
+#define USE_SINGLE_CELL_MONITOR
+#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
+#ifdef USE_SINGLE_CELL_MONITOR
+// configure number of cells
+#define CELLCOUNT 6
+#endif
+/// ~ Wolke lipo-single-cell-monitor
+
 // ******************************************
 // Message #0  HEARTHBEAT 
 uint8_t    ap_type = 0;
@@ -166,6 +185,35 @@ int led = 13;
 
 mavlink_message_t msg;
 
+/// Wolke lipo-single-cell-monitor
+#ifdef USE_SINGLE_CELL_MONITOR
+
+//cell voltage divider. this is dependent from your resitor voltage divider network
+double LIPOCELL_1TO8[9] =
+{
+  234.899328859,
+  114.689333174,
+  76.5399737877,
+  58.1913499345,
+  45.8772770853,
+  39.0300415468,
+  0.00,
+  0.00
+};
+
+double individualcelldivider[CELLCOUNT+1];
+int32_t zelle[CELLCOUNT+1];
+double cell[CELLCOUNT+1];
+int32_t alllipocells = 0;
+int32_t lowzelle =0;
+int32_t highzelle =0;
+int32_t zellendiff =0;
+float lp_filter_val = 0.3; // this determines smoothness  - .0001 is max  0.99 is off (no smoothing)
+double smoothedVal[CELLCOUNT+1]; // this holds the last loop value
+
+#endif
+/// ~Wolke lipo-single-cell-monitor
+
 // ******************************************
 void setup()  {
 
@@ -184,11 +232,62 @@ void setup()  {
   pinMode(14,INPUT);
   analogReference(DEFAULT);
 
+  /// Wolke lipo-single-cell-monitor
+#ifdef USE_SINGLE_CELL_MONITOR
+  for(int i = 0; i < CELLCOUNT; i++){
+    zelle[i] = 0;
+    cell[i] = 0.0;
+    individualcelldivider[i] = LIPOCELL_1TO8[i];
+    smoothedVal[i] = 900.0;
+  }
+#endif
+  /// ~Wolke lipo-single-cell-monitor
+
 }
 
 
 // ******************************************
 void loop()  {
+
+  /// Wolke lipo-single-cell-monitor
+#ifdef USE_SINGLE_CELL_MONITOR
+  double aread[CELLCOUNT+1];
+  for(int i = 0; i < CELLCOUNT; i++){
+    //aread[i] = random(850, 860) ; test without lipo connected
+    aread[i] = analogRead(i);
+    // USE Low Pass filter
+    smoothedVal[i] = ( aread[i] * (1 - lp_filter_val)) + (smoothedVal[i]  *  lp_filter_val);
+    aread[i] = smoothedVal[i];
+
+    cell[i] = double (aread[i]/individualcelldivider[i]) * 1000;
+    if( i == 0 ) zelle[i] = round(cell[i]);
+    else zelle[i] =  round(cell[i] - cell[i-1]);
+  }
+  alllipocells = cell[CELLCOUNT -1];
+
+  highzelle = lowzelle = zelle[0];
+  for(int i = 1; i < CELLCOUNT; i++){
+    if(lowzelle  > zelle[i]) lowzelle = zelle[i];
+    if(highzelle < zelle[i]) highzelle = zelle[i];
+  }
+
+  zellendiff = highzelle - lowzelle;
+
+  for(int i = 0; i < CELLCOUNT; i++){
+    debugSerial.print( zelle[i]);
+    debugSerial.print( ", ");
+  }
+  debugSerial.print("niedrig ");
+  debugSerial.print(lowzelle);
+  debugSerial.print(", hoch ");
+  debugSerial.print(highzelle);
+  debugSerial.print(", diff ");
+  debugSerial.print(zellendiff);
+  debugSerial.print(", sum ");
+  debugSerial.println(alllipocells);
+#endif
+  /// ~Wolke lipo-single-cell-monitor
+
   uint16_t len;
 
   if(millis()-hb_timer > 1500) {
@@ -272,7 +371,11 @@ void _MavLink_receive() {
         break;
 break; 
       case MAVLINK_MSG_ID_SYS_STATUS :   // 1
+#ifdef USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR
+        ap_voltage_battery = alllipocells;
+#else
         ap_voltage_battery = mavlink_msg_sys_status_get_voltage_battery(&msg);  // 1 = 1mV
+#endif
         ap_current_battery = mavlink_msg_sys_status_get_current_battery(&msg);     // 1=10mA
         ap_battery_remaining = mavlink_msg_sys_status_get_battery_remaining(&msg); //battery capacity reported in %
         storeVoltageReading(ap_voltage_battery);
@@ -287,6 +390,10 @@ break;
         debugSerial.println();
 #endif
         uint8_t temp_cell_count;
+#ifdef USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR
+        ap_cell_count = CELLCOUNT;
+        break;
+#else
         if(ap_voltage_battery > 21000) temp_cell_count = 6;
         else if (ap_voltage_battery > 17500) temp_cell_count = 5;
         else if(ap_voltage_battery > 12750) temp_cell_count = 4;
@@ -296,6 +403,7 @@ break;
         if(temp_cell_count > ap_cell_count)
           ap_cell_count = temp_cell_count;
         break;
+#endif
 
       case MAVLINK_MSG_ID_GPS_RAW_INT:   // 24
         ap_fixtype = mavlink_msg_gps_raw_int_get_fix_type(&msg);                               // 0 = No GPS, 1 =No Fix, 2 = 2D Fix, 3 = 3D Fix

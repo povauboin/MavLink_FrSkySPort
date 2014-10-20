@@ -87,7 +87,11 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
         {
           // First 2 cells
           offset = 0x00 | ((ap_cell_count & 0xF)<<4);
+#ifdef USE_SINGLE_CELL_MONITOR
+          temp=((lowzelle/2) & 0xFFF);
+#else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
+#endif
           FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp << 8) | offset);  // Battery cell 0,1
         }
         break;
@@ -95,14 +99,22 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
         // Optional 3 and 4 Cells
         if(ap_cell_count > 2) {
           offset = 0x02 | ((ap_cell_count & 0xF)<<4);
+#ifdef USE_SINGLE_CELL_MONITOR
+          temp=((zellendiff/2) & 0xFFF);
+#else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
+#endif
           FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp << 8) | offset);  // Battery cell 2,3
         }
         break;
       case 2:    // Optional 5 and 6 Cells
         if(ap_cell_count > 4) {
           offset = 0x04 | ((ap_cell_count & 0xF)<<4);
+#ifdef USE_SINGLE_CELL_MONITOR
+          temp=((highzelle/2) & 0xFFF);
+#else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
+#endif
           FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp << 8) | offset);  // Battery cell 2,3
         }
         break;     
