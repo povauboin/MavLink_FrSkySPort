@@ -208,7 +208,7 @@ int32_t alllipocells = 0;
 int32_t lowzelle =0;
 int32_t highzelle =0;
 int32_t zellendiff =0;
-float lp_filter_val = 0.7; // this determines smoothness  - .0001 is max  0.99 is off (no smoothing)
+float lp_filter_val = 0.99; // this determines smoothness  - .0001 is max  0.99 is off (no smoothing)
 double smoothedVal[CELLCOUNT+1]; // this holds the last loop value
 
 #endif
@@ -219,7 +219,7 @@ void setup()  {
 
   FrSkySPort_Init();
   _MavLinkSerial.begin(57600);
-  debugSerial.begin(57600);
+  //debugSerial.begin(57600);
   MavLink_Connected = 0;
   MavLink_Connected_timer=millis();
   hb_timer = millis();
@@ -269,11 +269,15 @@ void loop()  {
     if(highzelle < zelle[i]) highzelle = zelle[i];
   }
   zellendiff = highzelle - lowzelle;
+  
   /*
   for(int i = 0; i < CELLCOUNT; i++){
+    
     debugSerial.print( zelle[i]);
-    debugSerial.print( ", ");
+    debugSerial.print( ", ");    
   }
+  debugSerial.println("-------");
+  
   debugSerial.print("niedrig ");
   debugSerial.print(lowzelle);
   debugSerial.print(", hoch ");

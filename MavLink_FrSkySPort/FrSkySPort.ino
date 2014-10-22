@@ -94,7 +94,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
-          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp2 << 8) | offset);  // Battery cell 0,1
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp2 << 20) | (temp << 8) | offset);  // Battery cell 0,1
         }
         break;
       case 1:    
@@ -107,7 +107,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
-          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp2 << 8) | offset);  // Battery cell 2,3
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp2 << 20) | (temp << 8) | offset);  // Battery cell 2,3
         }
         break;
       case 2:    // Optional 5 and 6 Cells
@@ -119,7 +119,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
-          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp2 << 8) | offset);  // Battery cell 2,3
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp2 << 20) | (temp << 8) | offset);  // Battery cell 2,3
         }
         break;     
       }
