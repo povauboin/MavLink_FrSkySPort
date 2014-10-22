@@ -24,10 +24,10 @@
 
 				Switches[1].FlightNumber=1 -- these correspond to the Logical Switches defined on the Radio - L1  is 1 =Stabilize
 				Switches[2].FlightNumber=3 -- these correspond to the Logical Switches defined on the Radio - L2  is 3 =Altitude Hold
-				Switches[3].FlightNumber=6 -- these correspond to the Logical Switches defined on the Radio - L3  is 6 =Stabilize
-				Switches[4].FlightNumber=1 -- these correspond to the Logical Switches defined on the Radio - L4  is 1 =Stabilize
-				Switches[5].FlightNumber=17 -- these correspond to the Logical Switches defined on the Radio - L5  is 17 =Position Hold
-				Switches[6].FlightNumber=12 -- these correspond to the Logical Switches defined on the Radio - L6  is 12 =Drift
+				Switches[3].FlightNumber=6 -- these correspond to the Logical Switches defined on the Radio - L3  is 6 =Loiter
+				Switches[4].FlightNumber=6 -- these correspond to the Logical Switches defined on the Radio - L4  is 6 =Loiter
+				Switches[5].FlightNumber=4 -- these correspond to the Logical Switches defined on the Radio - L5  is 4 =Auto
+				Switches[6].FlightNumber=8 -- these correspond to the Logical Switches defined on the Radio - L6  is 8 =Circle
 
 
 
@@ -392,11 +392,12 @@
 					local throttle = (power-(power%100))/100 --throttle reported
 					local tension=getValue(216) --
 					local current=getValue(217) ---
-					local consumption=getValue(218)--
+					local consumption=getValue(218)---
 					local watts=getValue(219) ---
-					local tension_min=getValue(246) --
+					local tension_min=getValue(246) ---
 					local current_max=getValue(247) ---
 					local watts_max=getValue(248)  ---
+					local cellminmin=getValue(214) --- 244 = cell-min-min
 
 					if battremaining~=consumption_max then
 					eff=battremaining*model.getTimer(0).value/(zerocap-battremaining)
@@ -423,6 +424,11 @@
 
 					lcd.drawNumber(57,32,current*10,MIDSIZE+PREC1)
 					lcd.drawText(lcd.getLastPos(),33,"A",0)
+					
+					lcd.drawNumber(28,47,cellminmin*100,MIDSIZE+PREC2)
+					local xposConsCell=lcd.getLastPos()
+					lcd.drawText(xposConsCell,47,"Cell",SMLSIZE)
+					lcd.drawText(xposConsCell,54,"min",SMLSIZE)
 
 					vgauge(64,19,8,45,throttle,100,GREY_DEFAULT+FILL_WHITE,0,0)
 					lcd.drawText(65,11,"T%",SMLSIZE)
