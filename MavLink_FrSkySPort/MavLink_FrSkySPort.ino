@@ -191,14 +191,14 @@ mavlink_message_t msg;
 //cell voltage divider. this is dependent from your resitor voltage divider network
 double LIPOCELL_1TO8[9] =
 {
-  234.899328859,
-  114.689333174,
-  76.5399737877,
-  58.1913499345,
-  45.8772770853,
-  39.0300415468,
-  0.00,
-  0.00
+  237.350026082,
+  116.006256517,
+  77.3509473318,
+  58.7966886122,
+  46.3358699051,
+  39.4176445024,
+  0.0,
+  0.0
 };
 
 double individualcelldivider[CELLCOUNT+1];
@@ -208,7 +208,7 @@ int32_t alllipocells = 0;
 int32_t lowzelle =0;
 int32_t highzelle =0;
 int32_t zellendiff =0;
-float lp_filter_val = 0.3; // this determines smoothness  - .0001 is max  0.99 is off (no smoothing)
+float lp_filter_val = 0.7; // this determines smoothness  - .0001 is max  0.99 is off (no smoothing)
 double smoothedVal[CELLCOUNT+1]; // this holds the last loop value
 
 #endif
@@ -219,7 +219,7 @@ void setup()  {
 
   FrSkySPort_Init();
   _MavLinkSerial.begin(57600);
-  //debugSerial.begin(57600);
+  debugSerial.begin(57600);
   MavLink_Connected = 0;
   MavLink_Connected_timer=millis();
   hb_timer = millis();
@@ -253,12 +253,10 @@ void loop()  {
 #ifdef USE_SINGLE_CELL_MONITOR
   double aread[CELLCOUNT+1];
   for(int i = 0; i < CELLCOUNT; i++){
-    //aread[i] = random(850, 860) ; test without lipo connected
     aread[i] = analogRead(i);
     // USE Low Pass filter
     smoothedVal[i] = ( aread[i] * (1 - lp_filter_val)) + (smoothedVal[i]  *  lp_filter_val);
-    aread[i] = smoothedVal[i];
-
+    aread[i] = round(smoothedVal[i]);
     cell[i] = double (aread[i]/individualcelldivider[i]) * 1000;
     if( i == 0 ) zelle[i] = round(cell[i]);
     else zelle[i] =  round(cell[i] - cell[i-1]);
@@ -270,9 +268,8 @@ void loop()  {
     if(lowzelle  > zelle[i]) lowzelle = zelle[i];
     if(highzelle < zelle[i]) highzelle = zelle[i];
   }
-
   zellendiff = highzelle - lowzelle;
-
+  /*
   for(int i = 0; i < CELLCOUNT; i++){
     debugSerial.print( zelle[i]);
     debugSerial.print( ", ");
@@ -285,6 +282,7 @@ void loop()  {
   debugSerial.print(zellendiff);
   debugSerial.print(", sum ");
   debugSerial.println(alllipocells);
+  */
 #endif
   /// ~Wolke lipo-single-cell-monitor
 

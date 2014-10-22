@@ -61,6 +61,7 @@ uint16_t sendValueFASVoltage = 0;
 void FrSkySPort_ProcessSensorRequest(uint8_t sensorId) 
 {
   uint32_t temp=0;
+  uint32_t temp2=0;
   uint8_t offset;
   switch(sensorId)
   {
@@ -88,11 +89,12 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
           // First 2 cells
           offset = 0x00 | ((ap_cell_count & 0xF)<<4);
 #ifdef USE_SINGLE_CELL_MONITOR
-          temp=((lowzelle/2) & 0xFFF);
+          temp=((zelle[0]/2) & 0xFFF);
+          temp2=((zelle[1]/2) & 0xFFF);
 #else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
-          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp << 8) | offset);  // Battery cell 0,1
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp2 << 8) | offset);  // Battery cell 0,1
         }
         break;
       case 1:    
@@ -100,22 +102,24 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
         if(ap_cell_count > 2) {
           offset = 0x02 | ((ap_cell_count & 0xF)<<4);
 #ifdef USE_SINGLE_CELL_MONITOR
-          temp=((zellendiff/2) & 0xFFF);
+          temp=((zelle[2]/2) & 0xFFF);
+          temp2=((zelle[3]/2) & 0xFFF);
 #else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
-          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp << 8) | offset);  // Battery cell 2,3
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp2 << 8) | offset);  // Battery cell 2,3
         }
         break;
       case 2:    // Optional 5 and 6 Cells
         if(ap_cell_count > 4) {
           offset = 0x04 | ((ap_cell_count & 0xF)<<4);
 #ifdef USE_SINGLE_CELL_MONITOR
-          temp=((highzelle/2) & 0xFFF);
+          temp=((zelle[4]/2) & 0xFFF);
+          temp2=((zelle[5]/2) & 0xFFF);
 #else
           temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
-          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp << 8) | offset);  // Battery cell 2,3
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp << 20) | (temp2 << 8) | offset);  // Battery cell 2,3
         }
         break;     
       }
