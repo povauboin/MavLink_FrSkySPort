@@ -181,7 +181,7 @@ LipoCell | R1 in series to cell | R2 to gnd | software  divider
 
 S1  4,2V |   1k  |  3k3 |  237.350026082
 
-S2  8,4V |   8k4 |  1k2 |  116.006256517
+S2  8,4V |   2k  |  1k2 |  116.006256517
 
 S3 12,6V |   3k6 |  1k2 |  77.3509473318
 
