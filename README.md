@@ -193,13 +193,13 @@ S6 25,2V |  11k  |  1k6 |  39.4176445024
 
 all needed resistors found in E24 series. the divider are defined in MavLink_FrSkySPort.ino. if you use other resistors all dividers must recalculated.
 
-![](https://raw.githubusercontent.com/wolke/MavLink_FrSkySPort/single-cell-lipo-voltage/resistor_network.jpg)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/resistor_network.jpg)
 
 
-![](https://raw.githubusercontent.com/wolke/MavLink_FrSkySPort/single-cell-lipo-voltage/CellsScreen.jpg)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/CellsScreen.jpg)
 
 
-![](https://raw.githubusercontent.com/wolke/MavLink_FrSkySPort/single-cell-lipo-voltage/MainScreen.jpg)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/MainScreen.jpg)
 
 
 
