@@ -191,12 +191,12 @@ mavlink_message_t msg;
 //cell voltage divider. this is dependent from your resitor voltage divider network
 double LIPOCELL_1TO8[9] =
 {
-  237.350026082,
-  116.006256517,
-  77.3509473318,
-  58.7966886122,
-  46.3358699051,
-  39.4176445024,
+  1897.85344189,// 10bit 237.350026082,
+  926.799312208,// 10bit 116.006256517,
+  618.198183455,// 10bit 77.3509473318,
+  470.134166514,// 10bit 58.7966886122,
+  370.317778975,// 10bit 46.3358699051,
+  315.045617465,// 10bit 39.4176445024,
   0.0,
   0.0
 };
@@ -230,6 +230,8 @@ void setup()  {
   pinMode(12,OUTPUT);
 
   pinMode(14,INPUT);
+  
+  analogReadResolution(13);
   analogReference(DEFAULT);
 
   /// Wolke lipo-single-cell-monitor
@@ -262,6 +264,12 @@ void loop()  {
     else zelle[i] =  round(cell[i] - cell[i-1]);
   }
   alllipocells = cell[CELLCOUNT -1];
+
+  /*
+  debugSerial.println(aread[0]);
+  debugSerial.println(cell[0]);
+  debugSerial.println("-------");
+  */
 
   highzelle = lowzelle = zelle[0];
   for(int i = 1; i < CELLCOUNT; i++){
