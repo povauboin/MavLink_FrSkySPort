@@ -397,7 +397,7 @@
 					local tension_min=getValue(246) ---
 					local current_max=getValue(247) ---
 					local watts_max=getValue(248)  ---
-					local cellminmin=getValue(214) --- 244 = cell-min-min
+					local cellmin=getValue(214) --- 214 = cell-min
 
 					if battremaining~=consumption_max then
 					eff=battremaining*model.getTimer(0).value/(zerocap-battremaining)
@@ -425,7 +425,7 @@
 					lcd.drawNumber(57,32,current*10,MIDSIZE+PREC1)
 					lcd.drawText(lcd.getLastPos(),33,"A",0)
 					
-					lcd.drawNumber(28,47,cellminmin*100,MIDSIZE+PREC2)
+					lcd.drawNumber(28,47,cellmin*100,MIDSIZE+PREC2)
 					local xposConsCell=lcd.getLastPos()
 					lcd.drawText(xposConsCell,47,"Cell",SMLSIZE)
 					lcd.drawText(xposConsCell,54,"min",SMLSIZE)
