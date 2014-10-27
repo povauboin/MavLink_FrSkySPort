@@ -63,6 +63,9 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
   uint32_t temp=0;
   uint32_t temp2=0;
   uint8_t offset;
+  
+  //ap_cell_count =2;
+  
   switch(sensorId)
   {
   #ifdef SENSOR_ID_FLVSS
@@ -119,9 +122,45 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #else
           temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
-          FrSkySPort_SendPackage(FR_ID_CELLS,(temp2 << 20) | (temp << 8) | offset);  // Battery cell 2,3
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp2 << 20) | (temp << 8) | offset);  // Battery cell 4,5
         }
-        break;     
+        break;
+        case 3:    // Optional 7 and 8 Cells
+        if(ap_cell_count > 6) {
+          offset = 0x06 | ((ap_cell_count & 0xF)<<4);
+#ifdef USE_SINGLE_CELL_MONITOR
+          temp=((zelle[5]/2) & 0xFFF);
+          temp2=((zelle[7]/2) & 0xFFF);
+#else
+          temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
+#endif
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp2 << 20) | (temp << 8) | offset);  // Battery cell 6,7
+        }
+        break;
+        case 4:    // Optional 9 and 10 Cells
+        if(ap_cell_count > 8) {
+          offset = 0x08 | ((ap_cell_count & 0xF)<<4);
+#ifdef USE_SINGLE_CELL_MONITOR
+          temp=((zelle[8]/2) & 0xFFF);
+          temp2=((zelle[9]/2) & 0xFFF);
+#else
+          temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
+#endif
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp2 << 20) | (temp << 8) | offset);  // Battery cell 8,9
+        }
+        break;
+        case 5:    // Optional 11 and 12 Cells
+         if(ap_cell_count > 10) {
+          offset = 0x0A | ((ap_cell_count & 0xF)<<4);
+#ifdef USE_SINGLE_CELL_MONITOR
+          temp=((zelle[10]/2) & 0xFFF);
+          temp2=((zelle[11]/2) & 0xFFF);
+#else
+          temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
+#endif
+          FrSkySPort_SendPackage(FR_ID_CELLS,(temp2 << 20) | (temp << 8) | offset);  // Battery cell 10,11
+        }
+        break;        
       }
       nextFLVSS++;
       if(nextFLVSS>2)

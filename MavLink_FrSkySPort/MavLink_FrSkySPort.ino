@@ -87,8 +87,8 @@ AccZ            ( Z Axis average vibration m/s?)
 #define USE_SINGLE_CELL_MONITOR
 #define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
 #ifdef USE_SINGLE_CELL_MONITOR
-// configure number of cells
-#define CELLCOUNT 6
+// configure number maximum connected analog inputs(cells) if you build an six cell network then MAXCELLS is 6 
+#define MAXCELLS 6
 #endif
 /// ~ Wolke lipo-single-cell-monitor
 
@@ -189,7 +189,7 @@ mavlink_message_t msg;
 #ifdef USE_SINGLE_CELL_MONITOR
 
 //cell voltage divider. this is dependent from your resitor voltage divider network
-double LIPOCELL_1TO8[9] =
+double LIPOCELL_1TO8[13] =
 {
   1897.85344189,// 10bit 237.350026082,
   926.799312208,// 10bit 116.006256517,
@@ -197,19 +197,22 @@ double LIPOCELL_1TO8[9] =
   470.134166514,// 10bit 58.7966886122,
   370.317778975,// 10bit 46.3358699051,
   315.045617465,// 10bit 39.4176445024,
+  0.0, // diverders 7-12 not defined because my network includes only 6 voltage dividers
+  0.0,
+  0.0,
+  0.0,
   0.0,
   0.0
 };
 
-double individualcelldivider[CELLCOUNT+1];
-int32_t zelle[CELLCOUNT+1];
-double cell[CELLCOUNT+1];
+double individualcelldivider[MAXCELLS+1];
+uint8_t analogread_threshold = 10;         // threshold for connected zelldetection in mV
+uint8_t cells_in_use = MAXCELLS;
+int32_t zelle[MAXCELLS+1];
+double cell[MAXCELLS+1];
 int32_t alllipocells = 0;
-int32_t lowzelle =0;
-int32_t highzelle =0;
-int32_t zellendiff =0;
 float lp_filter_val = 0.99; // this determines smoothness  - .0001 is max  0.99 is off (no smoothing)
-double smoothedVal[CELLCOUNT+1]; // this holds the last loop value
+double smoothedVal[MAXCELLS+1]; // this holds the last loop value
 
 #endif
 /// ~Wolke lipo-single-cell-monitor
@@ -236,7 +239,7 @@ void setup()  {
 
   /// Wolke lipo-single-cell-monitor
 #ifdef USE_SINGLE_CELL_MONITOR
-  for(int i = 0; i < CELLCOUNT; i++){
+  for(int i = 0; i < MAXCELLS; i++){
     zelle[i] = 0;
     cell[i] = 0.0;
     individualcelldivider[i] = LIPOCELL_1TO8[i];
@@ -253,9 +256,17 @@ void loop()  {
 
   /// Wolke lipo-single-cell-monitor
 #ifdef USE_SINGLE_CELL_MONITOR
-  double aread[CELLCOUNT+1];
-  for(int i = 0; i < CELLCOUNT; i++){
+  double aread[MAXCELLS+1];
+  for(int i = 0; i < MAXCELLS; i++){
     aread[i] = analogRead(i);
+    if(aread[i] < analogread_threshold ){
+      cells_in_use = i;
+      break;
+    }
+    else
+    {
+      cells_in_use = MAXCELLS;
+    }
     // USE Low Pass filter
     smoothedVal[i] = ( aread[i] * (1 - lp_filter_val)) + (smoothedVal[i]  *  lp_filter_val);
     aread[i] = round(smoothedVal[i]);
@@ -263,39 +274,25 @@ void loop()  {
     if( i == 0 ) zelle[i] = round(cell[i]);
     else zelle[i] =  round(cell[i] - cell[i-1]);
   }
-  alllipocells = cell[CELLCOUNT -1];
+  alllipocells = cell[cells_in_use -1];
 
   /*
   debugSerial.println(aread[0]);
   debugSerial.println(cell[0]);
   debugSerial.println("-------");
-  */
 
-  highzelle = lowzelle = zelle[0];
-  for(int i = 1; i < CELLCOUNT; i++){
-    if(lowzelle  > zelle[i]) lowzelle = zelle[i];
-    if(highzelle < zelle[i]) highzelle = zelle[i];
-  }
-  zellendiff = highzelle - lowzelle;
-
-  /*
-  for(int i = 0; i < CELLCOUNT; i++){
+  for(int i = 0; i < MAXCELLS; i++){
     
     debugSerial.print( zelle[i]);
     debugSerial.print( ", ");    
   }
-  /*
-  debugSerial.println("-------");
-  
-  debugSerial.print("niedrig ");
-  debugSerial.print(lowzelle);
-  debugSerial.print(", hoch ");
-  debugSerial.print(highzelle);
-  debugSerial.print(", diff ");
-  debugSerial.print(zellendiff);
+  debugSerial.print("cells in use: ");
+  debugSerial.print(cells_in_use);
+  debugSerial.print( ", ");
   debugSerial.print(", sum ");
   debugSerial.println(alllipocells);
   */
+  
 #endif
   /// ~Wolke lipo-single-cell-monitor
 
@@ -401,8 +398,8 @@ break;
         debugSerial.println();
 #endif
         uint8_t temp_cell_count;
-#ifdef USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR
-        ap_cell_count = CELLCOUNT;
+#ifdef USE_SINGLE_CELL_MONITOR
+        ap_cell_count = cells_in_use;
         break;
 #else
         if(ap_voltage_battery > 21000) temp_cell_count = 6;
