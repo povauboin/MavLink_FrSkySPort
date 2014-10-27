@@ -277,13 +277,14 @@ void loop()  {
     if(highzelle < zelle[i]) highzelle = zelle[i];
   }
   zellendiff = highzelle - lowzelle;
-  
+
   /*
   for(int i = 0; i < CELLCOUNT; i++){
     
     debugSerial.print( zelle[i]);
     debugSerial.print( ", ");    
   }
+  /*
   debugSerial.println("-------");
   
   debugSerial.print("niedrig ");
