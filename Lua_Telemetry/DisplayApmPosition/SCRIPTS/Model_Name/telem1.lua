@@ -450,11 +450,11 @@
 					local xposConsCell=lcd.getLastPos()
 					lcd.drawText(xposConsCell,47,"Cell",SMLSIZE)
 					lcd.drawText(xposConsCell,54,"min",SMLSIZE)
-
+-- debug
 					-- lcd.drawNumber(lcd.getLastPos() +2,56,apm_status_message.textnr,SMLSIZE)
 					-- lcd.drawNumber(lcd.getLastPos() +15,47,oldcellvoltage*100,SMLSIZE)
 					-- lcd.drawNumber(lcd.getLastPos() ,54,cellmin*100,SMLSIZE)
-
+-- debug
 					vgauge(64,19,8,45,throttle,100,GREY_DEFAULT+FILL_WHITE,0,0)
 					lcd.drawText(65,11,"T%",SMLSIZE)
 	end
