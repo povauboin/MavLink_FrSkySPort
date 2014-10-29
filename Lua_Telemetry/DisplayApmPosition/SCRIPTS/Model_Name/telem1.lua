@@ -70,6 +70,10 @@
   	local Engaged=0
 	local last_flight_mode = 0
 	local last_flight_mode_play = 0
+	local last_apm_message_played = 0
+	local lastimeplaysound=0
+	local repeattime=400 -- 4 sekunden
+	local oldcellvoltage=4.2
 
 	--Timer 0 is time while vehicle is armed
 
@@ -447,6 +451,10 @@
 					lcd.drawText(xposConsCell,47,"Cell",SMLSIZE)
 					lcd.drawText(xposConsCell,54,"min",SMLSIZE)
 
+					-- lcd.drawNumber(lcd.getLastPos() +2,56,apm_status_message.textnr,SMLSIZE)
+					-- lcd.drawNumber(lcd.getLastPos() +15,47,oldcellvoltage*100,SMLSIZE)
+					-- lcd.drawNumber(lcd.getLastPos() ,54,cellmin*100,SMLSIZE)
+
 					vgauge(64,19,8,45,throttle,100,GREY_DEFAULT+FILL_WHITE,0,0)
 					lcd.drawText(65,11,"T%",SMLSIZE)
 	end
@@ -530,7 +538,42 @@
 						apm_status_message.severity = 0
 						apm_status_message.textnr = 0
 						apm_status_message.timestamp = 0
+						last_apm_message_played = 0
 					end
+
+				-- play sound
+				if apm_status_message.textnr >0 then
+					if last_apm_message_played ~= apm_status_message.textnr then
+						local nameofsndfile = "SOUNDS/en/MSG"..apm_status_message.textnr..".wav"
+						playFile(nameofsndfile)
+						last_apm_message_played = apm_status_message.textnr
+					end
+				end
+
+				local newtime=getTime()
+				if newtime-lastimeplaysound>=repeattime then
+					local cellmin=getValue(214) --- 214 = cell-min
+					lastimeplaysound = newtime
+
+					if cellmin<=2.0 then --silent
+					elseif cellmin<=3.4 then --critical
+						playFile("/SOUNDS/en/CRICM.wav")
+						playNumber(cellmin*10, 0, PREC2)
+					elseif cellmin<=3.5 then --warnlevel
+						playFile("/SOUNDS/en/WARNCM.wav")
+						playNumber(cellmin*10, 0, PREC2)
+					elseif cellmin<=4.2 then --info level
+						if oldcellvoltage < cellmin then -- temp cell drop during aggressive flight
+							oldcellvoltage = cellmin
+						end
+						if oldcellvoltage*100 - cellmin*100 >= 10.0 then
+							playFile("/SOUNDS/en/CELLMIN.wav")
+							local rounded = round(cellmin*10)
+							playNumber(rounded, 0, PREC2)
+							oldcellvoltage = cellmin
+						end
+					end
+				end
 			end
 
 --FlightModes
@@ -594,7 +637,13 @@
 					
 				end
 			end
-	
+
+-- Math helper
+			local function round(num, idp)
+				local mult = 10^(idp or 0)
+				return math.floor(num * mult + 0.5) / mult
+			end
+
 --Background
 	local function background()
 
