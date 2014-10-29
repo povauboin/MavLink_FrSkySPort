@@ -638,12 +638,6 @@
 				end
 			end
 
--- Math helper
-			local function round(num, idp)
-				local mult = 10^(idp or 0)
-				return math.floor(num * mult + 0.5) / mult
-			end
-
 --Background
 	local function background()
 
