@@ -94,6 +94,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #ifdef USE_SINGLE_CELL_MONITOR
           temp=((zelle[0]/2) & 0xFFF);
           temp2=((zelle[1]/2) & 0xFFF);
+          if(cells_in_use == 0) temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #else
           temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
@@ -107,6 +108,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #ifdef USE_SINGLE_CELL_MONITOR
           temp=((zelle[2]/2) & 0xFFF);
           temp2=((zelle[3]/2) & 0xFFF);
+          if(cells_in_use == 0) temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #else
           temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
@@ -119,6 +121,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #ifdef USE_SINGLE_CELL_MONITOR
           temp=((zelle[4]/2) & 0xFFF);
           temp2=((zelle[5]/2) & 0xFFF);
+          if(cells_in_use == 0) temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #else
           temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
@@ -131,6 +134,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #ifdef USE_SINGLE_CELL_MONITOR
           temp=((zelle[5]/2) & 0xFFF);
           temp2=((zelle[7]/2) & 0xFFF);
+          if(cells_in_use == 0) temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #else
           temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
@@ -143,6 +147,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #ifdef USE_SINGLE_CELL_MONITOR
           temp=((zelle[8]/2) & 0xFFF);
           temp2=((zelle[9]/2) & 0xFFF);
+          if(cells_in_use == 0) temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #else
           temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif
@@ -155,6 +160,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 #ifdef USE_SINGLE_CELL_MONITOR
           temp=((zelle[10]/2) & 0xFFF);
           temp2=((zelle[11]/2) & 0xFFF);
+          if(cells_in_use == 0) temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #else
           temp2=temp=((sendValueFlvssVoltage/(ap_cell_count * 2)) & 0xFFF);
 #endif

@@ -206,7 +206,7 @@ double LIPOCELL_1TO8[13] =
 };
 
 double individualcelldivider[MAXCELLS+1];
-uint8_t analogread_threshold = 10;         // threshold for connected zelldetection in mV
+uint8_t analogread_threshold = 100;         // threshold for connected zelldetection in mV
 uint8_t cells_in_use = MAXCELLS;
 int32_t zelle[MAXCELLS+1];
 double cell[MAXCELLS+1];
@@ -280,18 +280,18 @@ void loop()  {
   debugSerial.println(aread[0]);
   debugSerial.println(cell[0]);
   debugSerial.println("-------");
-
+ 
   for(int i = 0; i < MAXCELLS; i++){
     
-    debugSerial.print( zelle[i]);
+    debugSerial.print( aread[i]);
     debugSerial.print( ", ");    
-  }
+  }  
   debugSerial.print("cells in use: ");
   debugSerial.print(cells_in_use);
   debugSerial.print( ", ");
   debugSerial.print(", sum ");
   debugSerial.println(alllipocells);
-  */
+   */
   
 #endif
   /// ~Wolke lipo-single-cell-monitor
@@ -381,6 +381,8 @@ break;
       case MAVLINK_MSG_ID_SYS_STATUS :   // 1
 #ifdef USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR
         ap_voltage_battery = alllipocells;
+        //no lipo to network connected use reported mavlink_msg voltage
+        if(cells_in_use == 0) ap_voltage_battery = mavlink_msg_sys_status_get_voltage_battery(&msg);
 #else
         ap_voltage_battery = mavlink_msg_sys_status_get_voltage_battery(&msg);  // 1 = 1mV
 #endif
@@ -400,6 +402,16 @@ break;
         uint8_t temp_cell_count;
 #ifdef USE_SINGLE_CELL_MONITOR
         ap_cell_count = cells_in_use;
+        if(cells_in_use == 0){
+          if(ap_voltage_battery > 21000) temp_cell_count = 6;
+          else if (ap_voltage_battery > 17500) temp_cell_count = 5;
+          else if(ap_voltage_battery > 12750) temp_cell_count = 4;
+          else if(ap_voltage_battery > 8500) temp_cell_count = 3;
+          else if(ap_voltage_battery > 4250) temp_cell_count = 2;
+          else temp_cell_count = 0;
+          if(temp_cell_count > ap_cell_count)
+            ap_cell_count = temp_cell_count;          
+        }
         break;
 #else
         if(ap_voltage_battery > 21000) temp_cell_count = 6;
