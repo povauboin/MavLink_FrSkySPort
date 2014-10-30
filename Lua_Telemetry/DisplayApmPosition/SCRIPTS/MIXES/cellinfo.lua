@@ -21,13 +21,17 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 	local drop = celldropmvolts/10
 	local hornfile=""
 	if horn>0 then
-		local hornfile="/SOUNDS/en/ALARM"..horn.."K.wav"
+		hornfile="SOUNDS/en/ALARM"..horn.."K.wav"
 	end
 
 	local newtime=getTime()
 		if newtime-lastimeplaysound>=repeattime then
 		local cellmin=getValue(214) --- 214 = cell-min
 		lastimeplaysound = newtime
+		
+		local firstitem = math.floor(cellmin)
+		local lastitem = (cellmin-firstitem) * 100
+		
 		if cellmin<=2.0 then --silent
 		elseif cellmin<=voltcritcal/1000 then --critical
 			if horn>0 then
