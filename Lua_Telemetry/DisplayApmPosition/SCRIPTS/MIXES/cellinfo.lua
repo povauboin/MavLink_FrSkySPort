@@ -31,10 +31,9 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 		
 		local firstitem = math.floor(cellmin)
 		local miditem = math.floor((cellmin-firstitem) * 10)
-		local temp = (cellmin-firstitem) * 10
-		local lastitem = (temp-math.floor(temp)) *10
+		local lastitem = round((((cellmin-firstitem) * 10)-math.floor(((cellmin-firstitem) * 10))) *10)
 		
-		if cellmin<=1.0 then --silent
+		if cellmin<=2.0 then --silent
 		elseif cellmin<=voltcritcal/1000 then --critical
 			if horn>0 then
 				playFile(hornfile)
@@ -45,7 +44,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 			playNumber(firstitem, 0, 0)
 			playFile("/SOUNDS/en/POINT.wav")
 			playNumber(miditem, 0, 0)
-			playNumber(lastitem, 1, 0)
+			playNumber(lastitem, 0, 0)
 			--local rounded = round(cellmin*10)
 			--playNumber(rounded, 0)
 		elseif cellmin<=voltwarnlevel/1000 then --warnlevel
@@ -53,7 +52,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 			playNumber(firstitem, 0, 0)
 			playFile("/SOUNDS/en/POINT.wav")
 			playNumber(miditem, 0, 0)
-			playNumber(lastitem, 1, 0)
+			playNumber(lastitem, 0, 0)
 			--local rounded = round(cellmin*10)
 			--playNumber(rounded, 0, PREC2)
 		elseif cellmin<=4.2 then --info level
@@ -65,7 +64,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 				playNumber(firstitem, 0, 0)
 				playFile("/SOUNDS/en/POINT.wav")
 				playNumber(miditem, 0, 0)
-				playNumber(lastitem, 1, 0)
+				playNumber(lastitem, 0, 0)
 				--local rounded = round(cellmin*10)
 				--playNumber(rounded, 0, PREC2)
 				oldcellvoltage = cellmin
