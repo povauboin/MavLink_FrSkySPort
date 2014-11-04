@@ -1,6 +1,5 @@
 
 local inputs = { {"Crit., mV", VALUE,3000,3500,3400}, {"Use Horn", VALUE, 0, 3, 0}, {"Warn, mV", VALUE, 3100, 3800, 3500}, {"Rep, Sec", VALUE, 3, 30, 4},{"Drop, mV", VALUE, 1, 500, 100} }
---local outputs = { "Vcel" }
 
 local lastimeplaysound=0
 local repeattime=400 -- 4 sekunden
@@ -26,7 +25,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 
 	local newtime=getTime()
 		if newtime-lastimeplaysound>=repeattime then
-		local cellmin=getValue(214) --- 214 = cell-min
+		local cellmin=getValue(214) + 0.0001 --- 214 = cell-min
 		lastimeplaysound = newtime
 		
 		local firstitem = math.floor(cellmin)
@@ -44,7 +43,9 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 			playNumber(firstitem, 0, 0)
 			playFile("/SOUNDS/en/POINT.wav")
 			playNumber(miditem, 0, 0)
-			playNumber(lastitem, 0, 0)
+			if lastitem ~= 0 then
+				playNumber(lastitem, 0, 0)
+			end
 			--local rounded = round(cellmin*10)
 			--playNumber(rounded, 0)
 		elseif cellmin<=voltwarnlevel/1000 then --warnlevel
@@ -52,19 +53,23 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 			playNumber(firstitem, 0, 0)
 			playFile("/SOUNDS/en/POINT.wav")
 			playNumber(miditem, 0, 0)
-			playNumber(lastitem, 0, 0)
+			if lastitem ~= 0 then
+				playNumber(lastitem, 0, 0)
+			end
 			--local rounded = round(cellmin*10)
 			--playNumber(rounded, 0, PREC2)
 		elseif cellmin<=4.2 then --info level
 			if oldcellvoltage < cellmin then -- temp cell drop during aggressive flight
-			oldcellvoltage = cellmin
+				oldcellvoltage = cellmin
 			end
 			if oldcellvoltage*100 - cellmin*100 >= drop then
 				playFile("/SOUNDS/en/CELLMIN.wav")
 				playNumber(firstitem, 0, 0)
 				playFile("/SOUNDS/en/POINT.wav")
 				playNumber(miditem, 0, 0)
-				playNumber(lastitem, 0, 0)
+				if lastitem ~= 0 then
+					playNumber(lastitem, 0, 0)
+				end
 				--local rounded = round(cellmin*10)
 				--playNumber(rounded, 0, PREC2)
 				oldcellvoltage = cellmin
