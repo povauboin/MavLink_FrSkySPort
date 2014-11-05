@@ -4,6 +4,14 @@ local inputs = { {"Crit., mV", VALUE,3000,3500,3400}, {"Use Horn", VALUE, 0, 3, 
 local lastimeplaysound=0
 local repeattime=400 -- 4 sekunden
 local oldcellvoltage=4.2
+local drop = 0
+local hornfile=""
+local cellmin=0
+local firstitem=0
+local miditem=0
+local lastitem=0
+local mult=0
+local newtime=0
 
 local function init_func()
 	lastimeplaysound=getTime()
@@ -11,26 +19,26 @@ end
 
 -- Math Helper
 local function round(num, idp)
-	local mult = 10^(idp or 0)
+	mult = 10^(idp or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
 
 local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, celldropmvolts)
 	repeattime = repeattimeseconds*100
-	local drop = celldropmvolts/10
-	local hornfile=""
+	drop = celldropmvolts/10
+	hornfile=""
 	if horn>0 then
 		hornfile="SOUNDS/en/ALARM"..horn.."K.wav"
 	end
 
-	local newtime=getTime()
+	newtime=getTime()
 	if newtime-lastimeplaysound>=repeattime then
-		local cellmin=getValue(214) + 0.0001 --- 214 = cell-min
+		cellmin=getValue(214) + 0.0001 --- 214 = cell-min
 		lastimeplaysound = newtime
 		
-		local firstitem = math.floor(cellmin)
-		local miditem = math.floor((cellmin-firstitem) * 10)
-		local lastitem = round((((cellmin-firstitem) * 10)-math.floor(((cellmin-firstitem) * 10))) *10)
+		firstitem = math.floor(cellmin)
+		miditem = math.floor((cellmin-firstitem) * 10)
+		lastitem = round((((cellmin-firstitem) * 10)-math.floor(((cellmin-firstitem) * 10))) *10)
 	  
 		if cellmin<=2.0 then --silent
 		elseif cellmin<=voltcritcal/1000 then --critical
