@@ -24,14 +24,14 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 	end
 
 	local newtime=getTime()
-		if newtime-lastimeplaysound>=repeattime then
+	if newtime-lastimeplaysound>=repeattime then
 		local cellmin=getValue(214) + 0.0001 --- 214 = cell-min
 		lastimeplaysound = newtime
 		
 		local firstitem = math.floor(cellmin)
 		local miditem = math.floor((cellmin-firstitem) * 10)
 		local lastitem = round((((cellmin-firstitem) * 10)-math.floor(((cellmin-firstitem) * 10))) *10)
-		
+	  
 		if cellmin<=2.0 then --silent
 		elseif cellmin<=voltcritcal/1000 then --critical
 			if horn>0 then
@@ -46,8 +46,6 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 			if lastitem ~= 0 then
 				playNumber(lastitem, 0, 0)
 			end
-			--local rounded = round(cellmin*10)
-			--playNumber(rounded, 0)
 		elseif cellmin<=voltwarnlevel/1000 then --warnlevel
 			playFile("/SOUNDS/en/WARNCM.wav")
 			playNumber(firstitem, 0, 0)
@@ -56,8 +54,6 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 			if lastitem ~= 0 then
 				playNumber(lastitem, 0, 0)
 			end
-			--local rounded = round(cellmin*10)
-			--playNumber(rounded, 0, PREC2)
 		elseif cellmin<=4.2 then --info level
 			if oldcellvoltage < cellmin then -- temp cell drop during aggressive flight
 				oldcellvoltage = cellmin
@@ -70,14 +66,10 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 				if lastitem ~= 0 then
 					playNumber(lastitem, 0, 0)
 				end
-				--local rounded = round(cellmin*10)
-				--playNumber(rounded, 0, PREC2)
 				oldcellvoltage = cellmin
 			end
 		end
 	end
 end
 
-
---return {run=run_func, input=inputs, output=outputs}
 return {run=run_func, init=init_func, input=inputs}
