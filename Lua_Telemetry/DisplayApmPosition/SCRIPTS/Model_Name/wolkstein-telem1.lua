@@ -40,6 +40,10 @@
 	local last_flight_mode = 0
 	local last_flight_mode_play = 0
 	local last_apm_message_played = 0
+	local vh1, vy1, mult, integHead, rangle, rx2, rx1, ry1, ry2
+	local power, battremaining, throttle, tension, current, consumption
+ 	local watts, tension_min, current_max, watts_max, cellmin, xposCons, xposConsCell
+	local t2, nameofsndfile
 	
 	--Timer 0 is time while vehicle is armed
 	
@@ -150,12 +154,13 @@
 	end
 
 --Aux Display functions and panels
+
 	local function vgauge(vx, vy, vw, vh, value, vmax, look, max, min)  -- look use GREY_DEFAULT+FILL_WHITE
 	  if value>vmax then
 	    vmax=value
 	  end
-	  local vh1 =(vh * value / vmax)
-	  local vy1 = (vy + (vh - vh1))
+	  vh1 =(vh * value / vmax)
+	  vy1 = (vy + (vh - vh1))
 	  lcd.drawFilledRectangle(vx, vy1, vw, vh1, look)
 	  lcd.drawRectangle(vx, vy ,vw, vh,SOLID,2)
 	  
@@ -169,7 +174,7 @@
 	  end
 	  
 	  if min~=0 then
-	    local vh1 =(vh * min / vmax)
+	    vh1 =(vh * min / vmax)
 	    vy1 = (vy + (vh - vh1))	
 	    lcd.drawPixmap (vx+vw,vy1-3,"/SCRIPTS/BMP/larrow.bmp")	
 	    --lcd.drawLine(vx,vy1,vx+vw,vy1,SOLID,2)
@@ -177,7 +182,7 @@
 	end
 
 	local function round(num, idp)
-		local mult = 10^(idp or 0)
+		mult = 10^(idp or 0)
 		return math.floor(num * mult + 0.5) / mult
 	end
 
@@ -193,11 +198,13 @@
 	  
 	  if telem_lock >= 3 then
 	    lcd.drawText (171, 9, "3D",DBLSIZE)
-	    lcd.drawText (192, 21, telem_sats.."sat", 0)
+	    lcd.drawNumber (192, 21, telem_sats, 0)
+	    lcd.drawText (lcd.getLastPos(), 21, "sat", 0)
 	    
 	  elseif telem_lock>1 then
 	    lcd.drawText (171, 9, "2D", DBLSIZE)
-	    lcd.drawText (192, 21, telem_sats.."sat", 0)
+	    lcd.drawNumber (192, 21, telem_sats, 0)
+	    lcd.drawText (lcd.getLastPos(), 21, "sat", 0)
 	  else
 	    lcd.drawText (171, 9, "NO", BLINK+INVERS+DBLSIZE)
 	    lcd.drawText (192, 21, "----", 0)
@@ -228,7 +235,7 @@
 	    
 	    if headtoh < 0 then
 	      headtoh = headtoh+360				
-	      local integHead=round(headtoh/45)
+	      integHead=round(headtoh/45)
 	      lcd.drawText(171,37,"Z1=", 0)
 	      lcd.drawNumber(lcd.getLastPos(),37,z1*10000000,0 + PREC2 + LEFT)
 	      lcd.drawText(171,47,"Z2=", 0)
@@ -244,7 +251,8 @@
 	    lcd.drawText(171,37,"No",MIDSIZE)
 	    lcd.drawText(171,50,"Cords",MIDSIZE)
 	  end
-	  lcd.drawText(180, 29, getValue(212).."m", 0)
+	  lcd.drawNumber(180, 29, getValue(212), 0)
+	  lcd.drawText(lcd.getLastPos(), 29, "m", 0)
 	end
 
 -- Speed Panel
@@ -339,11 +347,11 @@
 -- Roll Panel
 	local function rollpanel()
 	  
-	  local rangle=math.rad(getValue(204)*10)
-	  local rx2=145
-	  local rx1=100
-	  local ry1=round(32-20*math.sin(rangle))
-	  local ry2=round(32+20*math.sin(rangle))
+	  rangle=math.rad(getValue(204)*10)
+	  rx2=145
+	  rx1=100
+	  ry1=round(32-20*math.sin(rangle))
+	  ry2=round(32+20*math.sin(rangle))
 	  
 	  lcd.drawLine (rx1,ry1-1 ,rx2, ry2-1, SOLID, 2)
 	  lcd.drawLine (rx1,ry1 ,rx2, ry2, SOLID, 2)
@@ -369,26 +377,29 @@
 	  lcd.drawText(94, 0, " T:", INVERS)
 	  lcd.drawTimer(lcd.getLastPos(),0,model.getTimer(1).value,INVERS)
 	  
-	  lcd.drawText(134, 0, "TX:"..getValue(189).."v", INVERS)
+	  lcd.drawText(134, 0, "TX:", INVERS)
+	  lcd.drawNumber(lcd.getLastPos(), 0, getValue(189),0+INVERS)
+	  lcd.drawText(lcd.getLastPos(), 0, "v", INVERS)
 	  
-	  lcd.drawText(172, 0, "rssi:" .. getValue(200), INVERS)
+	  lcd.drawText(172, 0, "rssi:", INVERS)
+	  lcd.drawNumber(lcd.getLastPos(), 0, getValue(200),0+INVERS)
 	end
 
 --Power Panel
 	local function powerpanel()
 	  --Used on power panel -- still to check if all needed
 	  
-	  local power=getValue(207) 
-	  local battremaining = (power%100)*cap_est/zerocap  --battery % remaining reported adjusted to initial reading
-	  local throttle = (power-(power%100))/100 --throttle reported
-	  local tension=getValue(216) --
-	  local current=getValue(217) ---
-	  local consumption=getValue(218)---
-	  local watts=getValue(219) ---
-	  local tension_min=getValue(246) ---
-	  local current_max=getValue(247) ---
-	  local watts_max=getValue(248)  ---
-	  local cellmin=getValue(214) --- 214 = cell-min
+	  power=getValue(207) 
+	  battremaining = (power%100)*cap_est/zerocap  --battery % remaining reported adjusted to initial reading
+	  throttle = (power-(power%100))/100 --throttle reported
+	  tension=getValue(216) --
+	  current=getValue(217) ---
+	  consumption=getValue(218)---
+	  watts=getValue(219) ---
+	  tension_min=getValue(246) ---
+	  current_max=getValue(247) ---
+	  watts_max=getValue(248)  ---
+	  cellmin=getValue(214) --- 214 = cell-min
 	  
 	  if battremaining~=consumption_max then
 	    eff=battremaining*model.getTimer(0).value/(zerocap-battremaining)
@@ -403,7 +414,7 @@
 	  lcd.drawText(lcd.getLastPos(),9,"%",MIDSIZE)
 	  
 	  lcd.drawNumber(28,21,consumption,MIDSIZE)
-	  local xposCons=lcd.getLastPos()
+	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,20,"m",SMLSIZE)
 	  lcd.drawText(xposCons,26,"Ah",SMLSIZE)
 	  
@@ -417,7 +428,7 @@
 	  lcd.drawText(lcd.getLastPos(),33,"A",0)
 	  
 	  lcd.drawNumber(28,47,cellmin*100,MIDSIZE+PREC2)
-	  local xposConsCell=lcd.getLastPos()
+	  xposConsCell=lcd.getLastPos()
 	  lcd.drawText(xposConsCell,47,"Cell",SMLSIZE)
 	  lcd.drawText(xposConsCell,54,"min",SMLSIZE)
 	  
@@ -454,7 +465,7 @@
 --APM Armed and errors		
 	local function armed_status()
 	  
-	  local t2 = getValue(210)
+	  t2 = getValue(210)
 	  apmarmed = t2%0x02;
 	  
 	  if lastarmed~=apmarmed then
@@ -511,7 +522,7 @@
 	  -- play sound
 	  if apm_status_message.textnr >0 then
 	    if last_apm_message_played ~= apm_status_message.textnr then
-	      local nameofsndfile = "SOUNDS/en/MSG"..apm_status_message.textnr..".wav"
+	      nameofsndfile = "SOUNDS/en/MSG"..apm_status_message.textnr..".wav"
 	      playFile(nameofsndfile)
 	      last_apm_message_played = apm_status_message.textnr
 	    end
