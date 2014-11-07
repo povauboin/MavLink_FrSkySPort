@@ -41,10 +41,24 @@
 	local last_flight_mode = 0
 	local last_flight_mode_play = 0
 	local last_apm_message_played = 0
-	local vh1, vy1, mult, integHead, rangle, rx2, rx1, ry1, ry2
+	local vh1, vy1, mult, rangle, rx2, rx1, ry1, ry2
 	local power, battremaining, throttle, tension, current, consumption
  	local watts, tension_min, current_max, watts_max, cellmin, xposCons, xposConsCell
-	local t2, nameofsndfile
+	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp,radarytmp 
+	
+
+	-- Temporary text attribute
+	local FORCE = 0x02 -- draw ??? line or rectangle
+	local X1, Y1, X2, Y2
+	local sinCorr, cosCorr, radTmp
+	local CenterXcolArrow = 189
+	local CenterYrowArrow = 41
+	local offsetX = 0
+	local offsetY = 0
+	local divtmp = 1
+	local upppp = 20480
+	local divvv = 2048 --12 mal teilen
+
 	
 	--Timer 0 is time while vehicle is armed
 	
@@ -153,6 +167,37 @@
 	  A4.alarm2 = -180
 	  model.setTelemetryChannel(3, A4)
 	end
+	
+	local arrowLine = {
+	  {-4, 5, 0, -4},
+	  {-3, 5, 0, -3},
+	  
+	  --{0, 7, 0,-7},
+	  
+	  {3, 5, 0, -3},
+	  {4, 5, 0, -4}
+	}
+	
+-- draw arrow
+	
+	local function drawArrow()
+	  	  
+	  sinCorr = math.sin(math.rad(getValue(223)-prearmheading))
+	  cosCorr = math.cos(math.rad(getValue(223)-prearmheading))
+	  
+	  for index, point in pairs(arrowLine) do
+	    X1 = CenterXcolArrow + offsetX + math.floor(point[1] * cosCorr - point[2] * sinCorr + 0.5)
+	    Y1 = CenterYrowArrow + offsetY + math.floor(point[1] * sinCorr + point[2] * cosCorr + 0.5)
+	    X2 = CenterXcolArrow + offsetX + math.floor(point[3] * cosCorr - point[4] * sinCorr + 0.5)
+	    Y2 = CenterYrowArrow + offsetY + math.floor(point[3] * sinCorr + point[4] * cosCorr + 0.5)
+	    
+	    if X1 == X2 and Y1 == Y2 then
+	      lcd.drawPoint(X1, Y1, SOLID, FORCE)
+	    else
+	      lcd.drawLine (X1, Y1, X2, Y2, SOLID, FORCE)
+	    end
+	  end	  
+	end
 
 --Aux Display functions and panels
 
@@ -198,25 +243,34 @@
 	  telem_sats = (telem_t1 - (telem_t1%10))/10
 	  
 	  if telem_lock >= 3 then
-	    lcd.drawText (171, 9, "3D",DBLSIZE)
-	    lcd.drawNumber (192, 21, telem_sats, 0)
-	    lcd.drawText (lcd.getLastPos(), 21, "sat", 0)
+	    lcd.drawText (168, 10, "3D",0)
+	    lcd.drawNumber (195, 10, telem_sats, 0+LEFT)
+	    lcd.drawText (lcd.getLastPos(), 10, "S", 0)
 	    
 	  elseif telem_lock>1 then
-	    lcd.drawText (171, 9, "2D", DBLSIZE)
-	    lcd.drawNumber (192, 21, telem_sats, 0)
-	    lcd.drawText (lcd.getLastPos(), 21, "sat", 0)
+	    lcd.drawText (168, 10, "2D", 0)
+	    lcd.drawNumber (195, 10, telem_sats, 0+LEFT )
+	    lcd.drawText (lcd.getLastPos(), 10, "S", 0)
 	  else
-	    lcd.drawText (171, 9, "NO", BLINK+INVERS+DBLSIZE)
-	    lcd.drawText (192, 21, "----", 0)
+	    lcd.drawText (168, 10, "NO", 0+BLINK+INVERS)
+	    lcd.drawText (195, 10, "--S",0)
 	  end
 	  
 	  hdop=round(getValue(203))
 	  if hdop <20 then
-	    lcd.drawNumber (196, 9, hdop, 0+PREC1+LEFT+MIDSIZE )
+	    lcd.drawNumber (180, 10, hdop, PREC1+LEFT+SMLSIZE )
 	  else
-	    lcd.drawNumber (196, 9, hdop, 0+PREC1+LEFT+BLINK+INVERS+MIDSIZE)
+	    lcd.drawNumber (180, 10, hdop, PREC1+LEFT+BLINK+INVERS+SMLSIZE)
 	  end
+	
+	  -- pilot lat  52.027536, 8.513764
+	  
+	  -- flieger   52.027522, 8.515386
+	  -- 110,75 mm
+	  --pilotlat = 52.027536 --getValue("pilot-latitude")
+	  --pilotlon = 8.513764--getValue("pilot-longitude")
+	  --curlat = 52.027536--getValue("latitude")
+	  --curlon = 8.521737--getValue("longitude")
 	  
 	  pilotlat = getValue("pilot-latitude")
 	  pilotlon = getValue("pilot-longitude")
@@ -232,28 +286,69 @@
 	      headfromh=headfromh+360
 	    end
 	    
-	    headtoh = headfromh-180
+	    headtoh = headfromh
 	    
 	    if headtoh < 0 then
-	      headtoh = headtoh+360				
-	      integHead=round(headtoh/45)
-	      lcd.drawText(171,37,"Z1=", 0)
-	      lcd.drawNumber(lcd.getLastPos(),37,z1*10000000,0 + PREC2 + LEFT)
-	      lcd.drawText(171,47,"Z2=", 0)
-	      lcd.drawNumber(lcd.getLastPos(),47,z2*10000000,0 + PREC2 + LEFT)
-	      lcd.drawText(171,57,"HT=", 0)
-	      lcd.drawNumber(lcd.getLastPos(),57,headtoh,0 + LEFT)
-	      
+	      headtoh = headtoh+360
 	    end
+	    -- use prearmheading later to rotate cordinates relative to copter.
+	    radarx=z1*6358364.9098634 -- meters for x absolut to center(homeposition)
+	    radary=z2*6358364.9098634 -- meters for y absolut to center(homeposition)	    
+	    
+	    radTmp = math.rad(prearmheading)
+	    radarxtmp = radarx * math.cos(prearmheading) - radary * math.sin(prearmheading)
+	    radarytmp =  radarx* math.sin(prearmheading) + radary * math.cos(prearmheading)
+	    
+	    if math.abs(radarxtmp) >= math.abs(radarytmp) then --divtmp
+	      for i = 13 ,1,-1 do
+		if math.abs(radarxtmp) >= upppp then
+		  divtmp=divvv
+		  break
+		end
+		divvv = divvv/2
+		upppp = upppp/2
+	      end
+	    else
+	      for i = 13 ,1,-1 do
+		if math.abs(radarytmp) >= upppp then
+		  divtmp=divvv
+		  break
+		end
+		divvv = divvv/2
+		upppp = upppp/2
+	      end	      
+	    end
+	    
+	    upppp = 20480
+	    divvv = 2048 --12 mal teilen	    
+	    
+	    offsetX = radarxtmp / divtmp
+	    offsetY = (radarytmp / divtmp)*-1
+	    
+	    --lcd.drawText(171,25,"X=",SMLSIZE )
+	    --lcd.drawNumber(lcd.getLastPos(),25,offsetX,SMLSIZE + LEFT)
+	    --lcd.drawText(171,47,"Y=", SMLSIZE)
+	    --lcd.drawNumber(lcd.getLastPos(),47,offsetY,SMLSIZE + LEFT)
+	    --lcd.drawText(190,57,"AR ",SMLSIZE )
+	    --lcd.drawNumber(lcd.getLastPos(),57,divtmp,SMLSIZE + LEFT)
+
+	    lcd.drawText(187,37,"o",0)	    
+	    lcd.drawRectangle(167, 19, 45, 45)
+	    for j=169, 209, 4 do
+	      lcd.drawPoint(j, 19+22) 
+	    end
+	    for j=21, 61, 4 do
+	      lcd.drawPoint(167+22, j) 
+	    end
+
+	    
+	    
 	  else
 	    headfromh = 0
 	    headtoh = 0
-	    
-	    lcd.drawText(171,37,"No",MIDSIZE)
-	    lcd.drawText(171,50,"Cords",MIDSIZE)
 	  end
-	  lcd.drawNumber(180, 29, getValue(212), 0)
-	  lcd.drawText(lcd.getLastPos(), 29, "m", 0)
+	  lcd.drawNumber(180, 57, getValue(212), SMLSIZE)
+	  lcd.drawText(lcd.getLastPos(), 57, "m", SMLSIZE)
 	end
 
 -- Speed Panel
@@ -379,11 +474,11 @@
 	  lcd.drawTimer(lcd.getLastPos(),0,model.getTimer(1).value,INVERS)
 	  
 	  lcd.drawText(134, 0, "TX:", INVERS)
-	  lcd.drawNumber(lcd.getLastPos(), 0, getValue(189),0+INVERS)
+	  lcd.drawNumber(160, 0, getValue(189)*10,0+PREC1+INVERS)
 	  lcd.drawText(lcd.getLastPos(), 0, "v", INVERS)
 	  
 	  lcd.drawText(172, 0, "rssi:", INVERS)
-	  lcd.drawNumber(lcd.getLastPos(), 0, getValue(200),0+INVERS)
+	  lcd.drawNumber(lcd.getLastPos()+10, 0, getValue(200),0+INVERS)
 	end
 
 --Power Panel
@@ -468,6 +563,10 @@
 	  
 	  t2 = getValue(210)
 	  apmarmed = t2%0x02;
+	  
+	  if apmarmed ~=1 then -- report last heading bevor arming. this can used for display position relative to copter
+	    prearmheading=getValue(223)--( 0 * 3.1415926) / 180 --in radien getValue(223) 90 ist test
+	  end
 	  
 	  if lastarmed~=apmarmed then
 	    lastarmed=apmarmed
@@ -562,7 +661,7 @@
 	    last_flight_mode_play=(100*FlightMode[FmodeNr].Repeat)+getTime()
 	  end
 	end
-
+	
 
 --Background
 	local function background()
@@ -601,6 +700,8 @@
 	  speedpanel()
 	  
 	  gpspanel()
+	  
+	  drawArrow()
 	  
 	end
 
