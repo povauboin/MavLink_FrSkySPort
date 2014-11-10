@@ -44,7 +44,7 @@
 	local vh1, vy1, mult, rangle, rx2, rx1, ry1, ry2
 	local power, battremaining, throttle, tension, current, consumption
  	local watts, tension_min, current_max, watts_max, cellmin, xposCons, xposConsCell
-	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp,radarytmp 
+	local t2, nameofsndfile, radarx, radary, radarxtmp,radarytmp 
 	
 
 	-- Temporary text attribute
@@ -182,8 +182,8 @@
 	
 	local function drawArrow()
 	  	  
-	  sinCorr = math.sin(math.rad(getValue(223)-prearmheading))
-	  cosCorr = math.cos(math.rad(getValue(223)-prearmheading))
+	  sinCorr = math.sin(headfromh)
+	  cosCorr = math.cos(headfromh)
 	  
 	  for index, point in pairs(arrowLine) do
 	    X1 = CenterXcolArrow + offsetX + math.floor(point[1] * cosCorr - point[2] * sinCorr + 0.5)
@@ -288,7 +288,7 @@
 	    radarx=z1*6358364.9098634 -- meters for x absolut to center(homeposition)
 	    radary=z2*6358364.9098634 -- meters for y absolut to center(homeposition)	    
 	    
-	    radTmp = math.rad( headfromh - getValue(223) % 360 )
+	    radTmp = math.rad( headfromh )
 	    radarxtmp = radarx * math.cos(radTmp) - radary * math.sin(radTmp)
 	    radarytmp =  radarx* math.sin(radTmp) + radary * math.cos(radTmp)
 	    
@@ -558,9 +558,9 @@
 	  t2 = getValue(210)
 	  apmarmed = t2%0x02;
 	  
-	  if apmarmed ~=1 then -- report last heading bevor arming. this can used for display position relative to copter
-	    prearmheading=getValue(223)--( 0 * 3.1415926) / 180 --in radien getValue(223) 90 ist test
-	  end
+	  --if apmarmed ~=1 then -- report last heading bevor arming. this can used for display position relative to copter
+	  --  prearmheading=getValue(223)--( 0 * 3.1415926) / 180 --in radien getValue(223) 90 ist test
+	  --end
 	  
 	  if lastarmed~=apmarmed then
 	    lastarmed=apmarmed
