@@ -231,8 +231,8 @@
 		mult = 10^(idp or 0)
 		return math.floor(num * mult + 0.5) / mult
 	end
-
-
+	
+	
 -- GPS Panel
 	local function gpspanel()
 	  
@@ -267,37 +267,30 @@
 	  
 	  -- flieger   52.027522, 8.515386
 	  -- 110,75 mm
-	  --pilotlat = 52.027536 --getValue("pilot-latitude")
-	  --pilotlon = 8.513764--getValue("pilot-longitude")
-	  --curlat = 52.027536--getValue("latitude")
-	  --curlon = 8.521737--getValue("longitude")
+	  --pilotlat = math.rad(52.027536) --getValue("pilot-latitude")
+	  --pilotlon = math.rad(8.513764)--getValue("pilot-longitude")
+	  --curlat = math.rad(52.027522)--getValue("latitude")
+	  --curlon = math.rad(8.515386)--getValue("longitude")
 	  
-	  pilotlat = getValue("pilot-latitude")
-	  pilotlon = getValue("pilot-longitude")
-	  curlat = getValue("latitude")
-	  curlon = getValue("longitude")
+	  pilotlat = math.rad(getValue("pilot-latitude"))
+	  pilotlon = math.rad(getValue("pilot-longitude"))
+	  curlat = math.rad(getValue("latitude"))
+	  curlon = math.rad(getValue("longitude"))
 	  
 	  if pilotlat~=0 and curlat~=0 and pilotlon~=0 and curlon~=0 then 
 	    
-	    z1 = math.sin(math.rad(curlon) - math.rad(pilotlon)) * math.cos(math.rad(curlat))
-	    z2 = math.cos(math.rad(pilotlat)) * math.sin(math.rad(curlat)) - math.sin(math.rad(pilotlat)) * math.cos(math.rad(curlat)) * math.cos(math.rad(curlon) - math.rad(pilotlon))
-	    headfromh = math.deg(math.atan2(z1, z2))
-	    if headfromh < 0 then
-	      headfromh=headfromh+360
-	    end
-	    
-	    headtoh = headfromh
-	    
-	    if headtoh < 0 then
-	      headtoh = headtoh+360
-	    end
+	    z1 = math.sin(curlon - pilotlon) * math.cos(curlat)
+	    z2 = math.cos(pilotlat) * math.sin(curlat) - math.sin(pilotlat) * math.cos(curlat) * math.cos(curlon - pilotlon)
+	    headfromh =  math.floor(math.deg(math.atan2(z1, z2)) + 0.5) % 360
+	    headtoh = (headfromh - 180) % 360
+
 	    -- use prearmheading later to rotate cordinates relative to copter.
 	    radarx=z1*6358364.9098634 -- meters for x absolut to center(homeposition)
 	    radary=z2*6358364.9098634 -- meters for y absolut to center(homeposition)	    
 	    
-	    radTmp = math.rad(prearmheading)
-	    radarxtmp = radarx * math.cos(prearmheading) - radary * math.sin(prearmheading)
-	    radarytmp =  radarx* math.sin(prearmheading) + radary * math.cos(prearmheading)
+	    radTmp = math.rad( headfromh - getValue(223) % 360 )
+	    radarxtmp = radarx * math.cos(radTmp) - radary * math.sin(radTmp)
+	    radarytmp =  radarx* math.sin(radTmp) + radary * math.cos(radTmp)
 	    
 	    if math.abs(radarxtmp) >= math.abs(radarytmp) then --divtmp
 	      for i = 13 ,1,-1 do
@@ -321,31 +314,32 @@
 	    
 	    upppp = 20480
 	    divvv = 2048 --12 mal teilen	    
-	    
-	    offsetX = radarxtmp / divtmp
-	    offsetY = (radarytmp / divtmp)*-1
-	    
-	    --lcd.drawText(171,25,"X=",SMLSIZE )
-	    --lcd.drawNumber(lcd.getLastPos(),25,offsetX,SMLSIZE + LEFT)
-	    --lcd.drawText(171,47,"Y=", SMLSIZE)
-	    --lcd.drawNumber(lcd.getLastPos(),47,offsetY,SMLSIZE + LEFT)
-	    --lcd.drawText(190,57,"AR ",SMLSIZE )
-	    --lcd.drawNumber(lcd.getLastPos(),57,divtmp,SMLSIZE + LEFT)
 
-	    lcd.drawText(187,37,"o",0)	    
-	    lcd.drawRectangle(167, 19, 45, 45)
-	    for j=169, 209, 4 do
-	      lcd.drawPoint(j, 19+22) 
-	    end
-	    for j=21, 61, 4 do
-	      lcd.drawPoint(167+22, j) 
-	    end
-
-	    
-	    
+--	    if apmarmed ~= 1 then
+--	      offsetX =0
+--	      offsetY =0
+--	    else
+	      offsetX = radarxtmp / divtmp
+	      offsetY = (radarytmp / divtmp)*-1
+--	    end
 	  else
 	    headfromh = 0
 	    headtoh = 0
+	  end
+	  --lcd.drawText(171,25,"X=",SMLSIZE )
+	  --lcd.drawNumber(lcd.getLastPos(),25,radarxtmp,SMLSIZE + LEFT)
+	  --lcd.drawText(171,47,"Y=", SMLSIZE)
+	  --lcd.drawNumber(lcd.getLastPos(),47,radarytmp,SMLSIZE + LEFT)
+	  --lcd.drawText(190,57,"",SMLSIZE )
+	  --lcd.drawNumber(lcd.getLastPos(),57,headtoh,SMLSIZE + LEFT)
+	  
+	  lcd.drawText(187,37,"o",0)	    
+	  lcd.drawRectangle(167, 19, 45, 45)
+	  for j=169, 209, 4 do
+	    lcd.drawPoint(j, 19+22) 
+	  end
+	  for j=21, 61, 4 do
+	    lcd.drawPoint(167+22, j) 
 	  end
 	  lcd.drawNumber(180, 57, getValue(212), SMLSIZE)
 	  lcd.drawText(lcd.getLastPos(), 57, "m", SMLSIZE)
