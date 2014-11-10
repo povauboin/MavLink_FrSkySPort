@@ -171,8 +171,8 @@
 	  	  
 	  --working sinCorr = math.sin(math.rad(getValue(223)-prearmheading))
 	  --working cosCorr = math.cos(math.rad(getValue(223)-prearmheading))
-	  sinCorr = math.sin(headfromh)
-	  cosCorr = math.cos(headfromh)	  
+	  sinCorr = math.sin(math.rad(getValue(223))-headfromh)
+	  cosCorr = math.cos(math.rad(getValue(223))-headfromh)	
 	  for index, point in pairs(arrowLine) do
 	    X1 = CenterXcolArrow + offsetX + math.floor(point[1] * cosCorr - point[2] * sinCorr + 0.5)
 	    Y1 = CenterYrowArrow + offsetY + math.floor(point[1] * sinCorr + point[2] * cosCorr + 0.5)
@@ -291,10 +291,10 @@
 	    headfromh = 0
 	    headtoh = 0
 	  end
-	  lcd.drawText(171,25,"X=",SMLSIZE )
-	  lcd.drawNumber(lcd.getLastPos(),25,offsetX,SMLSIZE + LEFT)
-	  lcd.drawText(171,47,"Y=", SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos(),47,offsetY,SMLSIZE + LEFT)
+	  --lcd.drawText(171,25,"X=",SMLSIZE )
+	  --lcd.drawNumber(lcd.getLastPos(),25,offsetX,SMLSIZE + LEFT)
+	  --lcd.drawText(171,47,"Y=", SMLSIZE)
+	  --lcd.drawNumber(lcd.getLastPos(),47,offsetY,SMLSIZE + LEFT)
 	  --lcd.drawText(190,57,"",SMLSIZE )
 	  --lcd.drawNumber(lcd.getLastPos(),57,headtoh,SMLSIZE + LEFT)
 	  
