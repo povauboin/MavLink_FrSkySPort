@@ -30,7 +30,8 @@
 	local last_apm_message_played = 0
 	local mult, tension, current, consumption
  	local watts, tension_min, current_max, watts_max, cellmin, xposCons, xposConsCell
-	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp,radarytmp 
+	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp,radarytmp,
+	--local headfromh, headtoh -- not needed if we use compass prearmheading
 	local watthours = 0
 	local lastconsumption =0
 
@@ -169,10 +170,10 @@
 	
 	local function drawArrow()
 	  	  
-	  --working sinCorr = math.sin(math.rad(getValue(223)-prearmheading))
-	  --working cosCorr = math.cos(math.rad(getValue(223)-prearmheading))
-	  sinCorr = math.sin(math.rad(getValue(223))-headfromh)
-	  cosCorr = math.cos(math.rad(getValue(223))-headfromh)	
+	  sinCorr = math.sin(math.rad(getValue(223)-prearmheading))
+	  cosCorr = math.cos(math.rad(getValue(223)-prearmheading))
+	  -- working but without good gps a lot of movements// sinCorr = math.sin(math.rad(getValue(223))-headfromh)
+	  -- working but without good gps a lot of movements// cosCorr = math.cos(math.rad(getValue(223))-headfromh)	  
 	  for index, point in pairs(arrowLine) do
 	    X1 = CenterXcolArrow + offsetX + math.floor(point[1] * cosCorr - point[2] * sinCorr + 0.5)
 	    Y1 = CenterYrowArrow + offsetY + math.floor(point[1] * sinCorr + point[2] * cosCorr + 0.5)
@@ -226,8 +227,7 @@
 	    lcd.drawNumber (180, 10, hdop, PREC1+LEFT+BLINK+INVERS+SMLSIZE)
 	  end
 	
-	  -- pilot lat  52.027536, 8.513764
-	  
+	  -- pilot lat  52.027536, 8.513764  
 	  -- flieger   52.027522, 8.515386
 	  -- 110,75 mm
 	  --pilotlat = math.rad(52.027536) --getValue("pilot-latitude")
@@ -244,18 +244,17 @@
 	    
 	    z1 = math.sin(curlon - pilotlon) * math.cos(curlat)
 	    z2 = math.cos(pilotlat) * math.sin(curlat) - math.sin(pilotlat) * math.cos(curlat) * math.cos(curlon - pilotlon)
-	    headfromh =  math.floor(math.deg(math.atan2(z1, z2)) + 0.5) % 360
-	    headtoh = (headfromh - 180) % 360
+	    -- headfromh =  math.floor(math.deg(math.atan2(z1, z2)) + 0.5) % 360 --not needed if we use prearmheading
+	    -- headtoh = (headfromh - 180) % 360 --not needed if we use prearmheading
 
 	    -- use prearmheading later to rotate cordinates relative to copter.
 	    radarx=z1*6358364.9098634 -- meters for x absolut to center(homeposition)
 	    radary=z2*6358364.9098634 -- meters for y absolut to center(homeposition)	    
 	    
-	   --radTmp = math.rad( headfromh - getValue(223) % 360 )
-	    --radTmp = math.rad( prearmheading )--work!!
-	    radTmp = math.rad( headfromh )
+	    radTmp = math.rad( prearmheading ) --work!!
+	    --radTmp = math.rad( headfromh )--  work, but need good gps signal. 
 	    radarxtmp = radarx * math.cos(radTmp) - radary * math.sin(radTmp)
-	    radarytmp =  radarx* math.sin(radTmp) + radary * math.cos(radTmp)
+	    radarytmp = radarx * math.sin(radTmp) + radary * math.cos(radTmp)
 	    
 	    if math.abs(radarxtmp) >= math.abs(radarytmp) then --divtmp
 	      for i = 13 ,1,-1 do
@@ -280,16 +279,11 @@
 	    upppp = 20480
 	    divvv = 2048 --12 mal teilen	    
 
---	    if apmarmed ~= 1 then
---	      offsetX =0
---	      offsetY =0
---	    else
-	      offsetX = radarxtmp / divtmp
-	      offsetY = (radarytmp / divtmp)*-1
---	    end
+	    offsetX = radarxtmp / divtmp
+	    offsetY = (radarytmp / divtmp)*-1
 	  else
-	    headfromh = 0
-	    headtoh = 0
+	    -- headfromh = 0
+	    -- headtoh = 0
 	  end
 	  --lcd.drawText(171,25,"X=",SMLSIZE )
 	  --lcd.drawNumber(lcd.getLastPos(),25,offsetX,SMLSIZE + LEFT)
