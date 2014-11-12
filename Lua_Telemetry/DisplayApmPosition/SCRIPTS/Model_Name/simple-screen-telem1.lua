@@ -30,7 +30,7 @@
 	local last_apm_message_played = 0
 	local mult, tension, current, consumption
  	local watts, tension_min, current_max, watts_max, cellmin, xposCons, xposConsCell
-	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp,radarytmp,
+	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp,radarytmp
 	--local headfromh, headtoh -- not needed if we use compass prearmheading
 	local watthours = 0
 	local lastconsumption =0
