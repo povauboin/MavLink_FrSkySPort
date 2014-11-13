@@ -34,7 +34,9 @@
 	--local headfromh, headtoh -- not needed if we use compass prearmheading
 	local watthours = 0
 	local lastconsumption =0
-
+	local localtime =0
+	local oldlocaltime=0
+	
 	-- Temporary text attribute
 	local FORCE = 0x02 -- draw ??? line or rectangle
 	local X1, Y1, X2, Y2
@@ -172,8 +174,8 @@
 	  	  
 	  sinCorr = math.sin(math.rad(getValue(223)-prearmheading))
 	  cosCorr = math.cos(math.rad(getValue(223)-prearmheading))
-	  -- working but without good gps a lot of movements// sinCorr = math.sin(math.rad(getValue(223))-headfromh)
-	  -- working but without good gps a lot of movements// cosCorr = math.cos(math.rad(getValue(223))-headfromh)	  
+	  -- working but without good gps a lot of movments// sinCorr = math.sin(math.rad(getValue(223))-headfromh)
+	  -- working but without good gps a lot of movments// cosCorr = math.cos(math.rad(getValue(223))-headfromh)	  
 	  for index, point in pairs(arrowLine) do
 	    X1 = CenterXcolArrow + offsetX + math.floor(point[1] * cosCorr - point[2] * sinCorr + 0.5)
 	    Y1 = CenterYrowArrow + offsetY + math.floor(point[1] * sinCorr + point[2] * cosCorr + 0.5)
@@ -398,7 +400,7 @@
 	  lcd.drawText(xposCons,32,"m",SMLSIZE)
 	  lcd.drawText(xposCons,38,"Ah",SMLSIZE)
 
-	  lcd.drawNumber(67,33,watthours,MIDSIZE)
+	  lcd.drawNumber(67,33,watthours*10,MIDSIZE+PREC1)
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,32,"w",SMLSIZE)
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
@@ -411,11 +413,19 @@
 	  lcd.drawText(xposConsCell,48,"V",SMLSIZE)
 	  lcd.drawText(xposConsCell,56,"C-min",SMLSIZE)
 	end
-
+	
+	
 	-- Calculate wattshours
 	local function calcWattHs()
-	  watthours = watthours + (getValue(216) * ((getValue(218)-lastconsumption)/1000))
-	  lastconsumption = getValue(218)
+	  --watthours = watthours + (getValue(216) * ((getValue(218)-lastconsumption)/1000))
+	  --lastconsumption = getValue(218)
+	  
+	  localtime = localtime + (getTime() - oldlocaltime)
+	  if localtime >=10 then --100 ms
+	    watthours = watthours + ( getValue(219) * (localtime/360000)  )
+	    localtime = 0
+	  end
+	  oldlocaltime = getTime()
 	end
 	
 --APM Armed and errors		
@@ -514,6 +524,7 @@
 	    last_flight_mode_play=(100*FlightMode[FmodeNr].Repeat)+getTime()
 	  end
 	end
+
 	
 
 --Background
@@ -526,7 +537,6 @@
 	  calcWattHs()
 	  
 	end
-
 
 --Main
 	local function run(event)
@@ -541,15 +551,15 @@
 	  toppanel()
 	  
 	  powerpanel()
-	  
-	  calcWattHs()
-	  
+	    
 	  htsapanel()
 	  
 	  gpspanel()
 	  
-	  drawArrow()
+	  drawArrow() 
 	  
+	  calcWattHs()  
+
 	end
 
 	return {run=run, background=background}
