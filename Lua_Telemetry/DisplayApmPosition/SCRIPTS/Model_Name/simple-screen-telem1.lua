@@ -406,8 +406,6 @@
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
 
 	  
-
-	  
 	  lcd.drawNumber(42,47,cellmin*100,DBLSIZE+PREC2)
 	  xposConsCell=lcd.getLastPos()
 	  lcd.drawText(xposConsCell,48,"V",SMLSIZE)
