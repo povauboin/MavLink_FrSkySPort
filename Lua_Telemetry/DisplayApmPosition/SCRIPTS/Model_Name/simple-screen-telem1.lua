@@ -48,6 +48,7 @@
 	local divtmp = 1
 	local upppp = 20480
 	local divvv = 2048 --12 mal teilen
+	
 
 	
 	--Timer 0 is time while vehicle is armed
@@ -390,17 +391,16 @@
 	  lcd.drawNumber(67,9,current*10,MIDSIZE+PREC1)
 	  lcd.drawText(lcd.getLastPos(),10,"A",0)
 	 
-
 	  
 	  lcd.drawNumber(67,21,watts,MIDSIZE)
 	  lcd.drawText(lcd.getLastPos(),22,"W",0)
 	  
-	  lcd.drawNumber(1,33,consumption,MIDSIZE+LEFT)
+	  lcd.drawNumber(1,33,consumption + ( consumption * ( model.getGlobalVariable(8, 0)/100 ) ),MIDSIZE+LEFT)
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,32,"m",SMLSIZE)
 	  lcd.drawText(xposCons,38,"Ah",SMLSIZE)
-
-	  lcd.drawNumber(67,33,watthours*10,MIDSIZE+PREC1)
+	  
+	  lcd.drawNumber(67,33,( watthours + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) ) *10 ,MIDSIZE+PREC1)
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,32,"w",SMLSIZE)
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
@@ -422,7 +422,7 @@
 	  
 	  localtime = localtime + (getTime() - oldlocaltime)
 	  if localtime >=10 then --100 ms
-	    watthours = watthours + ( getValue(219) * (localtime/360000)  )
+	    watthours = watthours + ( getValue(219) * (localtime/360000) )
 	    localtime = 0
 	  end
 	  oldlocaltime = getTime()

@@ -1,5 +1,5 @@
 
-local inputs = { {"Crit., mV", VALUE,3000,3500,3400}, {"Use Horn", VALUE, 0, 3, 0}, {"Warn, mV", VALUE, 3100, 3800, 3500}, {"Rep, Sec", VALUE, 3, 30, 4},{"Drop, mV", VALUE, 1, 500, 100} }
+local inputs = { {"Crit,V/100", VALUE,300,350,340}, {"Use Horn", VALUE, 0, 3, 0}, {"Warn,V/100", VALUE, 310, 380, 350}, {"Rep, Sec", VALUE, 3, 30, 4},{"Drop, mV", VALUE, 1, 500, 100} }
 
 local lastimeplaysound=0
 local repeattime=400 -- 4 sekunden
@@ -41,7 +41,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 		lastitem = round((((cellmin-firstitem) * 10)-math.floor(((cellmin-firstitem) * 10))) *10)
 	  
 		if cellmin<=2.0 then --silent
-		elseif cellmin<=voltcritcal/1000 then --critical
+		elseif cellmin<=voltcritcal/100 then --critical
 			if horn>0 then
 				playFile(hornfile)
 				playFile("/SOUNDS/en/CRICMK.wav")
@@ -54,7 +54,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 			if lastitem ~= 0 then
 				playNumber(lastitem, 0, 0)
 			end
-		elseif cellmin<=voltwarnlevel/1000 then --warnlevel
+		elseif cellmin<=voltwarnlevel/100 then --warnlevel
 			playFile("/SOUNDS/en/WARNCM.wav")
 			playNumber(firstitem, 0, 0)
 			playFile("/SOUNDS/en/POINT.wav")
