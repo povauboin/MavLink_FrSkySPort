@@ -7,7 +7,6 @@ It's based on the official 1.3 version.
 
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/tele1simu.jpg)
 
-![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/TelemetryScreen.png)
 
 The interface between the APM/PixHawk and the FrSky X series receiver is a small Teensy 3.1 board running a custom protocol translator from Mavlink to SPort telemetry.
 
@@ -69,7 +68,7 @@ I could not find a way to have the Flight Controller report the settings for som
 But the screen deserves some explanation, so here goes:
 
 
-![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/TelemetryScreen_with_labels.png)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/tele1+lables.jpeg)
 
 A-Current Flight Mode Active as reported by the Flight Controller. If blinking the vehicle is not Armed.
 
@@ -79,9 +78,13 @@ C-Radio Transmitter Battery Voltage.
 
 D-RSSI value
 
-E-Estimated Flight Time. 
+E-Reported Flight Battery Voltage from MavLink or measured Voltage from lipo balancer connectors teensyA0-A6. 
 
-F-Available Vehicle battery capacity. 
+F-Reported Flight Battery Current.
+
+G-Actual power output in Watts (VxA)
+
+H-Actual consumed power in mAh/ offset adjustable from Modelscript  
 
 E and F are inter related. When the vehicle is armed, the script checks the voltage and calculates the number of cells and estimates the status of the vehicle battery. This is then combined with the available capacity reported by the flight controller.
 E is calculated based on the rate of decay of reported capacity.
