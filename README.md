@@ -114,11 +114,11 @@ AudioMessage Minimum Cell Info
 the script is optional to use. It's enable audio messages to status of lowest lipo cell.
 this script allows you to setup your cell audio info-messages, warning-messages and alarm-messages.
 
- *Crit,V/100, setup Critical Voltage alarm level. The value is divided by 100. 320 mean 3.2V 
- *Use Horn, 0 = no horn, 1 = sine horn, 2 = other sine horn, 3 = another sine horn
- *Warn,V/100, setup Warn Voltage level. The value is divided by 100. 320 mean 3.2V
- *Rep,Sec,setup time in S between repeating warn and critical voltage level is reached.
- *Drop,mV, if you are not lower than warn level voltage messages will repeated dependent to voltage drop on lowest cell. 100 mean each 0.1 Volts cell drop an Audio Voltage info play the Cell Voltage with PREC 2. 
+ * Crit,V/100, setup Critical Voltage alarm level. The value is divided by 100. 320 mean 3.2V 
+ * Use Horn, 0 = no horn, 1 = sine horn, 2 = other sine horn, 3 = another sine horn
+ * Warn,V/100, setup Warn Voltage level. The value is divided by 100. 320 mean 3.2V
+ * Rep,Sec,setup time in S between repeating warn and critical voltage level is reached.
+ * Drop,mV, if you are not lower than warn level voltage messages will repeated dependent to voltage drop on lowest cell. 100 mean each 0.1 Volts cell drop an Audio Voltage info play the Cell Voltage with PREC 2. 
 
 
 Single Cell Lipo Voltage Monitor
