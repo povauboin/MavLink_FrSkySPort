@@ -5,7 +5,15 @@ http://diydrones.com/forum/topics/amp-to-frsky-x8r-sport-converter
 
 It's based on the official 1.3 version.
 
-![]https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/tele1simu.jpg
+The main focus of this script and teensy modification is the exact monitoring of the flight battery capacity and voltage.
+
+The consumption in mA / h and watt-hours can be calibrated on a separate model script.
+
+Moreover, by the modification described below on teensy, which are allowed lipo monitors individual cell voltage.
+
+The radar on the left represents the position and the orientation of the vehicle.
+
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/tele1simu.jpg)
 
 
 The interface between the APM/PixHawk and the FrSky X series receiver is a small Teensy 3.1 board running a custom protocol translator from Mavlink to SPort telemetry.
@@ -55,18 +63,9 @@ AccY ( Y Axis average vibration m/s?)
 
 AccZ ( Z Axis average vibration m/s?)
 
-This telemetry screen tries to report the data received in a easy way. 
-
-Due to the restricted screen space I didn't make descriptive labels on the values but tried to group them on a logical (to me) way.
-
 Also, this script relies heavily on voice alerts and prompts.
 
-I use a two switch combination (SWE and SWF) to change flight modes, that gives me the 6 flight modes. The combination of the 2 switches activate six Logical Switches on the Taranis - The Logical Switches MUST be L1 to L6.
-
-I could not find a way to have the Flight Controller report the settings for some parameters, like which 6 Flight Modes are defined so the script must be updated with the Flight Mode Numbers that correspond to each Logical Switch.
-
-But the screen deserves some explanation, so here goes:
-
+The screen explanation:
 
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/tele1+lables.jpeg)
 
@@ -78,97 +77,42 @@ C-Radio Transmitter Battery Voltage.
 
 D-RSSI value
 
-E-Reported Flight Battery Voltage from MavLink or measured Voltage from lipo balancer connectors teensyA0-A6. 
+E-Reported Flight Battery Voltage from MavLink or if teensy a0-a6 are connected will measured Voltage from lipo balancer connectors. 
 
 F-Reported Flight Battery Current.
 
 G-Actual power output in Watts (VxA)
 
-H-Actual consumed power in mAh/ offset adjustable from Modelscript  
+H-consumed power in mA/h, offset adjustable from Modelscript
 
-E and F are inter related. When the vehicle is armed, the script checks the voltage and calculates the number of cells and estimates the status of the vehicle battery. This is then combined with the available capacity reported by the flight controller.
-E is calculated based on the rate of decay of reported capacity.
-These are highly experimental and not to be considered real, but simple estimates.
+I-consumed power in Wh, offset adjustable from Modelscript
 
-G-Actual consumed power in mAh
+J-Lipo Cell minimum. this simple display lowest cell from your lipo
 
-H-Actual power output in Watts (VxA)
+K-Heading in degrees
 
-I-Reported Flight Battery Voltage
+L-Baro-Altitude
 
-J-Reported Flight Battery Current
+M-Maximum reached Altitude
 
-K-Vertical Gauge that shows the actual Throttle output (not the Throttle stick position but the actual output reported by the Flight Controller)
+N-Armed Time Timer - Starts and stops when the Vehicle is armed/disarmed
 
-L-Vehicle Height
+O-Speed in Km/h
 
-M-Max Height
+P-GPS Indicator, 3D, 2D or no status
 
-N-Vertical speed
+Q-HDop indicator. Blinks when over 2
 
-O-Vertical Speed Indicator (up or down)
+R-Number of reported satellites
 
-P-Heading
+V-Radar
 
-Q-Roll angle
+S-Vehicle Arrow can move and rotate. this display position relative to home and heading relative to home
 
-R-Armed Time Timer - Starts and stops when the Vehicle is armed/disarmed
+T-Home/Centre Position
 
-S-Speed
+U-Distance to home (Distance to the point the Taranis received a good satellite fix) 
 
-T-Pitch Indicator. When over 45 degrees the indicator is replaced by 3 up or 3 down indicators
-
-U-GPS Indicator. Three different graphics dependent on GPS status, 3D, 2D or no status
-
-V-HDop indicator. Blinks when over 2
-
-W-Number of reported satellites
-
-X-Distance to home (Distance to the point the Taranis received a good satellite fix)
-
-Y-Heading to home (Heading to the point the Taranis received a good satellite fix)
-
-When changing flight modes the radio says Flight Mode X engaged when the switch is moved and Flight Mode X active when the Flight Controller reports it. If there is a mismatch or the Flight Controller doesn't not report the Flight Mode as set by the switches you'll be notified.
-
-
-
-
-Radio setup
-
-The radio must be configured to run Lua Scripts, so in this image I show the options for the firmware:
-
-![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/Radio_Setup_6.png)
-
-
-Your radio setup can be different, because on "historic" reasons I had to setup the channel order as TAER, but yours are sure to be different, so please take that is consideration.
-
-A few more details required to have things going smoothly. The Taranis is a great radio but I compare it with a blank sheet of paper where one must be able to define what its needed.
-
-The basic settings I use on a model that can use this script are pictured below. Please note that you can have more channels and options configured but these are the minimum to operate correctly:
-
-
-![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/Radio_Setup_2.png)
-
-
-
-![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/Radio_Setup_3.png)
-
-
-
-![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/Radio_Setup_4.png)
-
-
-
-![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/Radio_Setup_5.png)
-
-
-
-Nothing else is needed, because the script takes care of all the warnings and notifications, so if you are used to use SF to have audio notifications, in this case:
-
-
-
-
-![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/Radio_Setup_1.png)
 
 
 Single Cell Lipo Voltage Monitor
