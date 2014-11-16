@@ -5,13 +5,7 @@ http://diydrones.com/forum/topics/amp-to-frsky-x8r-sport-converter
 
 It's based on the official 1.3 version.
 
-The main focus of this script and teensy modification is the exact monitoring of the flight battery capacity and voltage.
-
-The consumption in mA / h and watt-hours can be calibrated on a separate model script.
-
-Moreover, by the modification described below on teensy, which are allowed lipo monitors individual cell voltage.
-
-The radar on the left represents the position and the orientation of the vehicle.
+The main focus of this script and teensy modification is the exact monitoring of the flight battery capacity and voltage. The consumption in mA / h and watt-hours can be calibrated on a separate model script. Moreover, by the modification described below on teensy, which are allowed lipo monitors individual cell voltage. The radar on the left represents the position and the orientation of the vehicle.
 
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/tele1simu.jpg)
 
