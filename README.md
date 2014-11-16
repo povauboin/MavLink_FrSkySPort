@@ -105,7 +105,17 @@ S-Vehicle Arrow can move and rotate. this display position relative to home and 
 
 T-Home/Centre Position
 
-U-Distance to home (Distance to the point the Taranis received a good satellite fix) 
+U-Distance to home (Distance to the point the Taranis received a good satellite fix)
+
+Audio Minimum Cell Info
+=======================
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/cellinfo.jpg)
+
+the script is optional to use, and enables audio messages to lowest single lipo cell status
+this script allows you to setup your cell audio info-messages, warning-messages and alarm-messages.
+
+
+
 
 
 
