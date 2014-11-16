@@ -175,12 +175,17 @@ How can we help here telemetry screen No.1?
 Math Helper:
 Simple percentage calculation in battery capacity
 example:
+
 80% of 8000mAh battery with 88Wh capacity.
 
 8000mAh ÷ 100% × 80% = 6400mAh
+
 or
+
 88Wh ÷ 100% × 80% = 70,4Wh
- ---in progress---
+
+
+---in progress---
  
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/offset.jpg)
 
