@@ -134,13 +134,31 @@ S6 25,2V |  11k  |  1k6 |  39.4176445024
 
 all needed resistors found in E24 series. the divider are defined in MavLink_FrSkySPort.ino. if you use other resistors all dividers must recalculated.
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/resistor_network.jpg)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/resistor_network.jpg)
 
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/CellsScreen.jpg)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/CellsScreen.jpg)
 
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/MainScreen.jpg)
+Lipo 1x1... mA/h and Wh offset calibration
+==========================================
+
+ ---in progress---
+ 
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/offset.jpg)
+
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/after-ofsettcalibration.jpeg)
+
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/chargermah.jpg)
+
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/chargerwh.jpg)
+
+Known Issues
+============
+
+ * GPS-Pilot Latitud and Longitud are currently reported by FrSky Taranis from first received lat/long. this is independent of arming position. so currently it need an telemetry reset if you power your copter on an other place than you will arm the copter. i change this next time to arming position.
+
+
 
 
 
