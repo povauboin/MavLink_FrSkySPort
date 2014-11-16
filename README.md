@@ -5,7 +5,7 @@ http://diydrones.com/forum/topics/amp-to-frsky-x8r-sport-converter
 
 It's based on the official 1.3 version.
 
-Here goes the version 0.1 of my telemetry script for Taranis X9D for APM/PixHawk Flight Controllers.
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/tele1simu.jpg)
 
 ![](https://raw.githubusercontent.com/lvale/MavLink_FrSkySPort/DisplayAPMPosition/TelemetryScreen.png)
 
