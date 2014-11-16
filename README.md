@@ -149,9 +149,9 @@ Lipo 1x1... mA/h and Wh offset calibration
 
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/after-ofsettcalibration.jpeg)
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/chargermah.jpg)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/chargermah.jpeg)
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/chargerwh.jpg)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/chargerwh.jpeg)
 
 Known Issues
 ============
