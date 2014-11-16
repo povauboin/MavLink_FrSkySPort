@@ -5,7 +5,7 @@ http://diydrones.com/forum/topics/amp-to-frsky-x8r-sport-converter
 
 It's based on the official 1.3 version.
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/tele1simu.jpg)
+![]https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/tele1simu.jpg
 
 
 The interface between the APM/PixHawk and the FrSky X series receiver is a small Teensy 3.1 board running a custom protocol translator from Mavlink to SPort telemetry.
@@ -68,7 +68,7 @@ I could not find a way to have the Flight Controller report the settings for som
 But the screen deserves some explanation, so here goes:
 
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/single-cell-lipo-voltage/tele1+lables.jpeg)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/tele1+lables.jpeg)
 
 A-Current Flight Mode Active as reported by the Flight Controller. If blinking the vehicle is not Armed.
 
