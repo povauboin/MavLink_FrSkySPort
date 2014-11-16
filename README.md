@@ -169,8 +169,17 @@ On the following four points overloading can be easily found:
 How can we help here telemetry screen No.1?
  * First, In flight (ie under load), the cell voltage should never fall below 3.3V. This helps us Lable "J" lipo cell voltage Minimal. It is helpful audio prompts for the cell voltage adjust so the sounds of the Critical alarm at 3.3V. In this setting, we always get to hear the alarm if we for example. overload the lipo at full throttle passages. In this case, of course, the flight stick adapt. Should this happen in the first few minutes of flight, their system might be set incorrectly or her lipo is unterdimensoniert or too old.
  * Second, monitor the power output of the battery. Label H = mA / h and I = Wh help us here. All batteries have a specified amount of energy in Wh. And the capacity is measured in mAh. We should have a Lipo, DO NOT drain more than 80% in order to keep the number of cycles of Lipo high. That is for us if we we were to fly, for example with a 8000 mAh battery deprive him only 6400mAh capacity. Or if we stick to the amount of energy in Wh, we should consume only 70,4Wh with a printed on the battery indication of 88Wh.
+ * thirdly, the open circuit voltage of the battery should not under 3.6V traps. You can verify this by reading the value of the Cellen Minumum voltage (lable "J") after the flight. (System Disarmed status).
+ * fourth, Lipo to hot >60°. if this happens something goes wrong!! check system and calculation of components
+ 
+Math Helper:
+Simple percentage calculation in battery capacity
+example:
+80% of 8000mAh battery with 88Wh capacity.
 
-
+8000mAh ÷ 100% × 80% = 6400mAh
+or
+88Wh ÷ 100% × 80% = 70,4Wh
  ---in progress---
  
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/offset.jpg)
