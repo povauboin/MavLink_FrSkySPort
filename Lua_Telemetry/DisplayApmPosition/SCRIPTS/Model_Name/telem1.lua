@@ -28,14 +28,16 @@
 	local last_flight_mode = 0
 	local last_flight_mode_play = 0
 	local last_apm_message_played = 0
-	local mult, tension, current, consumption
+	local mult, tension, current, consumption, vspd
  	local watts, tension_min, current_max, watts_max, cellmin, xposCons, xposConsCell
-	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp,radarytmp
+	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp, radarytmp, hdop
 	--local headfromh, headtoh -- not needed if we use compass prearmheading
 	local watthours = 0
 	local lastconsumption =0
 	local localtime =0
 	local oldlocaltime=0
+	local pilotlat, pilotlon, curlat, curlon, telem_sats, telem_lock, telem_t1
+	local status_severity, status_textnr
 	
 	-- Temporary text attribute
 	local FORCE = 0x02 -- draw ??? line or rectangle
@@ -49,7 +51,6 @@
 	local upppp = 20480
 	local divvv = 2048 --12 mal teilen
 	
-
 	
 	--Timer 0 is time while vehicle is armed
 	
@@ -58,7 +59,7 @@
 	--Timer 1 is accumulated time per flight mode
 	
 	model.setTimer(1, {mode=0, start=0, value= 0, countdownBeep=0, minuteBeep=0, persistent=1})
-
+	
 --Init Flight Tables
 	FlightMode = {}
 	for i=1, 17 do
@@ -104,8 +105,8 @@
 	FlightMode[16].Repeat=30
 	FlightMode[17].Name="Position Hold"
 	FlightMode[17].Repeat=300
-
-
+	
+	
 --Init Severity Tables
 	Severity={}
 	Severity[1]={}
@@ -126,10 +127,10 @@
 	Severity[9].Name="Debug"
 	
 	local apm_status_message = {severity = 0, textnr = 0, timestamp=0}
-
+	
 --Init A registers
 	local A2 = model.getTelemetryChannel(1)
-	if A2 .unit ~= 3 or A2 .range ~=1024 or A2 .offset ~=0 
+	if A2 .unit ~= 3 or A2 .range ~=1024 or A2 .offset ~=0
 	then
 	  A2.unit = 3
 	  A2.range = 1024
@@ -138,7 +139,7 @@
 	end
 	
 	local A3 = model.getTelemetryChannel(2)
-	if A3.unit ~= 3 or A3.range ~=362 or A3.offset ~=-180 
+	if A3.unit ~= 3 or A3.range ~=362 or A3.offset ~=-180
 	then
 	  A3.unit = 3
 	  A3.range = 362
@@ -163,16 +164,14 @@
 	  {-4, 5, 0, -4},
 	  {-3, 5, 0, -3},
 	  
-	  --{0, 7, 0,-7},
-	  
 	  {3, 5, 0, -3},
 	  {4, 5, 0, -4}
 	}
 	
--- draw arrow
 	
+-- draw arrow
 	local function drawArrow()
-	  	  
+	  
 	  sinCorr = math.sin(math.rad(getValue(223)-prearmheading))
 	  cosCorr = math.cos(math.rad(getValue(223)-prearmheading))
 	  -- working but without good gps a lot of movments// sinCorr = math.sin(math.rad(getValue(223))-headfromh)
@@ -188,18 +187,18 @@
 	    else
 	      lcd.drawLine (X1, Y1, X2, Y2, SOLID, FORCE)
 	    end
-	  end	  
+	  end
 	end
-
+	
 --Aux Display functions and panels
-
-
+	
+	
 	local function round(num, idp)
 		mult = 10^(idp or 0)
 		return math.floor(num * mult + 0.5) / mult
 	end
-
-
+	
+	
 -- GPS Panel
 	local function gpspanel()
 	  
@@ -213,7 +212,7 @@
 	    lcd.drawText (168, 10, "3D",0)
 	    lcd.drawNumber (195, 10, telem_sats, 0+LEFT)
 	    lcd.drawText (lcd.getLastPos(), 10, "S", 0)
-	    
+	  
 	  elseif telem_lock>1 then
 	    lcd.drawText (168, 10, "2D", 0)
 	    lcd.drawNumber (195, 10, telem_sats, 0+LEFT )
@@ -230,7 +229,7 @@
 	    lcd.drawNumber (180, 10, hdop, PREC1+LEFT+BLINK+INVERS+SMLSIZE)
 	  end
 	
-	  -- pilot lat  52.027536, 8.513764  
+	  -- pilot lat  52.027536, 8.513764
 	  -- flieger   52.027522, 8.515386
 	  -- 110,75 mm
 	  --pilotlat = math.rad(52.027536) --getValue("pilot-latitude")
@@ -238,24 +237,25 @@
 	  --curlat = math.rad(52.027522)--getValue("latitude")
 	  --curlon = math.rad(8.515386)--getValue("longitude")
 	  
-	  pilotlat = math.rad(getValue("pilot-latitude"))
-	  pilotlon = math.rad(getValue("pilot-longitude"))
+	  --pilotlat = math.rad(getValue("pilot-latitude")) --not use taranis first lat and long here
+	  --pilotlon = math.rad(getValue("pilot-longitude"))
 	  curlat = math.rad(getValue("latitude"))
 	  curlon = math.rad(getValue("longitude"))
 	  
-	  if pilotlat~=0 and curlat~=0 and pilotlon~=0 and curlon~=0 then 
-	    
+	  
+	  if pilotlat~=0 and curlat~=0 and pilotlon~=0 and curlon~=0 then
+	  
 	    z1 = math.sin(curlon - pilotlon) * math.cos(curlat)
 	    z2 = math.cos(pilotlat) * math.sin(curlat) - math.sin(pilotlat) * math.cos(curlat) * math.cos(curlon - pilotlon)
 	    -- headfromh =  math.floor(math.deg(math.atan2(z1, z2)) + 0.5) % 360 --not needed if we use prearmheading
 	    -- headtoh = (headfromh - 180) % 360 --not needed if we use prearmheading
-
+	    
 	    -- use prearmheading later to rotate cordinates relative to copter.
 	    radarx=z1*6358364.9098634 -- meters for x absolut to center(homeposition)
 	    radary=z2*6358364.9098634 -- meters for y absolut to center(homeposition)	    
 	    
 	    radTmp = math.rad( prearmheading ) --work!!
-	    --radTmp = math.rad( headfromh )--  work, but need good gps signal. 
+	    --radTmp = math.rad( headfromh )--  work, but need good gps signal.
 	    radarxtmp = radarx * math.cos(radTmp) - radary * math.sin(radTmp)
 	    radarytmp = radarx * math.sin(radTmp) + radary * math.cos(radTmp)
 	    
@@ -276,12 +276,12 @@
 		end
 		divvv = divvv/2
 		upppp = upppp/2
-	      end	      
+	      end
 	    end
 	    
 	    upppp = 20480
-	    divvv = 2048 --12 mal teilen	    
-
+	    divvv = 2048 --12 mal teilen    
+	    
 	    offsetX = radarxtmp / divtmp
 	    offsetY = (radarytmp / divtmp)*-1
 	  else
@@ -295,22 +295,21 @@
 	  --lcd.drawText(190,57,"",SMLSIZE )
 	  --lcd.drawNumber(lcd.getLastPos(),57,headtoh,SMLSIZE + LEFT)
 	  
-	  lcd.drawText(187,37,"o",0)	    
+	  lcd.drawText(187,37,"o",0)
 	  lcd.drawRectangle(167, 19, 45, 45)
 	  for j=169, 209, 4 do
-	    lcd.drawPoint(j, 19+22) 
+	    lcd.drawPoint(j, 19+22)
 	  end
 	  for j=21, 61, 4 do
-	    lcd.drawPoint(167+22, j) 
+	    lcd.drawPoint(167+22, j)
 	  end
 	  lcd.drawNumber(180, 57, getValue(212), SMLSIZE)
 	  lcd.drawText(lcd.getLastPos(), 57, "m", SMLSIZE)
 	end
-
-
-
+	
+	
 -- Altitude Panel
-	local function htsapanel() 
+	local function htsapanel()
 	
 	  lcd.drawLine (74, 8, 74, 63, SOLID, 0)
 	  lcd.drawLine (154, 8, 154, 63, SOLID, 0)
@@ -318,13 +317,13 @@
 	  lcd.drawText(76,11,"Heading ",SMLSIZE)
 	  lcd.drawNumber(lcd.getLastPos(),9,getValue(223),MIDSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),9,"\64",MIDSIZE)
-	  	  
+	  
 	  --altitude
 	  --Alt max
 	  lcd.drawText(76,25,"Alt ",SMLSIZE)
 	  lcd.drawNumber(lcd.getLastPos()+3,22,getValue(206),MIDSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),22,"m",MIDSIZE)
-	  	  --vspeed
+	  --vspeed
 	  vspd= getValue(224)
 	  if vspd == 0 then
 	    lcd.drawText(lcd.getLastPos(), 25,"==",0)
@@ -339,17 +338,15 @@
 	  lcd.drawNumber(lcd.getLastPos()+8,35,getValue(237),SMLSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),35,"m",SMLSIZE)
 	  
-          --Armed time
-	  
-	  
+	  --Armed time
 	  lcd.drawTimer(106,42,model.getTimer(0).value,MIDSIZE)
 	  
 	  lcd.drawText(76,56,"Speed",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue(211),MIDSIZE+LEFT)	  
+	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue(211),MIDSIZE+LEFT)
 	  
 	end
-
-
+	
+	
 -- Top Panel
 	local function toppanel()
 	  
@@ -384,7 +381,7 @@
 	  current_max=getValue(247) ---
 	  watts_max=getValue(248)  ---
 	  cellmin=getValue(214) --- 214 = cell-min
-
+	  
 	  lcd.drawNumber(30,13,tension*10,DBLSIZE+PREC1)
 	  lcd.drawText(lcd.getLastPos(),14,"V",0)
 	  
@@ -404,7 +401,7 @@
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,32,"w",SMLSIZE)
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
-
+	  
 	  
 	  lcd.drawNumber(42,47,cellmin*100,DBLSIZE+PREC2)
 	  xposConsCell=lcd.getLastPos()
@@ -426,6 +423,7 @@
 	  oldlocaltime = getTime()
 	end
 	
+	
 --APM Armed and errors		
 	local function armed_status()
 	  
@@ -435,6 +433,8 @@
 	  --prearmheading =63
 	  if apmarmed ~=1 then -- report last heading bevor arming. this can used for display position relative to copter
 	    prearmheading=getValue(223)
+	    pilotlat = math.rad(getValue("latitude"))
+	    pilotlon = math.rad(getValue("longitude"))
 	  end
 	  
 	  if lastarmed~=apmarmed then
@@ -479,7 +479,7 @@
 	    apm_status_message.timestamp = 0
 	    last_apm_message_played = 0
 	  end
-	  
+	 
 	  -- play sound
 	  if apm_status_message.textnr >0 then
 	    if last_apm_message_played ~= apm_status_message.textnr then
@@ -489,8 +489,8 @@
 	    end
 	  end
 	end
-
-
+	
+	
 --FlightModes
 	local function Flight_modes()
 	  FmodeNr=getValue(208)+1
@@ -522,9 +522,8 @@
 	    last_flight_mode_play=(100*FlightMode[FmodeNr].Repeat)+getTime()
 	  end
 	end
-
 	
-
+	
 --Background
 	local function background()
 	  
@@ -535,7 +534,7 @@
 	  calcWattHs()
 	  
 	end
-
+	
 --Main
 	local function run(event)
 	  
@@ -554,10 +553,11 @@
 	  
 	  gpspanel()
 	  
-	  drawArrow() 
+	  drawArrow()
 	  
-	  calcWattHs()  
+	  calcWattHs()
 
 	end
 
 	return {run=run, background=background}
+	
