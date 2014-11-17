@@ -152,8 +152,8 @@ all needed resistors found in E24 series. the divider are defined in MavLink_FrS
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/CellsScreen.jpg)
 
 
-Lipo 1x1... mA/h and Wh offset calibration
-==========================================
+Lipo 1x1... mA/h and Wh telemetry screen meter calibration
+==========================================================
 
 Lipo 1x1
 --------
@@ -166,6 +166,8 @@ On the following four points overloading can be easily found:
  * The idle cell voltage (no load on LiPo), should never lie or fall below 3.6V.
  * The LiPo battery is extremely hot after discharge. The LiPo may be warmer than 60 ° C are under any circumstances. the damages sustained chemistry!
  
+If we can we monitor multiple readings of the battery during the flight very accurately judge the battery status and so exploit the maximum flight time with a maximum protection of the battery.
+
 How can we help here telemetry screen No.1?
  * First, In flight (ie under load), the cell voltage should never fall below 3.3V. This helps us Lable "J" lipo cell voltage Minimal. It is helpful audio prompts for the cell voltage adjust so the sounds of the Critical alarm at 3.3V. In this setting, we always get to hear the alarm if we for example. overload the lipo at full throttle passages. In this case, of course, the flight stick adapt. Should this happen in the first few minutes of flight, their system might be set incorrectly or her lipo is unterdimensoniert or too old.
  * Second, monitor the power output of the battery. Label H = mA / h and I = Wh help us here. All batteries have a specified amount of energy in Wh. And the capacity is measured in mAh. We should have a Lipo, DO NOT drain more than 80% in order to keep the number of cycles of Lipo high. That is for us if we we were to fly, for example with a 8000 mAh battery deprive him only 6400mAh capacity. Or if we stick to the amount of energy in Wh, we should consume only 70,4Wh with a printed on the battery indication of 88Wh.
@@ -173,7 +175,9 @@ How can we help here telemetry screen No.1?
  * fourth, Lipo to hot >60°. if this happens something goes wrong!! check system and calculation of components
  
 Math Helper:
+------------
 Simple percentage calculation in battery capacity
+
 example:
 
 80% of 8000mAh battery with 88Wh capacity.
@@ -184,10 +188,18 @@ or
 
 88Wh ÷ 100% × 80% = 70,4Wh
 
-
----in progress---
+mA/h and Wh telemetry screen meter calibration
+----------------------------------------------
+Telemetry screen battery calibration with the help of a lipo charger. Most chargers inform us about the amount of energy in Wh and mAh which flows during charging in the battery. If we now compare the values of the charger (reference) with the values of the telemetry screen it should be possible to make a fairly accurate comparison.
+In our case, we take the model scripts offset.lua to help.
  
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/offset.jpg)
+
+We can set from the linear function (Wh = P xt and Ah = V x I xt) dependent Percentage offset for mA / h and Wh here.
+
+Measurements
+------------
+
 
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/after-ofsettcalibration.jpeg)
 
