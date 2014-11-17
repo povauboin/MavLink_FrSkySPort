@@ -77,7 +77,7 @@ F-Reported Flight Battery Current.
 
 G-Actual power output in Watts (VxA)
 
-H-consumed power in mA/h, offset adjustable from Modelscript
+H-consumed power in mAh, offset adjustable from Modelscript
 
 I-consumed power in Wh, offset adjustable from Modelscript
 
@@ -195,17 +195,45 @@ In our case, we take the model scripts offset.lua to help.
  
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/offset.jpg)
 
-We can set from the linear function (Wh = P xt and Ah = V x I xt) dependent Percentage offset for mA / h and Wh here.
+We can set from the linear function (Wh = P x t and Ah = V x I xt) dependent Percentage offset for mAh and Wh here.
 
 Measurements
 ------------
 
+ * First, we fly a few empty batteries and keep a record of the displayed telemetry values for mAh and Wh. Of course, we arrange the batteries and values so we do not get confused later. (1 = Battery 5055mAh and 120,3Wh, Battery 2 = ... ..., battery 3 ...).
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/after-ofsettcalibration.jpeg)
+ * secondly, we load the empty flown batteries and keep a record of the relevant energy quantity from the charger. naturally sorted so that we can still assign the measured values of the Relevant flight.
+
+ * Thirdly, we make our Percentage offset calculation. A very simple calculation.
+
+Example of battery 1:
+we had on our charger a display of example. 5573mAh and 137,34Wh. The telemetry screen had but here 5055mAh and 120,3Wh displayed.
+
+then we calculate:
+
+Charger ÷ telemetry screen
+
+5573mAh ÷ 5055mAh = 1.10247
+
+The decimal places of the result give the Percentage offset.
+the means for our mAh offset is rounded 10%
+
+the same calculation for Wh
+
+137,34Wh ÷ 120,3Wh = 1,14164
+
+the means for our Wh offset is rounded 14%
+
+when we perform these calculations for all batteries, we can use later an average.
 
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/chargermah.jpeg)
 
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/chargerwh.jpeg)
+
+At the very end we make it up a flight test and compare the new values of the telemetry again with the values of the charger to recharge the batteries. Now should the values of the telemetry prefer a little higher than the be the charger. 1-5%. Higher values on the telemetry display of course prevent a negative charging of the batteries.
+
+after calibration
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/after-ofsettcalibration.jpeg)
 
 Known Issues
 ============
