@@ -152,7 +152,7 @@ all needed resistors found in E24 series. the divider are defined in MavLink_FrS
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/CellsScreen.jpg)
 
 
-Lipo 1x1... mA/h and Wh telemetry screen meter calibration
+Lipo 1x1... mAh and Wh telemetry screen meter calibration
 ==========================================================
 
 Lipo 1x1
