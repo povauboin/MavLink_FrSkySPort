@@ -303,7 +303,7 @@
 	  for j=21, 61, 4 do
 	    lcd.drawPoint(167+22, j)
 	  end
-	  lcd.drawNumber(180, 57, getValue(212), SMLSIZE)
+	  lcd.drawNumber(180, 57, math.sqrt(((radarx)*(radarx)) + ((radary)*(radary))), SMLSIZE)
 	  lcd.drawText(lcd.getLastPos(), 57, "m", SMLSIZE)
 	end
 	
