@@ -39,7 +39,7 @@
 	local localtimetwo =0
 	local oldlocaltimetwo=0	
 	local pilotlat, pilotlon, curlat, curlon, telem_sats, telem_lock, telem_t1
-	local status_severity, status_textnr, hypdist, battWhmax, maxconsume
+	local status_severity, status_textnr, hypdist, battWhmax, maxconsume, whconsumed
 	local batteryreachmaxWH = 0
 	
 	-- Temporary text attribute
@@ -193,27 +193,29 @@
 	  end
 	end
 	
--- mapValue  to map a value from to to an new value from to ( inputvalue, in_minimum, in maximum, out_min, out maximum)
+	-- mapValue  to map a value from to to an new value from to ( inputvalue, in_minimum, in maximum, out_min, out maximum)
 	-- example your input value is an integer from 0 - 200 and you need an linear expression from -100 - 0 analog to your input
 	-- Local new_value = mapvalue(value, 0,200,-100,0) //result for value = 100 is "-50"
 	
-	local function mapvalue(x, in_min, in_max, out_min, out_max)
-	  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;  
-	end
+	--local function mapvalue(x, in_min, in_max, out_min, out_max)
+	  --return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+	--end
 	
 	
 -- draw Wh Gauge	
-	local function drawWhGauge( whconsumed )
-	  
+	local function drawWhGauge()
+	   
+	   whconsumed = watthours + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) 
 	   if whconsumed >= maxconsume then
 	      whconsumed = maxconsume
-	   end   
+	   end
+	   
+	   --lcd.drawNumber(93,1,whconsumed,0+INVERS)
+	   
 	   lcd.drawFilledRectangle(74,9,11,55,INVERS)
-	   lcd.drawFilledRectangle(75,9,9, mapvalue(whconsumed, 0, maxconsume, 0, 55),0)
-	   --lcd.drawNumber(90,1,maxconsume,0)
+	   lcd.drawFilledRectangle(75,9,9, (whconsumed - 0)* ( 55 - 0 ) / (maxconsume - 0) + 0, 0)
 	end
 	
-
 	
 --Aux Display functions and panels
 	
@@ -427,7 +429,6 @@
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,32,"w",SMLSIZE)
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
-	  drawWhGauge( watthours )
 	  
 	  
 	  lcd.drawNumber(42,47,cellmin*100,DBLSIZE+PREC2)
@@ -439,14 +440,12 @@
 	
 	-- Calculate watthours
 	local function calcWattHs()
-	  --watthours = watthours + (getValue(216) * ((getValue(218)-lastconsumption)/1000))
-	  --lastconsumption = getValue(218)
 	  
 	  localtime = localtime + (getTime() - oldlocaltime)
 	  if localtime >=10 then --100 ms
 	    watthours = watthours + ( getValue(219) * (localtime/360000) )
 	    localtime = 0
-	  end
+	  end  
 	  oldlocaltime = getTime()
 	  maxconsume = model.getGlobalVariable(8, 2)
 	end
@@ -555,7 +554,7 @@
 -- play alarm wh reach maximum level	
 	local function playMaxWhReached()
 	  
-	  if watthours >= maxconsume then
+	  if (watthours  + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) ) >= maxconsume then
 	    localtimetwo = localtimetwo + (getTime() - oldlocaltimetwo)
 	    if localtimetwo >=800 then --8s
 	      playFile("/SOUNDS/en/ALARM3K.wav")
@@ -600,6 +599,8 @@
 	  drawArrow()
 	  
 	  calcWattHs()
+	  
+	  drawWhGauge()
 	  
 	  playMaxWhReached()
 
