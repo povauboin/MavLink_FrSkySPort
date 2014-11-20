@@ -36,8 +36,11 @@
 	local lastconsumption =0
 	local localtime =0
 	local oldlocaltime=0
+	local localtimetwo =0
+	local oldlocaltimetwo=0	
 	local pilotlat, pilotlon, curlat, curlon, telem_sats, telem_lock, telem_t1
-	local status_severity, status_textnr
+	local status_severity, status_textnr, hypdist, battWhmax, maxconsume
+	local batteryreachmaxWH = 0
 	
 	-- Temporary text attribute
 	local FORCE = 0x02 -- draw ??? line or rectangle
@@ -47,6 +50,7 @@
 	local CenterYrowArrow = 41
 	local offsetX = 0
 	local offsetY = 0
+	local htsapaneloffset = 11
 	local divtmp = 1
 	local upppp = 20480
 	local divvv = 2048 --12 mal teilen
@@ -168,7 +172,6 @@
 	  {4, 5, 0, -4}
 	}
 	
-	
 -- draw arrow
 	local function drawArrow()
 	  
@@ -189,6 +192,28 @@
 	    end
 	  end
 	end
+	
+-- mapValue  to map a value from to to an new value from to ( inputvalue, in_minimum, in maximum, out_min, out maximum)
+	-- example your input value is an integer from 0 - 200 and you need an linear expression from -100 - 0 analog to your input
+	-- Local new_value = mapvalue(value, 0,200,-100,0) //result for value = 100 is "-50"
+	
+	local function mapvalue(x, in_min, in_max, out_min, out_max)
+	  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;  
+	end
+	
+	
+-- draw Wh Gauge	
+	local function drawWhGauge( whconsumed )
+	  
+	   if whconsumed >= maxconsume then
+	      whconsumed = maxconsume
+	   end   
+	   lcd.drawFilledRectangle(74,9,11,55,INVERS)
+	   lcd.drawFilledRectangle(75,9,9, mapvalue(whconsumed, 0, maxconsume, 0, 55),0)
+	   --lcd.drawNumber(90,1,maxconsume,0)
+	end
+	
+
 	
 --Aux Display functions and panels
 	
@@ -252,7 +277,8 @@
 	    
 	    -- use prearmheading later to rotate cordinates relative to copter.
 	    radarx=z1*6358364.9098634 -- meters for x absolut to center(homeposition)
-	    radary=z2*6358364.9098634 -- meters for y absolut to center(homeposition)	    
+	    radary=z2*6358364.9098634 -- meters for y absolut to center(homeposition)
+	    hypdist =  math.sqrt( math.pow(math.abs(radarx),2) + math.pow(math.abs(radary),2) )
 	    
 	    radTmp = math.rad( prearmheading ) --work!!
 	    --radTmp = math.rad( headfromh )--  work, but need good gps signal.
@@ -303,7 +329,7 @@
 	  for j=21, 61, 4 do
 	    lcd.drawPoint(167+22, j)
 	  end
-	  lcd.drawNumber(180, 57, math.sqrt(((radarx)*(radarx)) + ((radary)*(radary))), SMLSIZE)
+	  lcd.drawNumber(180, 57,hypdist, SMLSIZE)
 	  lcd.drawText(lcd.getLastPos(), 57, "m", SMLSIZE)
 	end
 	
@@ -311,16 +337,16 @@
 -- Altitude Panel
 	local function htsapanel()
 	
-	  lcd.drawLine (74, 8, 74, 63, SOLID, 0)
-	  lcd.drawLine (154, 8, 154, 63, SOLID, 0)
+	  --lcd.drawLine (htsapaneloffset + 74, 8, htsapaneloffset + 74, 63, SOLID, 0)
+	  lcd.drawLine (htsapaneloffset + 154, 8, htsapaneloffset + 154, 63, SOLID, 0)
 	  --heading
-	  lcd.drawText(76,11,"Heading ",SMLSIZE)
+	  lcd.drawText(htsapaneloffset + 76,11,"Heading ",SMLSIZE)
 	  lcd.drawNumber(lcd.getLastPos(),9,getValue(223),MIDSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),9,"\64",MIDSIZE)
 	  
 	  --altitude
 	  --Alt max
-	  lcd.drawText(76,25,"Alt ",SMLSIZE)
+	  lcd.drawText(htsapaneloffset + 76,25,"Alt ",SMLSIZE)
 	  lcd.drawNumber(lcd.getLastPos()+3,22,getValue(206),MIDSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),22,"m",MIDSIZE)
 	  --vspeed
@@ -334,14 +360,14 @@
 	  end
 	  lcd.drawNumber(lcd.getLastPos(),25,vspd,0+LEFT)
 	 
-	  lcd.drawText(76,35,"Max",SMLSIZE)
+	  lcd.drawText(htsapaneloffset + 76,35,"Max",SMLSIZE)
 	  lcd.drawNumber(lcd.getLastPos()+8,35,getValue(237),SMLSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),35,"m",SMLSIZE)
 	  
 	  --Armed time
-	  lcd.drawTimer(106,42,model.getTimer(0).value,MIDSIZE)
+	  lcd.drawTimer(htsapaneloffset + 106,42,model.getTimer(0).value,MIDSIZE)
 	  
-	  lcd.drawText(76,56,"Speed",SMLSIZE)
+	  lcd.drawText(htsapaneloffset + 76,56,"Speed",SMLSIZE)
 	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue(211),MIDSIZE+LEFT)
 	  
 	end
@@ -401,6 +427,7 @@
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,32,"w",SMLSIZE)
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
+	  drawWhGauge( watthours )
 	  
 	  
 	  lcd.drawNumber(42,47,cellmin*100,DBLSIZE+PREC2)
@@ -410,7 +437,7 @@
 	end
 	
 	
-	-- Calculate wattshours
+	-- Calculate watthours
 	local function calcWattHs()
 	  --watthours = watthours + (getValue(216) * ((getValue(218)-lastconsumption)/1000))
 	  --lastconsumption = getValue(218)
@@ -421,6 +448,7 @@
 	    localtime = 0
 	  end
 	  oldlocaltime = getTime()
+	  maxconsume = model.getGlobalVariable(8, 2)
 	end
 	
 	
@@ -524,6 +552,20 @@
 	end
 	
 	
+-- play alarm wh reach maximum level	
+	local function playMaxWhReached()
+	  
+	  if watthours >= maxconsume then
+	    localtimetwo = localtimetwo + (getTime() - oldlocaltimetwo)
+	    if localtimetwo >=800 then --8s
+	      playFile("/SOUNDS/en/ALARM3K.wav")
+	      localtimetwo = 0
+	    end
+	    oldlocaltimetwo = getTime()	        
+	  end
+	  
+	end
+	
 --Background
 	local function background()
 	  
@@ -532,6 +574,8 @@
 	  Flight_modes()
 	  
 	  calcWattHs()
+	  
+	  playMaxWhReached()
 	  
 	end
 	
@@ -556,6 +600,8 @@
 	  drawArrow()
 	  
 	  calcWattHs()
+	  
+	  playMaxWhReached()
 
 	end
 
