@@ -198,7 +198,7 @@
 	-- Local new_value = mapvalue(value, 0,200,-100,0) //result for value = 100 is "-50"
 	
 	--local function mapvalue(x, in_min, in_max, out_min, out_max)
-	  --return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+	  --return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 	--end
 	
 	
@@ -455,7 +455,7 @@
 	local function armed_status()
 	  
 	  t2 = getValue(210)
-	  apmarmed = t2%0x02;
+	  apmarmed = t2%0x02
 	 
 	  --prearmheading =63
 	  if apmarmed ~=1 then -- report last heading bevor arming. this can used for display position relative to copter
@@ -485,11 +485,11 @@
 	    
 	  end
 	  
-	  t2 = (t2-apmarmed)/0x02;
-	  status_severity = t2%0x10;
+	  t2 = (t2-apmarmed)/0x02
+	  status_severity = t2%0x10
 	  
-	  t2 = (t2-status_severity)/0x10;
-	  status_textnr = t2%0x400;
+	  t2 = (t2-status_severity)/0x10
+	  status_textnr = t2%0x400
 	  
 	  if(status_severity > 0)
 	  then
