@@ -25,8 +25,7 @@
 	local lastarmed=0
 	local apmarmed=0
 	local FmodeNr=13 -- This is an invalid flight number when no data available
-	local last_flight_mode = 0
-	local last_flight_mode_play = 0
+	local last_flight_mode = 1
 	local last_apm_message_played = 0
 	local mult, tension, current, consumption, vspd
  	local watts, tension_min, current_max, watts_max, cellmin, xposCons, xposConsCell
@@ -69,46 +68,26 @@
 	for i=1, 17 do
 	  FlightMode[i] = {}
 	  FlightMode[i].Name=""
-	  FlightMode[i].SoundActive1="/SOUNDS/en/AVFM"..(i-1).."A.wav"
-	  FlightMode[i].SoundActive2="/SOUNDS/en/ALFM"..(i-1).."A.wav"
-	  FlightMode[i].Repeat=1
-	  FlightMode[i].Timer=0	  
+	  FlightMode[i].SoundActive1="/SOUNDS/en/AVFM"..(i-1).."A.wav" 
 	end
 	
 	FlightMode[1].Name="Stabilize"
-	FlightMode[1].Repeat=300
 	FlightMode[2].Name="Acro"
-	FlightMode[2].Repeat=300
 	FlightMode[3].Name="Altitude Hold"
-	FlightMode[3].Repeat=300
 	FlightMode[4].Name="Auto"
-	FlightMode[4].Repeat=60
 	FlightMode[5].Name="Guided"
-	FlightMode[5].Repeat=60
 	FlightMode[6].Name="Loiter"
-	FlightMode[6].Repeat=300
 	FlightMode[7].Name="Return to launch"
-	FlightMode[7].Repeat=15
 	FlightMode[8].Name="Circle"
-	FlightMode[8].Repeat=300
 	FlightMode[9].Name="Invalid Mode"
-	FlightMode[9].Repeat=15
 	FlightMode[10].Name="Land"
-	FlightMode[10].Repeat=15
 	FlightMode[11].Name="Optical Loiter"
-	FlightMode[11].Repeat=300
 	FlightMode[12].Name="Drift"
-	FlightMode[12].Repeat=300
 	FlightMode[13].Name="Invalid Mode"
-	FlightMode[13].Repeat=15
 	FlightMode[14].Name="Sport"
-	FlightMode[14].Repeat=60
 	FlightMode[15].Name="Flip Mode"
-	FlightMode[15].Repeat=15
 	FlightMode[16].Name="Auto Tune"
-	FlightMode[16].Repeat=30
 	FlightMode[17].Name="Position Hold"
-	FlightMode[17].Repeat=300
 	
 	
 --Init Severity Tables
@@ -385,8 +364,6 @@
 	  else
 	    lcd.drawText(1, 0, (FlightMode [FmodeNr].Name), INVERS+BLINK)
 	  end
-	  lcd.drawText(94, 0, " T:", INVERS)
-	  lcd.drawTimer(lcd.getLastPos(),0,model.getTimer(1).value,INVERS)
 	  
 	  lcd.drawText(134, 0, "TX:", INVERS)
 	  lcd.drawNumber(160, 0, getValue(189)*10,0+PREC1+INVERS)
@@ -468,7 +445,6 @@
 	    lastarmed=apmarmed
 	    if apmarmed==1 then
 	      model.setTimer(0,{ mode=1, start=0, value= SumFlight, countdownBeep=0, minuteBeep=1, persistent=1 })
-	      model.setTimer(1,{ mode=1, start=0, value= FlightMode[FmodeNr].Timer, countdownBeep=0, minuteBeep=0, persistent=1 })
 	      playFile("SOUNDS/en/SARM.wav")
 	      playFile(FlightMode[FmodeNr].SoundActive1)
 	      
@@ -476,9 +452,6 @@
 	      
 	      SumFlight = model.getTimer(0).value
 	      model.setTimer(0,{ mode=0, start=0, value= model.getTimer(0).value, countdownBeep=0, minuteBeep=1, persistent=1 })
-	      
-	      FlightMode[FmodeNr].Timer=model.getTimer(1).value
-	      model.setTimer(1,{ mode=0, start=0, value= FlightMode[FmodeNr].Timer, countdownBeep=0, minuteBeep=0, persistent=1 })
 	      
 	      playFile("SOUNDS/en/SDISAR.wav")
 	    end
@@ -525,28 +498,9 @@
 	    FmodeNr=13
 	  end
 	  
-	  
 	  if FmodeNr~=last_flight_mode then
-	    
 	    playFile(FlightMode[FmodeNr].SoundActive1)
-	    last_flight_mode_play=(100*FlightMode[FmodeNr].Repeat)+getTime()
-	    
-	    if apmarmed==1 then
-	      
-	      FlightMode[last_flight_mode].Timer=model.getTimer(1).value
-	      model.setTimer(1,{ mode=1, start=0, value= FlightMode[FmodeNr].Timer, countdownBeep=0, minuteBeep=0, persistent=1 })
-	      
-	    else
-	      model.setTimer(1,{ mode=0, start=0, value= FlightMode[FmodeNr].Timer, countdownBeep=0, minuteBeep=0, persistent=1 })
-	    end
-	    
 	    last_flight_mode=FmodeNr
-	    
-	    
-	  elseif getTime()>last_flight_mode_play
-	  then
-	    playFile(FlightMode[FmodeNr].SoundActive1)
-	    last_flight_mode_play=(100*FlightMode[FmodeNr].Repeat)+getTime()
 	  end
 	end
 	
