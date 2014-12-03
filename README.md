@@ -65,7 +65,7 @@ The screen explanation:
 
 A-Current Flight Mode Active as reported by the Flight Controller. If blinking the vehicle is not Armed.
 
-B-Current Flight Mode Timer. Each Flight Mode has its own timer. The timer stops if the vehicle is not Armed.
+B-Wh Gauge. Display Battery capacity left. Need an Setup Value in Mixes/offset.lua which holds your real battery capacity in Wh. 
 
 C-Radio Transmitter Battery Voltage.
 
@@ -106,6 +106,8 @@ S-Vehicle Arrow can move and rotate. this display position relative to home and 
 T-Home/Centre Position
 
 U-Distance to home (Distance to the point the Taranis received a good satellite fix)
+
+W-Vertical Speed in meters per minute
 
 AudioMessage Minimum Cell Info
 =======================
@@ -195,7 +197,7 @@ In our case, we take the model scripts offset.lua to help.
  
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/offset.jpg)
 
-We can set from the linear function (Wh = P x t and Ah = V x I xt) dependent Percentage offset for mAh and Wh here.
+We can set from the linear function (Wh = P x t and Ah = V x I xt) dependent Percentage offset for mAh and Wh here. "BatCap Wh" is needed by Wh consumption Gauge. This simply hold the Real Battery capacity in Wh. This is needed to display the Wh Gauge consumption correctly.
 
 Measurements
 ------------
