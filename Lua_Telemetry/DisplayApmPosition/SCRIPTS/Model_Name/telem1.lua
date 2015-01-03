@@ -27,9 +27,9 @@
 	local FmodeNr=13 -- This is an invalid flight number when no data available
 	local last_flight_mode = 1
 	local last_apm_message_played = 0
-	local mult, tension, current, consumption, vspd
- 	local watts, tension_min, current_max, watts_max, cellmin, xposCons, xposConsCell
-	local t2, nameofsndfile, prearmheading, radarx, radary, radarxtmp, radarytmp, hdop
+	local mult, consumption, vspd
+ 	local xposCons
+	local t2, prearmheading, radarx, radary, radarxtmp, radarytmp, hdop
 	--local headfromh, headtoh -- not needed if we use compass prearmheading
 	local watthours = 0
 	local lastconsumption =0
@@ -61,53 +61,29 @@
 	
 	--Timer 1 is accumulated time per flight mode
 	
-	model.setTimer(1, {mode=0, start=0, value= 0, countdownBeep=0, minuteBeep=0, persistent=1})
+	--model.setTimer(1, {mode=0, start=0, value= 0, countdownBeep=0, minuteBeep=0, persistent=1})
 	
 --Init Flight Tables
-	FlightMode = {}
-	for i=1, 17 do
-	  FlightMode[i] = {}
-	  FlightMode[i].Name=""
-	  FlightMode[i].SoundActive1="/SOUNDS/en/AVFM"..(i-1).."A.wav" 
-	end
-	
-	FlightMode[1].Name="Stabilize"
-	FlightMode[2].Name="Acro"
-	FlightMode[3].Name="Altitude Hold"
-	FlightMode[4].Name="Auto"
-	FlightMode[5].Name="Guided"
-	FlightMode[6].Name="Loiter"
-	FlightMode[7].Name="Return to launch"
-	FlightMode[8].Name="Circle"
-	FlightMode[9].Name="Invalid Mode"
-	FlightMode[10].Name="Land"
-	FlightMode[11].Name="Optical Loiter"
-	FlightMode[12].Name="Drift"
-	FlightMode[13].Name="Invalid Mode"
-	FlightMode[14].Name="Sport"
-	FlightMode[15].Name="Flip Mode"
-	FlightMode[16].Name="Auto Tune"
-	FlightMode[17].Name="Position Hold"
-	
-	
---Init Severity Tables
-	Severity={}
-	Severity[1]={}
-	Severity[1].Name=""
-	
-	for i=2,9 do
-	  Severity[i]={}
-	  Severity[i].Name=""
-	  Severity[i].Sound="/SOUNDS/en/ER"..(i-2)..".wav"
-	end
-	Severity[2].Name="Emergency"
-	Severity[3].Name="Alert"
-	Severity[4].Name="Critical"
-	Severity[5].Name="Error"
-	Severity[6].Name="Warning"
-	Severity[7].Name="Notice"
-	Severity[8].Name="Info"
-	Severity[9].Name="Debug"
+	local FlightMode = {
+			    "Stabilize",
+			    "Acro",
+			    "Altitude Hold",
+			    "Auto",
+			    "Guided",
+			    "Loiter",
+			    "Return to launch",
+			    "Circle",
+			    "Invalid Mode",
+			    "Land",
+			    "Optical Loiter",
+			    "Drift",
+			    "Invalid Mode",
+			    "Sport",
+			    "Flip Mode",
+			    "Auto Tune",
+			    "Position Hold"}
+
+
 	
 	local apm_status_message = {severity = 0, textnr = 0, timestamp=0}
 	
@@ -291,9 +267,6 @@
 	    
 	    offsetX = radarxtmp / divtmp
 	    offsetY = (radarytmp / divtmp)*-1
-	  else
-	    -- headfromh = 0
-	    -- headtoh = 0
 	  end
 	  --lcd.drawText(171,25,"X=",SMLSIZE )
 	  --lcd.drawNumber(lcd.getLastPos(),25,offsetX,SMLSIZE + LEFT)
@@ -360,9 +333,9 @@
 	  lcd.drawFilledRectangle(0, 0, 212, 9, 0)
 	  
 	  if apmarmed==1 then
-	    lcd.drawText(1, 0, (FlightMode [FmodeNr].Name), INVERS)
+	    lcd.drawText(1, 0, (FlightMode[FmodeNr]), INVERS)
 	  else
-	    lcd.drawText(1, 0, (FlightMode [FmodeNr].Name), INVERS+BLINK)
+	    lcd.drawText(1, 0, (FlightMode[FmodeNr]), INVERS+BLINK)
 	  end
 	  
 	  lcd.drawText(134, 0, "TX:", INVERS)
@@ -378,23 +351,23 @@
 	local function powerpanel()
 	  --Used on power panel -- still to check if all needed
 
-	  tension=getValue(216) --
-	  current=getValue(217) ---
+	  --tension=getValue(216) --
+	  --current=getValue(217) ---
 	  consumption=getValue(218)---
-	  watts=getValue(219) ---
-	  tension_min=getValue(246) ---
-	  current_max=getValue(247) ---
-	  watts_max=getValue(248)  ---
-	  cellmin=getValue(214) --- 214 = cell-min
+	  --watts=getValue(219) ---
+	  --tension_min=getValue(246) ---
+	  --current_max=getValue(247) ---
+	  --watts_max=getValue(248)  ---
+	  --cellmin=getValue(214) --- 214 = cell-min
 	  
-	  lcd.drawNumber(30,13,tension*10,DBLSIZE+PREC1)
+	  lcd.drawNumber(30,13,getValue(216)*10,DBLSIZE+PREC1)
 	  lcd.drawText(lcd.getLastPos(),14,"V",0)
 	  
-	  lcd.drawNumber(67,9,current*10,MIDSIZE+PREC1)
+	  lcd.drawNumber(67,9,getValue(217)*10,MIDSIZE+PREC1)
 	  lcd.drawText(lcd.getLastPos(),10,"A",0)
 	 
 	  
-	  lcd.drawNumber(67,21,watts,MIDSIZE)
+	  lcd.drawNumber(67,21,getValue(219),MIDSIZE)
 	  lcd.drawText(lcd.getLastPos(),22,"W",0)
 	  
 	  lcd.drawNumber(1,33,consumption + ( consumption * ( model.getGlobalVariable(8, 0)/100 ) ),MIDSIZE+LEFT)
@@ -408,10 +381,10 @@
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
 	  
 	  
-	  lcd.drawNumber(42,47,cellmin*100,DBLSIZE+PREC2)
-	  xposConsCell=lcd.getLastPos()
-	  lcd.drawText(xposConsCell,48,"V",SMLSIZE)
-	  lcd.drawText(xposConsCell,56,"C-min",SMLSIZE)
+	  lcd.drawNumber(42,47,getValue(214)*100,DBLSIZE+PREC2)
+	  xposCons=lcd.getLastPos()
+	  lcd.drawText(xposCons,48,"V",SMLSIZE)
+	  lcd.drawText(xposCons,56,"C-min",SMLSIZE)
 	end
 	
 	
@@ -446,7 +419,7 @@
 	    if apmarmed==1 then
 	      model.setTimer(0,{ mode=1, start=0, value= SumFlight, countdownBeep=0, minuteBeep=1, persistent=1 })
 	      playFile("SOUNDS/en/SARM.wav")
-	      playFile(FlightMode[FmodeNr].SoundActive1)
+	      playFile("/SOUNDS/en/AVFM"..(FmodeNr-1).."A.wav")
 	      
 	    else
 	      
@@ -483,8 +456,7 @@
 	  -- play sound
 	  if apm_status_message.textnr >0 then
 	    if last_apm_message_played ~= apm_status_message.textnr then
-	      nameofsndfile = "SOUNDS/en/MSG"..apm_status_message.textnr..".wav"
-	      playFile(nameofsndfile)
+	      playFile("SOUNDS/en/MSG"..apm_status_message.textnr..".wav")
 	      last_apm_message_played = apm_status_message.textnr
 	    end
 	  end
@@ -493,13 +465,13 @@
 	
 --FlightModes
 	local function Flight_modes()
-	  FmodeNr=getValue(208)+1
+	  FmodeNr= getValue(208)+1
 	  if FmodeNr<1 or FmodeNr>17 then
 	    FmodeNr=13
 	  end
 	  
 	  if FmodeNr~=last_flight_mode then
-	    playFile(FlightMode[FmodeNr].SoundActive1)
+	    playFile("/SOUNDS/en/AVFM"..(FmodeNr-1).."A.wav")
 	    last_flight_mode=FmodeNr
 	  end
 	end
