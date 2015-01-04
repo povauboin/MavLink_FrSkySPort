@@ -21,30 +21,53 @@
 
 
 --Init Variables
-	local SumFlight=0
-	local lastarmed=0
-	local apmarmed=0
-	local FmodeNr=13 -- This is an invalid flight number when no data available
+	local SumFlight = 0
+	local lastarmed = 0
+	local apmarmed = 0
+	local FmodeNr = 13 -- This is an invalid flight number when no data available
 	local last_flight_mode = 1
 	local last_apm_message_played = 0
-	local mult, consumption, vspd
- 	local xposCons
-	local t2, prearmheading, radarx, radary, radarxtmp, radarytmp, hdop
-	--local headfromh, headtoh -- not needed if we use compass prearmheading
+	local mult = 0
+	local consumption = 0
+	local vspd = 0
+ 	local xposCons = 0
+	local t2 = 0
+	local prearmheading = 0
+	local radarx = 0
+	local radary = 0
+	local radarxtmp = 0
+	local radarytmp = 0
+	local hdop = 0
 	local watthours = 0
-	local lastconsumption =0
-	local localtime =0
-	local oldlocaltime=0
-	local localtimetwo =0
-	local oldlocaltimetwo=0	
-	local pilotlat, pilotlon, curlat, curlon, telem_sats, telem_lock, telem_t1
-	local status_severity, status_textnr, hypdist, battWhmax, maxconsume, whconsumed
+	local lastconsumption = 0
+	local localtime = 0
+	local oldlocaltime= 0
+	local localtimetwo = 0
+	local oldlocaltimetwo= 0
+	local pilotlat = 0
+	local pilotlon = 0
+	local curlat = 0
+	local curlon = 0
+	local telem_sats = 0
+	local telem_lock = 0
+	local telem_t1 = 0
+	local status_severity = 0
+	local status_textnr = 0
+	local hypdist = 0
+	local battWhmax = 0
+	local maxconsume = 0
+	local whconsumed = 0
 	local batteryreachmaxWH = 0
 	
 	-- Temporary text attribute
 	local FORCE = 0x02 -- draw ??? line or rectangle
-	local X1, Y1, X2, Y2
-	local sinCorr, cosCorr, radTmp
+	local X1 = 0
+	local Y1 = 0
+	local X2 = 0
+	local Y2 = 0
+	local sinCorr = 0
+	local cosCorr = 0
+	local radTmp = 0
 	local CenterXcolArrow = 189
 	local CenterYrowArrow = 41
 	local offsetX = 0
@@ -82,8 +105,6 @@
 			    "Flip Mode",
 			    "Auto Tune",
 			    "Position Hold"}
-
-
 	
 	local apm_status_message = {severity = 0, textnr = 0, timestamp=0}
 	
@@ -109,7 +130,7 @@
 	end
 	
 	local A4 = model.getTelemetryChannel(3)
-	if A4.unit ~= 3 or A4.range ~=362 or A4.offset ~=-180 
+	if A4.unit ~= 3 or A4.range ~=362 or A4.offset ~=-180
 	then
 	  A4.unit = 3
 	  A4.range = 362
@@ -160,7 +181,7 @@
 -- draw Wh Gauge	
 	local function drawWhGauge()
 	   
-	   whconsumed = watthours + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) 
+	   whconsumed = watthours + ( watthours * ( model.getGlobalVariable(8, 1)/100) )
 	   if whconsumed >= maxconsume then
 	      whconsumed = maxconsume
 	   end
@@ -263,7 +284,7 @@
 	    end
 	    
 	    upppp = 20480
-	    divvv = 2048 --12 mal teilen    
+	    divvv = 2048 --12 mal teilen
 	    
 	    offsetX = radarxtmp / divtmp
 	    offsetY = (radarytmp / divtmp)*-1
@@ -401,7 +422,7 @@
 	end
 	
 	
---APM Armed and errors		
+--APM Armed and errors
 	local function armed_status()
 	  
 	  t2 = getValue(210)
@@ -477,7 +498,7 @@
 	end
 	
 	
--- play alarm wh reach maximum level	
+-- play alarm wh reach maximum level
 	local function playMaxWhReached()
 	  
 	  if (watthours  + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) ) >= maxconsume then
@@ -486,9 +507,8 @@
 	      playFile("/SOUNDS/en/ALARM3K.wav")
 	      localtimetwo = 0
 	    end
-	    oldlocaltimetwo = getTime()	        
+	    oldlocaltimetwo = getTime()
 	  end
-	  
 	end
 	
 --Background
@@ -507,12 +527,7 @@
 --Main
 	local function run(event)
 	  
-	  --lcd.lock()
-	  lcd.clear()
-	  
-	  armed_status()
-	  
-	  Flight_modes()
+	  background()
 	  
 	  toppanel()
 	  
@@ -524,11 +539,7 @@
 	  
 	  drawArrow()
 	  
-	  calcWattHs()
-	  
 	  drawWhGauge()
-	  
-	  playMaxWhReached()
 
 	end
 
