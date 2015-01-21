@@ -125,6 +125,7 @@ this script allows you to setup your cell audio info-messages, warning-messages 
 
 Single Cell Lipo Voltage Monitor
 ================================
+INFO: comment line 87 & 88 in MavLink_FrSkySPort.ino to disable the "Single Cell Lipo Voltage Monitor" functionality to use reported Mavlink voltage instead.
 
 this increase the teensy functionality to measure all lipo cells separate via lipo balancer jack. this require teensy pins A0 to A5(6S Lipo) connected via an voltage divider resistor network.
 
@@ -240,7 +241,7 @@ after calibration
 Known Issues
 ============
 
- * GPS-Pilot Latitud and Longitud are currently reported by FrSky Taranis from first received lat/long. this is independent of arming position. so currently it need an telemetry reset if you power your copter on an other place than you will arm the copter. i change this next time to arming position.
+
 
 
 
