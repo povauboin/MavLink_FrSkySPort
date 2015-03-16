@@ -22,4 +22,4 @@ Teensy2 Connection Diagram:
 
 Pro Mini Connection Diagram:
 
-![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/APM_MavLink2FrSky_PRO-MINI.png)
+![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/APM_MavLink2FrSky_PRO-MINI.jpg)
