@@ -55,12 +55,14 @@ AccZ            ( Z Axis average vibration m/s?)
 #include <GCS_MAVLink.h>
 #include "FrSkySPort.h"
 
-#define _MavLinkSerial      Serial1 // Teensy2 = Serial1 | Pro Mini ? 
-#define debugSerial          Serial
+
+#define _MavLinkSerial      Serial1 // Teensy2 = Serial1 | Pro Mini Serial
+#define debugSerial          Serial 
 #define START                     1
 #define MSG_RATE                 10 // Hertz
 #define FRSKY_PORT                4 // Teensy2 = pin 4 | Pro Mini = pin 9
 #define MavLinkSerialBaud     58824 // Teensy2 = 58824 | Pro Mini = 57600
+#define LEDPIN                   11 // Teensy2 = pin 11 | Pro Mini = pin 13
 
 //#define DEBUG_VFR_HUD
 //#define DEBUG_GPS_RAW
@@ -183,7 +185,7 @@ uint16_t  hb_count;
 unsigned long MavLink_Connected_timer;
 unsigned long hb_timer;
 
-int led = 11; //11 Teensy2, 13 Pro Mini
+int led = LEDPIN;
 
 mavlink_message_t msg;
 
