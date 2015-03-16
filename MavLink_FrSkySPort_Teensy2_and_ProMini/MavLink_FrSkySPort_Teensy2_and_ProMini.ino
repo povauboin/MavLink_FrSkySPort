@@ -5,14 +5,14 @@ APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1  http://www.pjrc.co
  ******************************************************
  Cut board on the backside to separate Vin from VUSB
  
- Connection on Teensy 3.1:
- SPort S --> TX1
+ Connection on Teensy2:
+ SPort S --> TX1 Pin 4
  SPort + --> Vin
  SPort  - --> GND
  
- APM Telemetry DF13-5  Pin 2 --> RX2
- APM Telemetry DF13-5  Pin 3 --> TX2
- APM Telemetry DF13-5  Pin 5 --> GND
+ APM Telemetry DF13-5  Pin 7 --> RX2
+ APM Telemetry DF13-5  Pin 8 --> TX2
+ APM Telemetry DF13-5  Pin GND --> GND
 
  Note that when used with other telemetry device (3DR Radio 433 or 3DR Bluetooth tested) in parallel on the same port the Teensy should only Receive, so please remove it's TX output (RX input on PixHawk or APM)
  
@@ -55,11 +55,12 @@ AccZ            ( Z Axis average vibration m/s?)
 #include <GCS_MAVLink.h>
 #include "FrSkySPort.h"
 
-#define _MavLinkSerial      Serial
-#define START                   1
-#define MSG_RATE            10              // Hertz
-#define FRSKY_PORT 1 // PIN, wo der X8R angeschlossen ist
-
+#define _MavLinkSerial      Serial1 // Teensy2 = Serial1 | Pro Mini ? 
+#define debugSerial          Serial
+#define START                     1
+#define MSG_RATE                 10 // Hertz
+#define FRSKY_PORT                4 // Teensy2 = pin 4 | Pro Mini = pin 9
+#define MavLinkSerialBaud     58824 // Teensy2 = 58824 | Pro Mini = 57600
 
 //#define DEBUG_VFR_HUD
 //#define DEBUG_GPS_RAW
@@ -221,15 +222,18 @@ double smoothedVal[MAXCELLS+1]; // this holds the last loop value
 // ******************************************
 void setup()  {
 
-  FrSkySPort_Init();
-  _MavLinkSerial.begin(57600);
+ 
+  _MavLinkSerial.begin(MavLinkSerialBaud);
   //debugSerial.begin(57600);
+  delay(1000);
+   FrSkySPort_Init();
+   
   MavLink_Connected = 0;
   MavLink_Connected_timer=millis();
   hb_timer = millis();
   hb_count = 0;
 
-
+ 
   pinMode(led,OUTPUT);
   pinMode(12,OUTPUT);
 

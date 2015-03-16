@@ -66,6 +66,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
   uint32_t temp2=0;
   uint8_t offset;
   
+
   //ap_cell_count =2;
   
   switch(sensorId)
