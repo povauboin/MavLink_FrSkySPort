@@ -4,7 +4,7 @@ on teensy2 or pro mini it is important to hold the estimated memory use below 20
 
 in Average.ino function void parseStatusText(int32_t severity, String text) line 206 holds a lot of Strings which consume memory. this strings are used to parse status text message as ID's. the lua script play this messages as audio messages. so if you need messages i have commented, simple uncomment messages you need. but you also must comment other message to hold the estimated memory use below 2000 bytes.
 
-in MavLink_FrSkySPort_Teensy2_and_ProMini.ino line 59 - 65 change valus dependent to your board.
+in "MavLink_FrSkySPort_Teensy2_and_ProMini.ino" line 59 - 65 change valus dependent to your board.
 
 ```
 #define _MavLinkSerial      Serial1 // Teensy2 = Serial1 | Pro Mini Serial
