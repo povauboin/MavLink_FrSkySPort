@@ -241,7 +241,7 @@ void setup()  {
 
   pinMode(14,INPUT);
   
-  //analogReadResolution(13);
+//
   analogReference(DEFAULT);
 
   /// Wolke lipo-single-cell-monitor
@@ -451,7 +451,7 @@ break;
           ap_gps_speed = 0;  
         }
 #ifdef DEBUG_GPS_RAW    
-        debugSerial.print(millis());
+        /*debugSerial.print(millis());
         debugSerial.print("\tMAVLINK_MSG_ID_GPS_RAW_INT: fixtype: ");
         debugSerial.print(ap_fixtype);
         debugSerial.print(", visiblesats: ");
@@ -462,8 +462,13 @@ break;
         debugSerial.print(mavlink_msg_gps_raw_int_get_vel(&msg)/100.0);
         debugSerial.print(", hdop: ");
         debugSerial.print(mavlink_msg_gps_raw_int_get_eph(&msg)/100.0);
-        debugSerial.print(", alt: ");
-        debugSerial.print(mavlink_msg_gps_raw_int_get_alt(&msg));
+        */
+        debugSerial.print(", gps lat: ");
+        debugSerial.print(mavlink_msg_gps_raw_int_get_lat(&msg));
+        debugSerial.print(", gps long: ");
+        debugSerial.print(mavlink_msg_gps_raw_int_get_lon(&msg));
+        //debugSerial.print(", alt: ");
+        //debugSerial.print(mavlink_msg_gps_raw_int_get_alt(&msg));
         debugSerial.println();                                     
 #endif
         break;
