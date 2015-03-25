@@ -233,7 +233,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
       case 0:        // Sends the ap_longitude value, setting bit 31 high
         if(ap_fixtype==3) {
           if(ap_longitude < 0){
-            latlong = latlong * -1;
+            ap_longitude = ap_longitude * -1;
             latlong=(ap_longitude)/100*6  | 0xC0000000;
           }
           else
@@ -246,7 +246,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
       case 1:        // Sends the ap_latitude value, setting bit 31 low  
         if(ap_fixtype==3) {
           if(ap_latitude < 0 ){
-            latlong = latlong * -1;
+            ap_latitude = ap_latitude * -1;
             latlong=(ap_latitude/100)*6 | 0x40000000;
           }
           else

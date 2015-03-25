@@ -195,12 +195,12 @@ mavlink_message_t msg;
 //cell voltage divider. this is dependent from your resitor voltage divider network
 double LIPOCELL_1TO8[13] =
 {
-  237.350026082,
-  116.006256517,
-  77.3509473318,
-  58.7966886122,
-  46.3358699051,
-  39.4176445024,
+  238.547031716,
+  116.553595658,
+  77.750655456,
+  59.11872705,
+  46.535677353,
+  39.62328371239,//39.628929118,
   0.0, // diverders 7-12 not defined because my network includes only 6 voltage dividers
   0.0,
   0.0,
@@ -242,7 +242,7 @@ void setup()  {
   pinMode(14,INPUT);
   
 //
-  analogReference(DEFAULT);
+  analogReference(EXTERNAL);
 
   /// Wolke lipo-single-cell-monitor
 #ifdef USE_SINGLE_CELL_MONITOR
@@ -278,15 +278,21 @@ void loop()  {
     smoothedVal[i] = ( aread[i] * (1 - lp_filter_val)) + (smoothedVal[i]  *  lp_filter_val);
     aread[i] = round(smoothedVal[i]);
     cell[i] = double (aread[i]/individualcelldivider[i]) * 1000;
+    
+    //debugSerial.print( cell[i]);
+    //debugSerial.print( ", "); 
+    
     if( i == 0 ) zelle[i] = round(cell[i]);
     else zelle[i] =  round(cell[i] - cell[i-1]);
   }
   alllipocells = cell[cells_in_use -1];
+  //debugSerial.println(", end");
 
   /*
   debugSerial.println(aread[0]);
   debugSerial.println(cell[0]);
   debugSerial.println("-------");
+ *//*
  
   for(int i = 0; i < MAXCELLS; i++){
     
@@ -298,7 +304,7 @@ void loop()  {
   debugSerial.print( ", ");
   debugSerial.print(", sum ");
   debugSerial.println(alllipocells);
-   */
+  */
   
 #endif
   /// ~Wolke lipo-single-cell-monitor
