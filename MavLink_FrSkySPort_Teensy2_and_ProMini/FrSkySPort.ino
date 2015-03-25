@@ -234,7 +234,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
         if(ap_fixtype==3) {
           if(ap_longitude < 0){
             ap_longitude = ap_longitude * -1;
-            latlong=(ap_longitude)/100*6  | 0xC0000000;
+            latlong=(ap_longitude/100)*6  | 0xC0000000;
           }
           else
           { 
