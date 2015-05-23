@@ -7,7 +7,7 @@ in Average.ino function void parseStatusText(int32_t severity, String text) line
 in "MavLink_FrSkySPort_Teensy2_and_ProMini.ino" line 59 - 65 change valus dependent to your board.
 
 ```
-#define _MavLinkSerial      Serial1 // Teensy2 = Serial1 | Pro Mini Serial
+#define _MavLinkSerial      Serial1 // Teensy2 = Serial1 | Pro Mini = Serial
 #define debugSerial          Serial 
 #define START                     1
 #define MSG_RATE                 10 // Hertz
