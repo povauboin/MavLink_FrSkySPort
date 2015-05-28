@@ -23,11 +23,11 @@ mavlink_system_t mavlink_system = {12,1,0,0}; //modified
 
 uint8_t mavlink_check_target(uint8_t sysid, uint8_t compid)
 {
-    if (sysid != mavlink_system.sysid)
+    if (sysid != mavlink_system.sysid || compid != mavlink_system.compid) {
         return 1;
-    // Currently we are not checking for correct compid since APM is not passing mavlink info to any subsystem
-    // If it is addressed to our system ID we assume it is for us
-    return 0; // no error
+    } else {
+        return 0; // no error
+    }
 }
 
 /*
