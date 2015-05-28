@@ -84,8 +84,8 @@ AccZ            ( Z Axis average vibration m/s?)
  *
  */
 
-#define USE_SINGLE_CELL_MONITOR
-#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
+//#define USE_SINGLE_CELL_MONITOR
+//#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
 #ifdef USE_SINGLE_CELL_MONITOR
 // configure number maximum connected analog inputs(cells) if you build an six cell network then MAXCELLS is 6 
 #define MAXCELLS 6
