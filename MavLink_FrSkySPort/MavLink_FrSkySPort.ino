@@ -55,9 +55,10 @@ AccZ            ( Z Axis average vibration m/s?)
 #include "GCS_MAVLink.h"
 #include "FrSkySPort.h"
 
-#define debugSerial           Serial
+#define debugSerial         Serial
 #define _MavLinkSerial      Serial2
-#define START                   1
+#define _MavLinkSerialBaud  57600
+#define START               1
 #define MSG_RATE            10              // Hertz
 
 //#define DEBUG_VFR_HUD
@@ -221,7 +222,7 @@ double smoothedVal[MAXCELLS+1]; // this holds the last loop value
 void setup()  {
 
   FrSkySPort_Init();
-  _MavLinkSerial.begin(57600);
+  _MavLinkSerial.begin(_MavLinkSerialBaud);
   //debugSerial.begin(57600);
   MavLink_Connected = 0;
   MavLink_Connected_timer=millis();
