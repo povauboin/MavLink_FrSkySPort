@@ -52,7 +52,7 @@ AccZ            ( Z Axis average vibration m/s?)
 
  */
 
-#include <GCS_MAVLink.h>
+#include "GCS_MAVLink.h"
 #include "FrSkySPort.h"
 
 #define debugSerial           Serial
