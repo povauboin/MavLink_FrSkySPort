@@ -349,7 +349,7 @@ uint32_t handle_A2_A3_value(uint32_t value)
 }
 
 // ***********************************************************************
-void printDebugPackageSend(char* pkg_name, uint8_t pkg_nr, uint8_t pkg_max)
+void printDebugPackageSend(const char* pkg_name, uint8_t pkg_nr, uint8_t pkg_max)
 {
 #ifdef DEBUG_FRSKY_SENSOR_REQUEST
   debugSerial.print(millis());
