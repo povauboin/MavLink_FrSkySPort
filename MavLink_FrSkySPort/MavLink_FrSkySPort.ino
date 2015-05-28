@@ -72,6 +72,7 @@ AccZ            ( Z Axis average vibration m/s?)
 //#define DEBUG_MODE
 //#define DEBUG_STATUS
 //#define DEBUG_ATTITUDE
+//#define DEBUG_GIMBAL
 
 //#define DEBUG_FRSKY_SENSOR_REQUEST
 
@@ -350,10 +351,6 @@ void _MavLink_receive() {
         ap_custom_mode = mavlink_msg_heartbeat_get_custom_mode(&msg);
 #ifdef DEBUG_MODE
         debugSerial.print(millis());
-        debugSerial.print("\tsysid: ");
-        debugSerial.print(msg.sysid);
-        debugSerial.print("\tcompid: ");
-        debugSerial.print(msg.compid);
         debugSerial.print("\tMAVLINK_MSG_ID_SYS_STATUS: base_mode: ");
         debugSerial.print((mavlink_msg_heartbeat_get_base_mode(&msg) & 0x80) > 7);
         debugSerial.print(", custom_mode: ");
@@ -542,7 +539,23 @@ break;
         break;
       }
 
+    } else if (GB_SYSID == msg.sysid && GB_CMPID == msg.compid) // only proceed with gimbal messages
+    {
+      switch(msg.msgid)
+      {
+      case MAVLINK_MSG_ID_HEARTBEAT:  // 0
+#ifdef DEBUG_MODE
+        debugSerial.print(millis());
+        debugSerial.print("\tGIMBAL MESSAGE: ");
+        debugSerial.print((mavlink_msg_heartbeat_get_base_mode(&msg) & 0x80) > 7);
+        debugSerial.print(", custom_mode: ");
+        debugSerial.print(mavlink_msg_heartbeat_get_custom_mode(&msg));
+        debugSerial.println();
+#endif              
+      break;
+      }
     }
+    
   }
 }
 
