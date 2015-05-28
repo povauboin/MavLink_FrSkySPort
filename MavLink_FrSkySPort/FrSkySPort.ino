@@ -34,8 +34,6 @@ void FrSkySPort_Init(void)  {
 // ***********************************************************************
 void FrSkySPort_Process(void) {
   uint8_t data = 0;
-  uint32_t temp=0;
-  uint8_t offset;
   while ( _FrSkySPort_Serial.available()) 
   {
     data =  _FrSkySPort_Serial.read();
