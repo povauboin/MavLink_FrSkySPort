@@ -60,6 +60,10 @@ AccZ            ( Z Axis average vibration m/s?)
 #define _MavLinkSerialBaud  57600
 #define START               1
 #define MSG_RATE            10              // Hertz
+#define AP_SYSID            1 // autopilot system id
+#define AP_CMPID            1 // autopilot component id
+#define GB_SYSID            71 // gimbal system id
+#define GB_CMPID            67 // gimbal component id
 
 //#define DEBUG_VFR_HUD
 //#define DEBUG_GPS_RAW
@@ -337,7 +341,7 @@ void _MavLink_receive() {
   while(_MavLinkSerial.available()) 
   { 
     uint8_t c = _MavLinkSerial.read();
-    if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status) && !mavlink_check_target(msg.sysid, msg.compid)) 
+    if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status) && (AP_SYSID == msg.sysid && AP_CMPID == msg.compid)) // only proceed with autopilot messages
     {
       switch(msg.msgid)
       {
