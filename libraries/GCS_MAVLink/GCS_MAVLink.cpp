@@ -19,7 +19,7 @@ version 2.1 of the License, or (at your option) any later version.
 Stream	*mavlink_comm_0_port;
 Stream	*mavlink_comm_1_port;
 
-mavlink_system_t mavlink_system = {1,1,0,0}; //set to default apm AP
+// mavlink_system_t mavlink_system = {123,123,0,0}; //set to default apm AP
 
 uint8_t mavlink_check_target(uint8_t sysid, uint8_t compid)
 {

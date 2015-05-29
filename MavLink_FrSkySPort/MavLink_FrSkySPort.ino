@@ -1,4 +1,3 @@
-
 /*
 APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1  http://www.pjrc.com/teensy/index.html
  based on ideas found here http://code.google.com/p/telemetry-convert/
@@ -64,6 +63,8 @@ AccZ            ( Z Axis average vibration m/s?)
 #define AP_CMPID            1 // autopilot component id
 #define GB_SYSID            71 // gimbal system id
 #define GB_CMPID            67 // gimbal component id
+#define MY_SYSID            123 // teensy system id
+#define MY_CMPID            123 // teensy component id
 
 //#define DEBUG_VFR_HUD
 //#define DEBUG_GPS_RAW
@@ -190,6 +191,7 @@ unsigned long hb_timer;
 int led = 13;
 
 mavlink_message_t msg;
+mavlink_system_t mavlink_system = {MY_SYSID,MY_CMPID,0,0};
 
 /// Wolke lipo-single-cell-monitor
 #ifdef USE_SINGLE_CELL_MONITOR
@@ -304,19 +306,29 @@ void loop()  {
 
   uint16_t len;
 
+  // Send a heartbeat over the mavlink
+  //mavlink_msg_heartbeat_pack(123, 123, &msg, MAV_TYPE_ONBOARD_CONTROLLER, MAV_AUTOPILOT_GENERIC, MAV_MODE_PREFLIGHT, <CUSTOM_MODE>, MAV_STATE_STANDBY);
+  mavlink_msg_heartbeat_pack(mavlink_system.sysid, mavlink_system.compid, &msg, 0, 18, 0, 0, 4);
+  len = mavlink_msg_to_send_buffer(buf, &msg);
+  _MavLinkSerial.write(buf,len);
+
   if(millis()-hb_timer > 1500) {
     hb_timer=millis();
     if(!MavLink_Connected) {    // Start requesting data streams from MavLink
+      debugSerial.print(millis());
+      debugSerial.print("\tEntering stream request");
+      debugSerial.println();
       digitalWrite(led,HIGH);
-      mavlink_msg_request_data_stream_pack(0xFF,0xBE,&msg,1,1,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
+      // mavlink_msg_request_data_stream_pack(0xFF,0xBE,&msg,1,1,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
+      mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,1,1,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
       len = mavlink_msg_to_send_buffer(buf, &msg);
       _MavLinkSerial.write(buf,len);
       delay(10);
-      mavlink_msg_request_data_stream_pack(0xFF,0xBE,&msg,1,1,MAV_DATA_STREAM_EXTRA2, MSG_RATE, START);
+      mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,1,1,MAV_DATA_STREAM_EXTRA2, MSG_RATE, START);
       len = mavlink_msg_to_send_buffer(buf, &msg);
       _MavLinkSerial.write(buf,len);
       delay(10);
-      mavlink_msg_request_data_stream_pack(0xFF,0xBE,&msg,1,1,MAV_DATA_STREAM_RAW_SENSORS, MSG_RATE, START);
+      mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,1,1,MAV_DATA_STREAM_RAW_SENSORS, MSG_RATE, START);
       len = mavlink_msg_to_send_buffer(buf, &msg);
       _MavLinkSerial.write(buf,len);
       digitalWrite(led,LOW);
@@ -554,12 +566,27 @@ break;
 #endif              
       break;
       }
-    }
+    } else {
+      switch(msg.msgid)
+      {
+      case MAVLINK_MSG_ID_HEARTBEAT:  // 0
+#ifdef DEBUG_MODE
+        debugSerial.print(millis());
+        debugSerial.print("\tOTHER MESSAGE: ");
+        debugSerial.print("sysid: ");
+        debugSerial.print(msg.sysid);
+        debugSerial.print(", compid: ");
+        debugSerial.print(msg.compid);
+        debugSerial.print(", ");
+        debugSerial.print((mavlink_msg_heartbeat_get_base_mode(&msg) & 0x80) > 7);
+        debugSerial.print(", custom_mode: ");
+        debugSerial.print(mavlink_msg_heartbeat_get_custom_mode(&msg));
+        debugSerial.println();
+#endif              
+      break;
+      }
+    }      
     
   }
 }
-
-
-
-
 
