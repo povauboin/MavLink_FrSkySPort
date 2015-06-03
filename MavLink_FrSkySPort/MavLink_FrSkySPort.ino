@@ -308,9 +308,9 @@ void loop()  {
 
   // Send a heartbeat over the mavlink
   //mavlink_msg_heartbeat_pack(123, 123, &msg, MAV_TYPE_ONBOARD_CONTROLLER, MAV_AUTOPILOT_GENERIC, MAV_MODE_PREFLIGHT, <CUSTOM_MODE>, MAV_STATE_STANDBY);
-  mavlink_msg_heartbeat_pack(mavlink_system.sysid, mavlink_system.compid, &msg, 0, 18, 0, 0, 4);
-  len = mavlink_msg_to_send_buffer(buf, &msg);
-  _MavLinkSerial.write(buf,len);
+  //mavlink_msg_heartbeat_pack(mavlink_system.sysid, mavlink_system.compid, &msg, 0, 18, 0, 0, 4);
+  //len = mavlink_msg_to_send_buffer(buf, &msg);
+  //_MavLinkSerial.write(buf,len);
 
   if(millis()-hb_timer > 1500) {
     hb_timer=millis();
