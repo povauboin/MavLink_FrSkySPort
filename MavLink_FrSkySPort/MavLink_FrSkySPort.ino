@@ -191,7 +191,7 @@ unsigned long hb_timer;
 int led = 13;
 
 mavlink_message_t msg;
-mavlink_system_t mavlink_system = {MY_SYSID,MY_CMPID,0,0};
+mavlink_system_t mavlink_system = {MY_SYSID,MY_CMPID};
 
 /// Wolke lipo-single-cell-monitor
 #ifdef USE_SINGLE_CELL_MONITOR
