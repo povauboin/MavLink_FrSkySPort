@@ -6,7 +6,9 @@ http://diydrones.com/forum/topics/amp-to-frsky-x8r-sport-converter
 It's based on the official 1.3 version.
 
 Teensy Compile INFO:
-comment line 87 & 88 in MavLink_FrSkySPort.ino to disable the "Single Cell Lipo Voltage Monitor" functionality to use reported Mavlink voltage instead.
+uncomment line 79 in MavLink_FrSkySPort.ino to enable processing of MavLink Message RC_CHANNELS, currently not in use, but can be used for extending possibilities of e.g. controlling LEDs or other addons.
+
+comment line 92 & 93 in MavLink_FrSkySPort.ino to disable the "Single Cell Lipo Voltage Monitor" functionality to use reported Mavlink voltage instead.
 
 The main focus of this script and teensy modification is the exact monitoring of the flight battery capacity and voltage. The consumption in mA / h and watt-hours can be calibrated on a separate model script. Moreover, by the modification described below on teensy, which are allowed lipo monitors individual cell voltage. The radar on the left represents the position and the orientation of the vehicle.
 
