@@ -242,16 +242,6 @@ At the very end we make it up a flight test and compare the new values of the te
 after calibration
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/after-ofsettcalibration.jpeg)
 
-LED-Control Cableing
---------------------
-You need a 74HCT245 Chip to converted signal from teensy to 5V .
-
-Connect Teensy Pin 6 to A1 of 74HCT245.
-Connect 5V to DIR and VCC of 74HCT245 and 5V on ws2812b LEDs.
-Connect Teensy GND to GND of 74HCT245 and WS2812b LEDs.
-Connect 74HCT245 B1 to a 100 Ohm Resistor and wire it to Din of WS2812b LED.
-
-
 Known Issues
 ============
 
