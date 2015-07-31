@@ -230,7 +230,9 @@ double smoothedVal[MAXCELLS+1]; // this holds the last loop value
 
 // ******************************************
 void setup()  {
-
+  
+  delay(20000);   // Waiting 20sec for bootup of pixhawk or apm
+  
   FrSkySPort_Init();
 
 
@@ -543,8 +545,8 @@ break;
         debugSerial.print(mavlink_msg_attitude_get_yaw(&msg));
         debugSerial.println();
 #endif
-      break;
-	  
+        break;
+        
 #ifdef USE_RC_CHANNELS
       case MAVLINK_MSG_ID_RC_CHANNELS:    //65    
         ap_chancount = mavlink_msg_rc_channels_get_chancount(&msg);     // Number of RC Channels used
@@ -568,13 +570,12 @@ break;
         ap_chan_raw[16] = mavlink_msg_rc_channels_get_chan16_raw(&msg);
         ap_chan_raw[17] = mavlink_msg_rc_channels_get_chan17_raw(&msg);
         ap_chan_raw[18] = mavlink_msg_rc_channels_get_chan18_raw(&msg);
-        
         //ap_rssi = mavlink_msg_rc_channels_get_rssi(&msg);       // Receive signal strength indicator, 0: 0%, 100: 100%, 255: invalid/unknown.
 
 #ifdef DEBUG_RC_CHANNELS
         debugSerial.print(millis());
         debugSerial.print(" - ");
-        debugSerial.print(ap_time_boot_ms);
+        //debugSerial.print(ap_time_boot_ms);
         debugSerial.print("\tMAVLINK_MSG_ID_RC_CHANNELS: chancount: ");
         debugSerial.print(ap_chancount);
         debugSerial.println();
@@ -611,7 +612,7 @@ break;
 #endif
       break;
 #endif
-	  
+
       case MAVLINK_MSG_ID_VFR_HUD:   //  74
         ap_groundspeed = mavlink_msg_vfr_hud_get_groundspeed(&msg);      // 100 = 1m/s
         ap_heading = mavlink_msg_vfr_hud_get_heading(&msg);              // 100 = 100 deg
@@ -669,7 +670,7 @@ break;
         debugSerial.print(msg.sysid);
         debugSerial.print(", compid: ");
         debugSerial.print(msg.compid);
-        debugSerial.print(", ");
+        debugSerial.print(", base_mode: ");
         debugSerial.print((mavlink_msg_heartbeat_get_base_mode(&msg) & 0x80) > 7);
         debugSerial.print(", custom_mode: ");
         debugSerial.print(mavlink_msg_heartbeat_get_custom_mode(&msg));
