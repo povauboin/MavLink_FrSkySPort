@@ -76,8 +76,8 @@ AccZ            ( Z Axis average vibration m/s?)
 //#define DEBUG_LIPO_SINGLE_CELL_MONITOR
 //#define DEBUG_RC_CHANNELS
 
-//#define USE_RC_CHANNELS
-
+#define USE_RC_CHANNELS
+#define USE_TEENSY_LED_SUPPORT
 /// Wolke lipo-single-cell-monitor
 /*
  *
@@ -89,11 +89,11 @@ AccZ            ( Z Axis average vibration m/s?)
  *
  */
 
-//#define USE_SINGLE_CELL_MONITOR
-//#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
+#define USE_SINGLE_CELL_MONITOR
+#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
 #ifdef USE_SINGLE_CELL_MONITOR
 // configure number maximum connected analog inputs(cells) if you build an six cell network then MAXCELLS is 6 
-#define MAXCELLS 6
+#define MAXCELLS 3
 #endif
 /// ~ Wolke lipo-single-cell-monitor
 
@@ -234,8 +234,10 @@ void setup()  {
   delay(20000);   // Waiting 20sec for bootup of pixhawk or apm
   
   FrSkySPort_Init();
-
-
+  
+#ifdef USE_TEENSY_LED_SUPPORT
+  Teensy_LED_Init();
+#endif
 
   _MavLinkSerial.begin(_MavLinkSerialBaud);
   //debugSerial.begin(57600);
@@ -243,7 +245,6 @@ void setup()  {
   MavLink_Connected_timer=millis();
   hb_timer = millis();
   hb_count = 0;
-
 
   pinMode(led,OUTPUT);
   pinMode(12,OUTPUT);
@@ -360,10 +361,10 @@ void loop()  {
 
   FrSkySPort_Process();               // Check FrSky S.Port communication
 
-  
-  
-  
-  
+#ifdef USE_TEENSY_LED_SUPPORT
+  Teensy_LED_process();
+#endif
+
 }
 
 

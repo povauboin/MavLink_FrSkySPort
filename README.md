@@ -6,9 +6,10 @@ http://diydrones.com/forum/topics/amp-to-frsky-x8r-sport-converter
 It's based on the official 1.3 version.
 
 Teensy Compile INFO:
-uncomment line 79 in MavLink_FrSkySPort.ino to enable processing of MavLink Message RC_CHANNELS, currently not in use, but can be used for extending possibilities of e.g. controlling LEDs or other addons.
+--------------------------
+comment line 79 & 80 in MavLink_FrSkySPort.ino to disable processing of MavLink Message RC_CHANNELS and led controller functionality.
 
-comment line 92 & 93 in MavLink_FrSkySPort.ino to disable the "Single Cell Lipo Voltage Monitor" functionality to use reported Mavlink voltage instead.
+comment line 87 & 88 in MavLink_FrSkySPort.ino to disable the "Single Cell Lipo Voltage Monitor" functionality to use reported Mavlink voltage instead.
 
 The main focus of this script and teensy modification is the exact monitoring of the flight battery capacity and voltage. The consumption in mA / h and watt-hours can be calibrated on a separate model script. Moreover, by the modification described below on teensy, which are allowed lipo monitors individual cell voltage. The radar on the left represents the position and the orientation of the vehicle.
 
@@ -241,6 +242,15 @@ At the very end we make it up a flight test and compare the new values of the te
 
 after calibration
 ![](https://raw.githubusercontent.com/wolkstein/MavLink_FrSkySPort/s-c-l-v-rc/after-ofsettcalibration.jpeg)
+
+LED-Control Cableing
+--------------------
+You need a 74HCT245 Chip to converted signal from teensy to 5V .
+
+Connect Teensy Pin 6 to A1 of 74HCT245.
+Connect 5V to DIR and VCC of 74HCT245 and 5V on ws2812b LEDs.
+Connect Teensy GND to GND of 74HCT245 and WS2812b LEDs.
+Connect 74HCT245 B1 to a 100 Ohm Resistor and wire it to Din of WS2812b LED.
 
 Known Issues
 ============
