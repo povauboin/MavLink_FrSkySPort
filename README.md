@@ -252,8 +252,10 @@ Connect 5V to DIR and VCC of 74HCT245 and 5V on ws2812b LEDs.
 Connect Teensy GND to GND of 74HCT245 and WS2812b LEDs.
 Connect 74HCT245 B1 to a 100 Ohm Resistor and wire it to Din of WS2812b LED.
 
+![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/led-control/connecting_leds.jpg)
+
 Known Issues
-============
+===========
 
 
 
