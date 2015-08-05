@@ -21,6 +21,11 @@
 //#define standalone      // DO NOT UNCOMMENT, just for testing purpose as standalone script without mavlink part.
 
 //#####################################################################################################
+//### DEBUG OPTIONS                                                                                 ###
+//#####################################################################################################
+//#define DEBUG_LANDUNG
+
+//#####################################################################################################
 //### DEFAULT VARIABLES                                                                             ###
 //#####################################################################################################
 #define RIGHT 0
@@ -282,6 +287,7 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
       break;
     case 2:   // GPS    Flight modes
       default_mode(ON, dim);
+      side_arms(ON, dim);
       break;
     case 3:   // MANUAL Flight modes
       //default_mode(OFF, dim);
@@ -305,7 +311,7 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
       get_armed_status(ON, dim);
       get_gps_status(ON, dim);
       LarsonScanner(0, POS_LEDS_FRONTARM_F[RIGHT], POS_LEDS_FLASH[3], dim);
-      landing_light(AUTO, dim);
+      landing_light(AUTO, 1);
       break;
     case 5:   // LAND   Flight mode
       default_mode(ON, dim);
@@ -352,20 +358,20 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
       rear_arms(OFF, dim);
       front_light(ON, dim);
       break_light(BLINK, dim);
-      landing_light(OFF, dim);
+      landing_light(AUTO, 1);
       get_armed_status(OFF, dim);
       get_gps_status(OFF, dim);
       flash_pos_light(ON, dim);
       break;
     case 104:   // USER Mode 4
-      //front_arms(OFF, dim);
+      front_arms(OFF, dim);
       side_arms(OFF, dim);
-      //rear_arms(OFF, dim);
+      rear_arms(OFF, dim);
       front_light(OFF, dim);
       break_light(OFF, dim);
       get_armed_status(ON, dim);
       get_gps_status(ON, dim);
-      landing_light(OFF, dim);
+      landing_light(ON, dim);
       flash_pos_light(ON, dim);
       rotor_lights(39, dim);
       break;
@@ -610,7 +616,7 @@ void default_mode(int STATUS, float dim) {
   front_light(!STATUS, dim);
   break_light(!STATUS, dim);
   flash_pos_light(STATUS, dim);
-  landing_light(!STATUS, dim);
+  landing_light(AUTO, dim);
   get_armed_status(ON, dim);
   get_gps_status(ON, dim);
 }
@@ -870,20 +876,45 @@ void rear_arms(int STATUS, float dim) {
 //#####################################################################################################
 void landing_light(int STATUS, float dim) {
   int32_t rel_alt = 0;
-  int alt_land = 5;
+  int alt_land = 3;
   if (ap_base_mode == 1 && ap_base_mode_last == 0) {
     ground_level = ap_bar_altitude / 100;
   } else if (ap_base_mode == 1) {
     rel_alt = ap_bar_altitude / 100;
+#ifdef DEBUG_LANDUNG
+  } else {
+    ground_level = 0;
+    rel_alt = ap_bar_altitude / 100;
+    ap_base_mode = 1;
+#endif
   }
   if (STATUS == 2) {
-    if ( rel_alt - alt_land <= ground_level && ap_base_mode == 1 ) {
+    if ( rel_alt - alt_land < ground_level && ap_base_mode == 1 ) {
       STATUS = 1;
     } else if ( rel_alt - alt_land > ground_level && ap_base_mode == 1 ) {
       STATUS = 0;
     }
   }
-
+#ifdef DEBUG_LANDUNG
+  debugSerial.print(millis());
+  debugSerial.println();
+  debugSerial.print("Groundlevel: ");
+  debugSerial.print(ground_level);
+  debugSerial.println();
+  debugSerial.print("AP_ALT: ");
+  debugSerial.print(ap_bar_altitude);
+  debugSerial.println();
+  debugSerial.print("REL_ALT: ");
+  debugSerial.print(rel_alt);
+  debugSerial.println();
+  debugSerial.print("ALT_LAND: ");
+  debugSerial.print(alt_land);
+  debugSerial.println();
+  debugSerial.print("Status: ");
+  debugSerial.print(STATUS);
+  debugSerial.println();
+  debugSerial.println();
+#endif
   if (NUM_LEDS_LANDING1 > 0) {
     for (int i = 0; i < NUM_LEDS_LANDING1; i++) {
       if (STATUS == 1) {

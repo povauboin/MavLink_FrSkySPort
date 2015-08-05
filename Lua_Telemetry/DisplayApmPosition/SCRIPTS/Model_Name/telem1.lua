@@ -104,7 +104,8 @@
 			    "Sport",
 			    "Flip Mode",
 			    "Auto Tune",
-			    "Position Hold"}
+			    "Position Hold",
+                            "Brake"}
 	
 	local apm_status_message = {severity = 0, textnr = 0, timestamp=0}
 	
