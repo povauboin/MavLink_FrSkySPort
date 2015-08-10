@@ -1,21 +1,10 @@
-#include "kinetis.h"
-#include "core_pins.h"
-#include "HardwareSerial.h"
 #include "FrSkySPort.h"
 
 #define _FrSkySPort_Serial            Serial1
 #define _FrSkySPort_C1                UART0_C1
-#define _FrSkySPort_C2                UART0_C2
 #define _FrSkySPort_C3                UART0_C3
-#define _FrSkySPort_C4                UART0_C4
 #define _FrSkySPort_S2                UART0_S2
 #define _FrSkySPort_BAUD              57600
-
-#define UART_C3_TXINV                 0x10
-#define UART_C3_TXDIR                 0x20
-#define UART_S2_RXINV                 0x10
-
-#define IRQ_PRIORITY                  64  // 0 = highest priority, 255 = lowest
 
 #define DIM(array) (sizeof(array) / sizeof(array[0]))
 
@@ -31,39 +20,37 @@ uint8_t nextVARIO = 0;
 uint8_t nextGPS = 0;
 uint8_t nextDefault = 0;
 
-uint8_t sportdata[32];
-uint8_t sportlen = 0;
-uint8_t sportindex = 0;
-
 // Scale factor for roll/pitch:
 // We need to scale down 360 deg to fit when max value is 256, and 256 equals 362 deg
 float scalefactor = 360.0/((362.0/360.0)*256.0);
 
-void _FrSkySPort_SerialBegin(uint32_t divisor)
-{
-  SIM_SCGC4 |= SIM_SCGC4_UART0;
-  CORE_PIN0_CONFIG = PORT_PCR_PE | PORT_PCR_PS | PORT_PCR_PFE | PORT_PCR_MUX(3);
-  CORE_PIN1_CONFIG = PORT_PCR_DSE | PORT_PCR_SRE | PORT_PCR_MUX(3);
-  UART0_BDH = (divisor >> 13) & 0x1F;
-  UART0_BDL = (divisor >> 5) & 0xFF;
-  _FrSkySPort_C4 = divisor & 0x1F;
-  _FrSkySPort_C1 = UART_C1_ILT;
-  _FrSkySPort_C2 = UART_C2_TE | UART_C2_RE | UART_C2_RIE | UART_C2_ILIE;
-  _FrSkySPort_C3 = UART_C3_TXINV;                // Tx invert
-  _FrSkySPort_C1 = UART_C1_LOOPS | UART_C1_RSRC; // Single wire mode
-  _FrSkySPort_S2 = UART_S2_RXINV;                // Rx Invert
-  attachInterruptVector(IRQ_UART0_STATUS, sport_uart0_status_isr);
-  NVIC_ENABLE_IRQ(IRQ_UART0_STATUS);
+// ***********************************************************************
+void FrSkySPort_Init(void)  {
+  _FrSkySPort_Serial.begin(_FrSkySPort_BAUD);
+  _FrSkySPort_C3 = 0x10;            // Tx invert
+  _FrSkySPort_C1= 0xA0;            // Single wire mode
+  _FrSkySPort_S2 = 0x10;           // Rx Invert
+
 }
 
-// ***********************************************************************
-void FrSkySPort_Init(void)
-{
-  _FrSkySPort_SerialBegin(BAUD2DIV(_FrSkySPort_BAUD));
-  
-}
+enum SensorsEnum {
+  SENSOR_ID_VARIO,
+  SENSOR_ID_ALTITUDE,
+  SENSOR_ID_FLVSS,
+  SENSOR_ID_FAS,
+  SENSOR_ID_GPS,
+  SENSOR_ID_RPM,
+  SENSOR_ID_HDOP,
+  SENSOR_ID_ACCX,
+  SENSOR_ID_ACCY,
+  SENSOR_ID_ACCZ,
+  SENSOR_ID_GPS_STATUS,
+  SENSOR_ID_ROLL_ANGLE,
+  SENSOR_ID_PITCH_ANGLE,
+  SENSOR_ID_FLIGHT_MODE,
+  SENSOR_ID_ARM_MODE,
+};
 
-// ***********************************************************************
 uint8_t FrSkyDataIdTable[] = {
   SENSOR_ID_VARIO,
   SENSOR_ID_ALTITUDE,
@@ -79,18 +66,44 @@ uint8_t FrSkyDataIdTable[] = {
   SENSOR_ID_ROLL_ANGLE,
   SENSOR_ID_PITCH_ANGLE,
   SENSOR_ID_FLIGHT_MODE,
-  SENSOR_ID_ARM_MODE
+  SENSOR_ID_ARM_MODE,
 };
-
 uint8_t FrSkyDataIdIndex = 0;
 
+
 // ***********************************************************************
-void FrSkySPort_Process()
-{
-  FrSkySPort_ProcessSensorRequest(FrSkyDataIdIndex);
-  FrSkyDataIdIndex += 1;
-  if (FrSkyDataIdIndex >= DIM(FrSkyDataIdTable))
-    FrSkyDataIdIndex = 0;
+void FrSkySPort_Process(void) {
+  uint8_t data = 0;
+  while ( _FrSkySPort_Serial.available()) 
+  {
+    data =  _FrSkySPort_Serial.read();
+    #ifdef DEBUG_FRSKY_SENSOR_REQUEST
+      debugSerial.print(millis());
+      debugSerial.print("\trecieving frsky package: ");
+      debugSerial.println(data, HEX);
+    #endif
+
+    if(data == START_STOP)
+    {
+      waitingForSensorId = true;
+    }
+    else {
+      if ((waitingForSensorId == true) && (data == 0xA1)) { 
+        #ifdef DEBUG_FRSKY_SENSOR_REQUEST
+          debugSerial.print("\tPROCESSING: ");
+          debugSerial.println(FrSkyDataIdIndex);
+        #endif
+        FrSkySPort_ProcessSensorRequest(FrSkyDataIdIndex);
+        FrSkyDataIdIndex += 1;
+        if (FrSkyDataIdIndex >= DIM(FrSkyDataIdTable))
+          FrSkyDataIdIndex = 0;
+      }
+      waitingForSensorId = false;
+    }
+    #ifdef DEBUG_FRSKY_SENSOR_REQUEST
+      debugSerial.println();
+    #endif
+  }
 }
 
 // ***********************************************************************
@@ -104,7 +117,13 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
   uint8_t offset;
   
   //ap_cell_count =2;
-  
+  #ifdef DEBUG_FRSKY_SENSOR_REQUEST
+    debugSerial.print(millis());
+    debugSerial.print("\tsensorId -\t");
+    debugSerial.print(sensorId);
+    debugSerial.print("\t-\t");
+    debugSerial.println(sensorId, HEX);
+  #endif
   switch(sensorId) {
 // ***********************************************************************
     case SENSOR_ID_FLVSS:
@@ -209,11 +228,13 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
 
 // ***********************************************************************
     case SENSOR_ID_VARIO:
+      printDebugPackageSend("VARIO", 1, 1);
       FrSkySPort_SendPackage(FR_ID_VARIO, ap_climb_rate );       // 100 = 1m/s        
       break;
 
 // ***********************************************************************
     case SENSOR_ID_ALTITUDE: 
+      printDebugPackageSend("Altidude", 1, 1);
       FrSkySPort_SendPackage(FR_ID_ALTITUDE,ap_bar_altitude);   // from barometer, 100 = 1m
       break;
     
@@ -296,49 +317,57 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
     
 // ***********************************************************************
     case SENSOR_ID_HDOP:
+      printDebugPackageSend("HDOP", 1, 1);
       FrSkySPort_SendPackage(FR_ID_ADC2, ap_gps_hdop);
       break;
-	
+  
 // ***********************************************************************
     case SENSOR_ID_ACCX:
+      printDebugPackageSend("AccX", 1, 1);
       FrSkySPort_SendPackage(FR_ID_ACCX, fetchAccX());    
       break;
-	
+  
 // ***********************************************************************
     case SENSOR_ID_ACCY:
+      printDebugPackageSend("AccY", 1, 1);
       FrSkySPort_SendPackage(FR_ID_ACCY, fetchAccY());     
       break;
-	
+  
 // ***********************************************************************
-	case SENSOR_ID_ACCZ:
+  case SENSOR_ID_ACCZ:
+      printDebugPackageSend("AccZ", 1, 1);
       FrSkySPort_SendPackage(FR_ID_ACCZ, fetchAccZ());    
       break;
-	
+  
 // ***********************************************************************
     case SENSOR_ID_GPS_STATUS:
+      printDebugPackageSend("GPS-Status", 1, 1);
       FrSkySPort_SendPackage(FR_ID_T1, gps_status);    
       break;
     
 // ***********************************************************************
-	case SENSOR_ID_ROLL_ANGLE:
+  case SENSOR_ID_ROLL_ANGLE:
+      printDebugPackageSend("Roll Angel", 1, 1);
       FrSkySPort_SendPackage(FR_ID_A3_FIRST, handle_A2_A3_value((ap_roll_angle+180)/scalefactor));
       break;
-	
+  
 // ***********************************************************************
-	case SENSOR_ID_PITCH_ANGLE:
+  case SENSOR_ID_PITCH_ANGLE:
+      printDebugPackageSend("Pitch Angel", 1, 1);
       FrSkySPort_SendPackage(FR_ID_A4_FIRST, handle_A2_A3_value((ap_pitch_angle+180)/scalefactor));
       break;
-	
+  
 // ***********************************************************************
-	case SENSOR_ID_FLIGHT_MODE:
-	  if (ap_custom_mode >= 0) {
+  case SENSOR_ID_FLIGHT_MODE:
+    if (ap_custom_mode >= 0) {
+        printDebugPackageSend("Flight Mode", 1, 1);
         FrSkySPort_SendPackage(FR_ID_FUEL, ap_custom_mode); 
       }
       break;
-	
+  
 // ***********************************************************************
-	case SENSOR_ID_ARM_MODE:
-	  {
+  case SENSOR_ID_ARM_MODE:
+    {
       // 16 bit value: 
       // bit 1: armed
       // bit 2-5: severity +1 (0 means no message)
@@ -355,12 +384,13 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
           ap_status_text_id = 0;
         }          
       }
+      printDebugPackageSend("ARM Mode", 1, 1);
       FrSkySPort_SendPackage(FR_ID_T2, ap_status_value); 
     }
     break;
-	
+  
 // ***********************************************************************
-	default: 
+  default: 
       #ifdef DEBUG_FRSKY_SENSOR_REQUEST
       debugSerial.print(millis());
       debugSerial.print("\tRequested data for unsupported appId: ");
@@ -371,7 +401,7 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
   }
 }
 
-// ***********************************************************************
+
 uint32_t handle_A2_A3_value(uint32_t value)
 {
   return (value *330-165)/0xFF;
@@ -380,37 +410,40 @@ uint32_t handle_A2_A3_value(uint32_t value)
 // ***********************************************************************
 void printDebugPackageSend(const char* pkg_name, uint8_t pkg_nr, uint8_t pkg_max)
 {
-  #ifdef DEBUG_FRSKY_SENSOR_REQUEST
-    debugSerial.print(millis());
-    debugSerial.print("\tCreating frsky package for ");
-    debugSerial.print(pkg_name);
-    debugSerial.print(" (");
-    debugSerial.print(pkg_nr);
-    debugSerial.print("/");
-    debugSerial.print(pkg_max);
-    debugSerial.print(")");
-    debugSerial.println();
-  #endif
+#ifdef DEBUG_FRSKY_SENSOR_REQUEST
+  debugSerial.print(millis());
+  debugSerial.print("\tCreating frsky package for ");
+  debugSerial.print(pkg_name);
+  debugSerial.print(" (");
+  debugSerial.print(pkg_nr);
+  debugSerial.print("/");
+  debugSerial.print(pkg_max);
+  debugSerial.print(")");
+  debugSerial.println();
+#endif
 }
 
+
 // ***********************************************************************
-void FrSkySPort_SendByte(uint8_t byte)
-{
-  if (byte == 0x7E) {
-    sportdata[sportlen++] = 0x7D;
-    sportdata[sportlen++] = 0x5E;
+void FrSkySPort_SendByte(uint8_t byte) {
+
+  if(byte == 0x7E)
+  {
+    _FrSkySPort_Serial.write(0x7D);
+    _FrSkySPort_Serial.write(0x5E);
   }
-  else if (byte == 0x7D) {
-    sportdata[sportlen++] = 0x7D;
-    sportdata[sportlen++] = 0x5D;
+  else if(byte == 0x7D)
+  {
+    _FrSkySPort_Serial.write(0x7D);
+    _FrSkySPort_Serial.write(0x5D);
   }
-  else {
-    sportdata[sportlen++] = byte;
+  else
+  {
+    _FrSkySPort_Serial.write(byte);
   }
   FrSkySPort_UpdateCRC(byte);
 }
 
-// ***********************************************************************
 void FrSkySPort_UpdateCRC(uint8_t byte)
 {
    // CRC update
@@ -420,22 +453,27 @@ void FrSkySPort_UpdateCRC(uint8_t byte)
 }
 
 // ***********************************************************************
-void FrSkySPort_SendCrc()
-{
-  sportdata[sportlen++] = 0xFF-crc;
+void FrSkySPort_SendCrc() {
+  _FrSkySPort_Serial.write(0xFF-crc);
   crc = 0;          // CRC reset
 }
 
+
 // ***********************************************************************
-void FrSkySPort_SendPackage(uint16_t id, uint32_t value)
-{
+void FrSkySPort_SendPackage(uint16_t id, uint32_t value) {
+  #ifdef DEBUG_FRSKY_SENSOR_REQUEST
+    debugSerial.print(millis());
+    debugSerial.print("\tSending frsky package for: ");
+    debugSerial.print(id, HEX);
+    debugSerial.print("\t-\t");
+    debugSerial.print(value);
+    debugSerial.println();
+    debugSerial.println();
+  #endif
   if(MavLink_Connected) {
     digitalWrite(led,HIGH);
   }
-  
-  sportlen = 0;
-  sportindex = 0;
-
+  _FrSkySPort_C3 |= 32;      //  Transmit direction, to S.Port
   FrSkySPort_SendByte(DATA_FRAME);
   uint8_t *bytes = (uint8_t*)&id;
   FrSkySPort_SendByte(bytes[0]);
@@ -446,39 +484,8 @@ void FrSkySPort_SendPackage(uint16_t id, uint32_t value)
   FrSkySPort_SendByte(bytes[2]);
   FrSkySPort_SendByte(bytes[3]);
   FrSkySPort_SendCrc();
-  
-  digitalWrite(led,LOW);
-}
+  _FrSkySPort_Serial.flush();
+  _FrSkySPort_C3 ^= 32;      // Transmit direction, from S.Port
 
-// ***********************************************************************
-extern "C" void sport_uart0_status_isr(void)
-{
-  if (UART0_S1 & UART_S1_RDRF) {
-    uint8_t data = UART0_D;
-    if( data == START_STOP) {
-      waitingForSensorId = true;
-    }
-    else {
-      if ((waitingForSensorId == true) && (data == 0xA1)) {  
-        FrSkySPort_Process();
-        _FrSkySPort_C3 |= UART_C3_TXDIR;
-        _FrSkySPort_C2 &= ~UART_C2_RE;
-      }
-      waitingForSensorId = false;
-    }
-  }
-  
-  if (UART0_S1 & UART_S1_TDRE) {
-    if (sportindex < sportlen) {
-      UART0_D = sportdata[sportindex++];
-    }
-    else {
-      _FrSkySPort_C2 |= UART_C2_TCIE;
-    }
-  }
-  
-  if (UART0_S1 & UART_S1_TC) {
-    _FrSkySPort_C3 &= ~UART_C3_TXDIR;
-    _FrSkySPort_C2 |= UART_C2_RE;
-  }
+  digitalWrite(led,LOW);
 }
