@@ -47,9 +47,10 @@ AccZ            ( Z Axis average vibration m/s?)
  */
 
 #include "GCS_MAVLink.h"
-#include "FrSkySPort.h"
+
 
 #define debugSerial         Serial
+#define debugSerialBaud     57600
 #define _MavLinkSerial      Serial2
 #define _MavLinkSerialBaud  57600
 #define START               1
@@ -61,6 +62,7 @@ AccZ            ( Z Axis average vibration m/s?)
 #define MY_SYSID            123 // teensy system id
 #define MY_CMPID            123 // teensy component id
 
+//#define DEBUG_AVERAGE_VOLTAGE
 //#define DEBUG_VFR_HUD
 //#define DEBUG_GPS_RAW
 //#define DEBUG_ACC
@@ -70,12 +72,20 @@ AccZ            ( Z Axis average vibration m/s?)
 //#define DEBUG_STATUS
 //#define DEBUG_ATTITUDE
 //#define DEBUG_GIMBAL
-//#define DEBUG_FRSKY_SENSOR_REQUEST
+//#define DEBUG_FrSkySportTelemetry_FAS
+//#define DEBUG_FrSkySportTelemetry_FLVSS
+//#define DEBUG_FrSkySportTelemetry_GPS
+//#define DEBUG_FrSkySportTelemetry_RPM
+//#define DEBUG_FrSkySportTelemetry_A3A4
+//#define DEBUG_FrSkySportTelemetry_VARIO
+//#define DEBUG_FrSkySportTelemetry_ACC
+//#define DEBUG_FrSkySportTelemetry_FLIGHTMODE
 //#define DEBUG_AVERAGE_VOLTAGE
 //#define DEBUG_PARSE_STATUS_TEXT
 //#define DEBUG_LIPO_SINGLE_CELL_MONITOR
 //#define DEBUG_RC_CHANNELS
 
+uint32_t start_telemetry = 30000;
 //#define USE_RC_CHANNELS
 
 /// Wolke lipo-single-cell-monitor
@@ -89,11 +99,11 @@ AccZ            ( Z Axis average vibration m/s?)
  *
  */
 
-//#define USE_SINGLE_CELL_MONITOR
-//#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
+#define USE_SINGLE_CELL_MONITOR
+#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
 #ifdef USE_SINGLE_CELL_MONITOR
 // configure number maximum connected analog inputs(cells) if you build an six cell network then MAXCELLS is 6 
-#define MAXCELLS 6
+#define MAXCELLS 3
 #endif
 /// ~ Wolke lipo-single-cell-monitor
 
@@ -131,7 +141,8 @@ int32_t    ap_gps_speed = 0;
 uint16_t   ap_gps_hdop = 255;             // GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
 // uint16_t    ap_vdop=0;                 // GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
 uint32_t    ap_cog = 0;                // Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
-
+//uint64_t   ap_gps_time_unix_utc = 0;
+time_t    ap_gps_time_unix_utc = 0;
 
 // Message #74 VFR_HUD 
 uint32_t  ap_groundspeed = 0;       // Current ground speed in m/s
@@ -236,10 +247,11 @@ void setup()  {
   FrSkySPort_Init();
   
 
-  
+
 
 
   _MavLinkSerial.begin(_MavLinkSerialBaud);
+  debugSerial.begin(debugSerialBaud);
   MavLink_Connected = 0;
   MavLink_Connected_timer=millis();
   hb_timer = millis();
@@ -279,7 +291,8 @@ void loop()  {
       cells_in_use = i;
       break;
     }
-    else {
+    else
+    {
       cells_in_use = MAXCELLS;
     }
     // USE Low Pass filter
@@ -303,6 +316,7 @@ void loop()  {
   debugSerial.println();
   
   for(int i = 0; i < MAXCELLS; i++){
+    
     debugSerial.print( aread[i]);
     debugSerial.print( ", ");    
   }  
@@ -312,11 +326,13 @@ void loop()  {
   debugSerial.print(", sum ");
   debugSerial.println(alllipocells);
 #endif
+  
 #endif
   /// ~Wolke lipo-single-cell-monitor
 
-  // Send a heartbeat over the mavlink
   uint16_t len;
+
+  // Send a heartbeat over the mavlink
   //mavlink_msg_heartbeat_pack(123, 123, &msg, MAV_TYPE_ONBOARD_CONTROLLER, MAV_AUTOPILOT_GENERIC, MAV_MODE_PREFLIGHT, <CUSTOM_MODE>, MAV_STATE_STANDBY);
   //mavlink_msg_heartbeat_pack(mavlink_system.sysid, mavlink_system.compid, &msg, 0, 18, 0, 0, 4);
   //len = mavlink_msg_to_send_buffer(buf, &msg);
@@ -360,10 +376,12 @@ void loop()  {
 
   _MavLink_receive();                   // Check MavLink communication
 
-  FrSkySPort_Process();               // Check FrSky S.Port communication
+  if ( millis() > start_telemetry) {
+    FrSkySPort_Process();               // Check FrSky S.Port communication
+  }
 
 
-  
+
 
 
 }
@@ -464,7 +482,7 @@ break;
           ap_cell_count = temp_cell_count;
         break;
 #endif
-
+      
       case MAVLINK_MSG_ID_GPS_RAW_INT:   // 24
         ap_fixtype = mavlink_msg_gps_raw_int_get_fix_type(&msg);                               // 0 = No GPS, 1 =No Fix, 2 = 2D Fix, 3 = 3D Fix
         ap_sat_visible =  mavlink_msg_gps_raw_int_get_satellites_visible(&msg);          // numbers of visible satelites
@@ -478,6 +496,7 @@ break;
           ap_longitude = mavlink_msg_gps_raw_int_get_lon(&msg);
           ap_gps_altitude = mavlink_msg_gps_raw_int_get_alt(&msg);      // 1m =1000
           ap_gps_speed = mavlink_msg_gps_raw_int_get_vel(&msg);         // 100 = 1m/s
+          ap_cog = mavlink_msg_gps_raw_int_get_cog(&msg)/100;          
         }
         else
         {
@@ -499,6 +518,13 @@ break;
         debugSerial.print(mavlink_msg_gps_raw_int_get_alt(&msg));
         debugSerial.println();                                     
 #endif
+        break;
+
+      case MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV:   // 63
+        ap_gps_time_unix_utc = mavlink_msg_global_position_int_cov_get_time_utc(&msg);
+        if(ap_gps_time_unix_utc > 0) {
+          
+        }
         break;
 
       case MAVLINK_MSG_ID_RAW_IMU:   // 27
