@@ -117,13 +117,23 @@
 	  {4, 5, 0, -4}
 	}
 	
+-- Telemetry helper function
+        local function getTelemetryId(name)
+          field = getFieldInfo(name)
+          if field then
+            return field.id
+          else
+            return -1
+          end
+        end
+
 -- draw arrow
 	local function drawArrow()
 	  
-	  sinCorr = math.sin(math.rad(getValue(223)-prearmheading))
-	  cosCorr = math.cos(math.rad(getValue(223)-prearmheading))
-	  -- working but without good gps a lot of movments// sinCorr = math.sin(math.rad(getValue(223))-headfromh)
-	  -- working but without good gps a lot of movments// cosCorr = math.cos(math.rad(getValue(223))-headfromh)	  
+	  sinCorr = math.sin(math.rad(getValue("COG")-prearmheading))
+	  cosCorr = math.cos(math.rad(getValue("COG")-prearmheading))
+	  -- working but without good gps a lot of movments// sinCorr = math.sin(math.rad(getValue("COG"))-headfromh)
+	  -- working but without good gps a lot of movments// cosCorr = math.cos(math.rad(getValue("COG"))-headfromh)	  
 	  for index, point in pairs(arrowLine) do
 	    X1 = CenterXcolArrow + offsetX + math.floor(point[1] * cosCorr - point[2] * sinCorr + 0.5)
 	    Y1 = CenterYrowArrow + offsetY + math.floor(point[1] * sinCorr + point[2] * cosCorr + 0.5)
@@ -174,7 +184,7 @@
 -- GPS Panel
 	local function gpspanel()
 	  
-	  telem_t1 = getValue(209) -- Temp1
+	  telem_t1 = getValue("T1") -- Temp1
 	  telem_lock = 0
 	  telem_sats = 0
 	  telem_lock = telem_t1%10
@@ -194,7 +204,7 @@
 	    lcd.drawText (195, 10, "--S",0)
 	  end
 	  
-	  hdop=round(getValue(203))
+	  hdop=round(getValue("HDOP"))
 	  if hdop <20 then
 	    lcd.drawNumber (180, 10, hdop, PREC1+LEFT+SMLSIZE )
 	  else
@@ -285,16 +295,16 @@
 	  lcd.drawLine (htsapaneloffset + 154, 8, htsapaneloffset + 154, 63, SOLID, 0)
 	  --heading
 	  lcd.drawText(htsapaneloffset + 76,11,"Heading ",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos(),9,getValue(223),MIDSIZE+LEFT)
+	  lcd.drawNumber(lcd.getLastPos(),9,getValue("COG"),MIDSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),9,"\64",MIDSIZE)
 	  
 	  --altitude
 	  --Alt max
 	  lcd.drawText(htsapaneloffset + 76,25,"Alt ",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos()+3,22,getValue(206),MIDSIZE+LEFT)
+	  lcd.drawNumber(lcd.getLastPos()+3,22,getValue("Alt"),MIDSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),22,"m",MIDSIZE)
 	  --vspeed
-	  vspd= getValue(224)
+	  vspd= getValue("VSI")
 	  if vspd == 0 then
 	    lcd.drawText(lcd.getLastPos(), 25,"==",0)
 	  elseif vspd >0 then
@@ -305,14 +315,14 @@
 	  lcd.drawNumber(lcd.getLastPos(),25,vspd,0+LEFT)
 	 
 	  lcd.drawText(htsapaneloffset + 76,35,"Max",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos()+8,35,getValue(237),SMLSIZE+LEFT)
+	  lcd.drawNumber(lcd.getLastPos()+8,35,getValue("Alt-"),SMLSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),35,"m",SMLSIZE)
 	  
 	  --Armed time
 	  lcd.drawTimer(htsapaneloffset + 106,42,model.getTimer(0).value,MIDSIZE)
 	  
 	  lcd.drawText(htsapaneloffset + 76,56,"Speed",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue(211),MIDSIZE+LEFT)
+	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue("GSPD"),MIDSIZE+LEFT)
 	  
 	end
 	
@@ -329,11 +339,11 @@
 	  end
 	  
 	  lcd.drawText(134, 0, "TX:", INVERS)
-	  lcd.drawNumber(160, 0, getValue(189)*10,0+PREC1+INVERS)
+	  lcd.drawNumber(160, 0, getValue("tx-voltage")*10,0+PREC1+INVERS)
 	  lcd.drawText(lcd.getLastPos(), 0, "v", INVERS)
 	  
 	  lcd.drawText(172, 0, "rssi:", INVERS)
-	  lcd.drawNumber(lcd.getLastPos()+10, 0, getValue(200),0+INVERS)
+	  lcd.drawNumber(lcd.getLastPos()+10, 0, getValue("RSSI"),0+INVERS)
 	end
 
 --Power Panel
@@ -341,23 +351,23 @@
 	local function powerpanel()
 	  --Used on power panel -- still to check if all needed
 
-	  --tension=getValue(216) --
-	  --current=getValue(217) ---
-	  consumption=getValue(218)---
-	  --watts=getValue(219) ---
-	  --tension_min=getValue(246) ---
-	  --current_max=getValue(247) ---
-	  --watts_max=getValue(248)  ---
-	  --cellmin=getValue(214) --- 214 = cell-min
+	  --tension=getValue("VFAS") --
+	  --current=getValue("Curr") ---
+	  consumption=getValue("mAh")---
+	  --watts=getValue("Watt") ---
+	  --tension_min=getValue("VFAS-") ---
+	  --current_max=getValue("Curr-") ---
+	  --watts_max=getValue("Watt+")  ---
+	  --cellmin=getValue("Cels-") --- 214 = cell-min
 	  
-	  lcd.drawNumber(30,13,getValue(216)*10,DBLSIZE+PREC1)
+	  lcd.drawNumber(30,13,getValue("VFAS")*10,DBLSIZE+PREC1)
 	  lcd.drawText(lcd.getLastPos(),14,"V",0)
 	  
-	  lcd.drawNumber(67,9,getValue(217)*10,MIDSIZE+PREC1)
+	  lcd.drawNumber(67,9,getValue("Curr")*10,MIDSIZE+PREC1)
 	  lcd.drawText(lcd.getLastPos(),10,"A",0)
 	 
 	  
-	  lcd.drawNumber(67,21,getValue(219),MIDSIZE)
+	  lcd.drawNumber(67,21,getValue("Watt"),MIDSIZE)
 	  lcd.drawText(lcd.getLastPos(),22,"W",0)
 	  
 	  lcd.drawNumber(1,33,consumption + ( consumption * ( model.getGlobalVariable(8, 0)/100 ) ),MIDSIZE+LEFT)
@@ -371,7 +381,7 @@
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
 	  
 	  
-	  lcd.drawNumber(42,47,getValue(214)*100,DBLSIZE+PREC2)
+	  lcd.drawNumber(42,47,getValue("Cels-")*100,DBLSIZE+PREC2)
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,48,"V",SMLSIZE)
 	  lcd.drawText(xposCons,56,"C-min",SMLSIZE)
@@ -383,7 +393,7 @@
 	  
 	  localtime = localtime + (getTime() - oldlocaltime)
 	  if localtime >=10 then --100 ms
-	    watthours = watthours + ( getValue(219) * (localtime/360000) )
+	    watthours = watthours + ( getValue("Watt") * (localtime/360000) )
 	    localtime = 0
 	  end  
 	  oldlocaltime = getTime()
@@ -394,12 +404,12 @@
 --APM Armed and errors
 	local function armed_status()
 	  
-	  t2 = getValue(210)
+	  t2 = getValue("T2")
 	  apmarmed = t2%0x02
 	 
 	  --prearmheading =63
 	  if apmarmed ~=1 then -- report last heading bevor arming. this can used for display position relative to copter
-	    prearmheading=getValue(223)
+	    prearmheading=getValue("COG")
 	    pilotlat = math.rad(getValue("latitude"))
 	    pilotlon = math.rad(getValue("longitude"))
 	  end
@@ -455,7 +465,7 @@
 	
 --FlightModes
 	local function Flight_modes()
-	  FmodeNr= getValue(208)+1
+          FmodeNr = getValue("FMod")+1
 	  if FmodeNr<1 or FmodeNr>17 then
 	    FmodeNr=13
 	  end
@@ -482,7 +492,7 @@
 	
 --Init
         local function init()
-          lcd.clear()
+          --lcd.clear()
         end
 
 --Background
@@ -500,6 +510,8 @@
 	
 --Main
 	local function run(event)
+          
+          lcd.clear()
 	  
 	  background()
 	  

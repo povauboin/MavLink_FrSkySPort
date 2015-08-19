@@ -29,6 +29,8 @@ FrSkySportTelemetry telemetry;                         // Create Variometer tele
 float FCSCurrent = 0.0;
 float FCSVoltage = 0.0;
 
+unsigned long FAS_timer = 0;
+
 // Scale factor for roll/pitch:
 // We need to scale down 360 deg to fit when max value is 256, and 256 equals 362 deg
 float scalefactor = 360.0/((362.0/360.0)*256.0);
@@ -55,17 +57,20 @@ void FrSkySPort_Process()
   // Set current/voltage sensor (FCS) data
   // (set Voltage source to FAS in menu to use this data for battery voltage,
   //  set Current source to FAS in menu to use this data for current readins)
-  if(currentCount > 2) {
+  if( millis() > FAS_timer ) {
     FCSVoltage = readAndResetAverageVoltage() / 1000.0 ;
     FCSCurrent = readAndResetAverageCurrent();  
     #ifdef DEBUG_FrSkySportTelemetry_FAS
       debugSerial.print(millis());
+      debugSerial.println("FrSkySportTelemetry_FAS:");
       debugSerial.print("\tVFAS (0x0210): ");
       debugSerial.print(FCSVoltage);
       debugSerial.print("\tCurr (0x0200): ");
-      debugSerial.print(FCSCurrent);
+      //debugSerial.print(FCSCurrent);
+      debugSerial.print(ap_current_battery / 10.0);
       debugSerial.println();
     #endif
+    FAS_timer = millis() + 500;
     fcs.setData(ap_current_battery / 10.0,   // Current consumption in amps
                 FCSVoltage);  // Battery voltage in volts
   }

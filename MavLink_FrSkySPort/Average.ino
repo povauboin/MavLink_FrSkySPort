@@ -44,6 +44,16 @@ void storeVoltageReading(uint16_t value)
   // Store this reading so we can return the average if we get multiple readings between the polls
   voltageSum += value;
   voltageCount++;
+
+  #ifdef DEBUG_AVERAGE_VOLTAGE
+    debugSerial.print(millis());
+    debugSerial.print("\tVoltageSum: ");
+    debugSerial.print(voltageSum);
+    debugSerial.print("\tvoltageCount: ");
+    debugSerial.print(voltageCount);
+    debugSerial.println();
+
+  #endif
   // Update the minimu voltage if this is lover
   if(voltageMinimum < 1 || value < voltageMinimum)
     voltageMinimum = value;
@@ -67,15 +77,20 @@ uint16_t readAndResetAverageVoltage()
   if(voltageCount < 1)
     return 0;
     
+  uint16_t avg = voltageSum / voltageCount;
+
 #ifdef DEBUG_AVERAGE_VOLTAGE
   debugSerial.print(millis());
   debugSerial.print("\tNumber of samples for voltage average: ");
-  debugSerial.print(voltageCount);
+  debugSerial.println(voltageCount);
+  debugSerial.print(millis());
+  debugSerial.print("\tAverage Voltage: ");
+  debugSerial.print(avg);
+  debugSerial.print(" V");
   debugSerial.println();      
 #endif
 
-  uint16_t avg = voltageSum / voltageCount;
-
+  
   voltageSum = 0;
   voltageCount = 0;
 

@@ -62,17 +62,19 @@ AccZ            ( Z Axis average vibration m/s?)
 #define MY_SYSID            123 // teensy system id
 #define MY_CMPID            123 // teensy component id
 
-//#define DEBUG_AVERAGE_VOLTAGE
+
 //#define DEBUG_VFR_HUD
 //#define DEBUG_GPS_RAW
 //#define DEBUG_ACC
 //#define DEBUG_BAT
 //#define DEBUG_MODE
+#define DEBUG_MAVLINK_CONNECTION
 //#define DEBUG_MAVLINK_MSGS
 //#define DEBUG_STATUS
 //#define DEBUG_ATTITUDE
 //#define DEBUG_GIMBAL
-//#define DEBUG_FrSkySportTelemetry_FAS
+#define DEBUG_FrSkySportTelemetry
+#define DEBUG_FrSkySportTelemetry_FAS
 //#define DEBUG_FrSkySportTelemetry_FLVSS
 //#define DEBUG_FrSkySportTelemetry_GPS
 //#define DEBUG_FrSkySportTelemetry_RPM
@@ -81,13 +83,12 @@ AccZ            ( Z Axis average vibration m/s?)
 //#define DEBUG_FrSkySportTelemetry_ACC
 //#define DEBUG_FrSkySportTelemetry_FLIGHTMODE
 //#define DEBUG_AVERAGE_VOLTAGE
-//#define DEBUG_PARSE_STATUS_TEXT
+#define DEBUG_PARSE_STATUS_TEXT
 //#define DEBUG_LIPO_SINGLE_CELL_MONITOR
 //#define DEBUG_RC_CHANNELS
 
-uint32_t start_telemetry = 30000;
-//#define USE_RC_CHANNELS
-
+#define USE_RC_CHANNELS
+//#define USE_TEENSY_LED_SUPPORT
 /// Wolke lipo-single-cell-monitor
 /*
  *
@@ -194,13 +195,20 @@ int32_t     gps_status = 0;     // (ap_sat_visible * 10) + ap_fixtype
 uint8_t   ap_cell_count = 0;
 
 // ******************************************
-uint8_t     MavLink_Connected;
-uint8_t     buf[MAVLINK_MAX_PACKET_LEN];
+bool          MavLink_Connected = 0;
+bool          MavLink_Connected_Last = 0;
+unsigned long MavLink_Connected_timer = 0;
+uint8_t       hb_count = 0;
+unsigned long hb_timer = 0;
 
-uint16_t  hb_count;
+uint8_t       buf[MAVLINK_MAX_PACKET_LEN];
 
-unsigned long MavLink_Connected_timer;
-unsigned long hb_timer;
+unsigned long start_MavLink_requests = 20000;
+unsigned long init_telemetry  = 2000;
+unsigned long start_telemetry = 30000;
+bool          telemetry_started = 0;
+bool          start_led = 0;
+unsigned long telemetry_timer = 0;
 
 int led = 13;
 
@@ -241,21 +249,15 @@ double smoothedVal[MAXCELLS+1]; // this holds the last loop value
 
 // ******************************************
 void setup()  {
-  
-  delay(20000);   // Waiting 20sec for bootup of pixhawk or apm
-  
-  FrSkySPort_Init();
-  
 
-
-
+  delay(10000);
+  
+  #ifdef USE_TEENSY_LED_SUPPORT
+    Teensy_LED_Init();
+  #endif
 
   _MavLinkSerial.begin(_MavLinkSerialBaud);
   debugSerial.begin(debugSerialBaud);
-  MavLink_Connected = 0;
-  MavLink_Connected_timer=millis();
-  hb_timer = millis();
-  hb_count = 0;
 
   pinMode(led,OUTPUT);
   pinMode(12,OUTPUT);
@@ -275,7 +277,7 @@ void setup()  {
   }
 #endif
   /// ~Wolke lipo-single-cell-monitor
-
+  
 }
 
 
@@ -332,20 +334,22 @@ void loop()  {
 
   uint16_t len;
 
-  // Send a heartbeat over the mavlink
-  //mavlink_msg_heartbeat_pack(123, 123, &msg, MAV_TYPE_ONBOARD_CONTROLLER, MAV_AUTOPILOT_GENERIC, MAV_MODE_PREFLIGHT, <CUSTOM_MODE>, MAV_STATE_STANDBY);
-  //mavlink_msg_heartbeat_pack(mavlink_system.sysid, mavlink_system.compid, &msg, 0, 18, 0, 0, 4);
-  //len = mavlink_msg_to_send_buffer(buf, &msg);
-  //_MavLinkSerial.write(buf,len);
-
-  if(millis()-hb_timer > 1500) {
-    hb_timer=millis();
-    if(!MavLink_Connected) {    // Start requesting data streams from MavLink
-#ifdef DEBUG_MODE
-      debugSerial.print(millis());
-      debugSerial.print("\tEntering stream request");
-      debugSerial.println();
-#endif
+  if(millis() > hb_timer) {
+    hb_timer=millis() + 1500;
+    if((MavLink_Connected == 0) && (hb_count < 3)) {    // Start requesting data streams from MavLink
+    //if((hb_count == 0)) {    // Start requesting data streams from MavLink
+      #ifdef DEBUG_MAVLINK_CONNECTION
+        if (MavLink_Connected_Last == 1) {
+          debugSerial.print(millis());
+          debugSerial.println("\tLost MavLink connection...");
+        } else {
+          debugSerial.print(millis());
+          debugSerial.println("\tMavLink not connected.");
+        }
+        debugSerial.print(millis());
+        debugSerial.println("\tEntering stream request");
+        //debugSerial.println();
+      #endif
       digitalWrite(led,HIGH);
       // mavlink_msg_request_data_stream_pack(0xFF,0xBE,&msg,1,1,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
       mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,1,1,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
@@ -359,31 +363,67 @@ void loop()  {
       mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,1,1,MAV_DATA_STREAM_RAW_SENSORS, MSG_RATE, START);
       len = mavlink_msg_to_send_buffer(buf, &msg);
       _MavLinkSerial.write(buf,len);
-#ifdef USE_RC_CHANNELS
-      delay(10);
-      mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,1,1,MAV_DATA_STREAM_RC_CHANNELS, MSG_RATE, START);
+      #ifdef USE_RC_CHANNELS
+        delay(10);
+        mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,1,1,MAV_DATA_STREAM_RC_CHANNELS, MSG_RATE, START);
+        len = mavlink_msg_to_send_buffer(buf, &msg);
+        _MavLinkSerial.write(buf,len);
+      #endif
+      digitalWrite(led,LOW);
+    } else {
+      // Send a heartbeat over the mavlink
+      #ifdef DEBUG_MAVLINK_CONNECTION
+        debugSerial.print(millis());
+        debugSerial.println("\tSending heartbeat message.");
+        //debugSerial.println();
+      #endif
+      /*
+      //mavlink_msg_heartbeat_pack(123, 123, &msg, MAV_TYPE_ONBOARD_CONTROLLER, MAV_AUTOPILOT_GENERIC, MAV_MODE_PREFLIGHT, <CUSTOM_MODE>, MAV_STATE_STANDBY);
+      mavlink_msg_heartbeat_pack(mavlink_system.sysid, mavlink_system.compid, &msg, 0, 18, 0, 0, 4);
       len = mavlink_msg_to_send_buffer(buf, &msg);
       _MavLinkSerial.write(buf,len);
-#endif
-      digitalWrite(led,LOW);
+      */
     }
   }
 
-  if((millis() - MavLink_Connected_timer) > 1500)  {   // if no HEARTBEAT from APM  in 1.5s then we are not connected
-    MavLink_Connected=0;
+  if(millis() > MavLink_Connected_timer)  {   // if no HEARTBEAT from APM  in 3s then we are not connected
+    MavLink_Connected_Last = MavLink_Connected;
+    MavLink_Connected = 0;
     hb_count = 0;
-  } 
+  }
 
   _MavLink_receive();                   // Check MavLink communication
 
-  if ( millis() > start_telemetry) {
-    FrSkySPort_Process();               // Check FrSky S.Port communication
+  if ( MavLink_Connected == 1 ) {
+    if ( (millis() > init_telemetry) && (telemetry_started == 0) ) {
+      FrSkySPort_Init();
+      telemetry_started = 1;
+      start_telemetry = millis() + 5000;
+      #ifdef DEBUG_FrSkySportTelemetry
+        telemetry_timer = millis() + 1500;
+        debugSerial.println("###############################################");
+        debugSerial.print(millis());
+        debugSerial.println("\tInitialise FrSky S.Port Telemetry");
+        debugSerial.println("###############################################");
+        debugSerial.println(start_telemetry);
+      #endif
+    }
+    if ( millis() > start_telemetry ) {
+      FrSkySPort_Process();               // Check FrSky S.Port communication
+      #ifdef DEBUG_FrSkySportTelemetry
+        telemetry_timer = millis() + 500;
+        if ( millis() > telemetry_timer ) {
+          debugSerial.print(millis());
+          debugSerial.println("\tProcessing FrSky S.Port Telemetry");
+        }
+      #endif
+    }
+    start_led = 1;
   }
 
-
-
-
-
+  #ifdef USE_TEENSY_LED_SUPPORT
+    Teensy_LED_process();
+  #endif
 }
 
 
@@ -396,12 +436,19 @@ void _MavLink_receive() {
     uint8_t c = _MavLinkSerial.read();
     if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status) && (AP_SYSID == msg.sysid && AP_CMPID == msg.compid)) // only proceed with autopilot messages
     {
+      #ifdef DEBUG_MAVLINK_MSGS
+        debugSerial.print(millis());
+        debugSerial.print("\tMSG: ");
+        debugSerial.print(msg.msgid);        
+        debugSerial.println();
+      #endif
       switch(msg.msgid)
       {
       case MAVLINK_MSG_ID_HEARTBEAT:  // 0
+        hb_count++;   
         ap_base_mode = (mavlink_msg_heartbeat_get_base_mode(&msg) & 0x80) > 7;
         ap_custom_mode = mavlink_msg_heartbeat_get_custom_mode(&msg);
-#ifdef DEBUG_MODE
+#ifdef DEBUG_MAVLINK_CONNECTION //DEBUG_MODE
         debugSerial.print(millis());
         debugSerial.print("\tMAVLINK_MSG_ID_SYS_STATUS: base_mode: ");
         debugSerial.print((mavlink_msg_heartbeat_get_base_mode(&msg) & 0x80) > 7);
@@ -409,15 +456,25 @@ void _MavLink_receive() {
         debugSerial.print(mavlink_msg_heartbeat_get_custom_mode(&msg));
         debugSerial.println();
 #endif              
-        MavLink_Connected_timer=millis(); 
-        if(!MavLink_Connected); 
-        {
-          hb_count++;   
-          if((hb_count++) > 10) {        // If  received > 10 heartbeats from MavLink then we are connected
-            MavLink_Connected=1;
-            hb_count=0;
-            digitalWrite(led,HIGH);      // LED will be ON when connected to MavLink, else it will slowly blink
-          }
+        MavLink_Connected_timer=millis() + 3000; 
+        #ifdef DEBUG_MAVLINK_CONNECTION
+          debugSerial.print(millis());
+          debugSerial.print("\t\theartbeat count:");
+          debugSerial.print(hb_count);
+          debugSerial.println();
+//            debugSerial.print(millis());
+//            debugSerial.print("\tConnected: ");
+//            debugSerial.println(MavLink_Connected);
+        #endif
+        if(hb_count == 10) {        // If  received > 10 heartbeats from MavLink then we are connected
+          MavLink_Connected = 1;
+          #ifdef DEBUG_MAVLINK_CONNECTION
+            debugSerial.println("###############################################");
+            debugSerial.print(millis());
+            debugSerial.println("\tMavLink connection etablished.");
+            debugSerial.println("###############################################");
+          #endif
+          digitalWrite(led,HIGH);      // LED will be ON when connected to MavLink, else it will slowly blink
         }
         break;
       case MAVLINK_MSG_ID_STATUSTEXT:     //253
@@ -663,12 +720,6 @@ break;
 #endif
         break; 
       default:
-#ifdef DEBUG_MAVLINK_MSGS
-        debugSerial.print(millis());
-        debugSerial.print("\tMSG: ");
-        debugSerial.print(msg.msgid);        
-        debugSerial.println();
-#endif
         break;
       }
 
