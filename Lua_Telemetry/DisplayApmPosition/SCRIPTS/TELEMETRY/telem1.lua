@@ -108,7 +108,42 @@
                             "Brake"}
 	
 	local apm_status_message = {severity = 0, textnr = 0, timestamp=0}
-	
+	modelInfo = model.getInfo()
+modelName = modelInfo.name
+scriptDirectory = "/SCRIPTS/" .. modelName
+
+--Init A registers
+local A2 = model.getTelemetryChannel(1)
+if A2 .unit ~= 3 or A2 .range ~=1024 or A2 .offset ~=0
+then
+    A2.unit = 3
+    A2.range = 1024
+    A2.offset = 0
+    model.setTelemetryChannel(1, A2)
+end
+
+local A3 = model.getTelemetryChannel(2)
+if A3.unit ~= 3 or A3.range ~=362 or A3.offset ~=-180
+then
+    A3.unit = 3
+    A3.range = 362
+    A3.offset = -180
+    A3.alarm1 = -180
+    A3.alarm2 = -180
+    model.setTelemetryChannel(2, A3)
+end
+
+local A4 = model.getTelemetryChannel(3)
+if A4.unit ~= 3 or A4.range ~=362 or A4.offset ~=-180
+then
+    A4.unit = 3
+    A4.range = 362
+    A4.offset = -180
+    A4.alarm1 = -180
+    A4.alarm2 = -180
+    model.setTelemetryChannel(3, A4)
+end
+
 	local arrowLine = {
 	  {-4, 5, 0, -4},
 	  {-3, 5, 0, -3},
