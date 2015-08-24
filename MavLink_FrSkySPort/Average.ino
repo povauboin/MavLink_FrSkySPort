@@ -21,6 +21,7 @@ uint16_t voltageMinimum = 0;
 boolean voltageStabilized = false;
 uint16_t voltageLast = 0;
 
+//==================================================================================================================
 // Store a voltage reading received through mavlink
 void storeVoltageReading(uint16_t value)
 {
@@ -416,7 +417,7 @@ void parseStatusText(int32_t severity, String text)
   else                                                                     textId = 1023;
     ap_status_text_id = textId;
 
-#ifdef DEBUG_PARSE_STATUS_TEXT
+#ifdef DEBUG_APM_PARSE_STATUSTEXT
   debugSerial.print(millis());
   debugSerial.print("\tparseStatusText. severity: ");
   debugSerial.print(severity);
