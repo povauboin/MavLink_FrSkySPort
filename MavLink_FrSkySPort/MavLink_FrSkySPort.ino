@@ -211,6 +211,8 @@ int32_t     ap_latitude           =   0;    // Latitude (WGS84), in degrees * 1E
 int32_t     ap_longitude          =   0;    // Longitude (WGS84), in degrees * 1E7
 int32_t     ap_gps_altitude       =   0;    // Altitude (AMSL, NOT WGS84), in meters * 1000 (positive for up). 
                                             // Note that virtually all GPS modules provide the AMSL altitude in addition to the WGS84 altitude.
+  int32_t latitude  = 0;
+  int32_t longitude = 0;
 int32_t     ap_gps_speed          =   0;    // GPS ground speed (m/s * 100)
 uint16_t    ap_gps_hdop           = 255;    // GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
 //uint16_t    ap_gps_vdop           =   0;    // GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535

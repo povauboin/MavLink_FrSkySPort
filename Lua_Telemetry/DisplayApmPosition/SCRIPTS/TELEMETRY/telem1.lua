@@ -108,42 +108,7 @@
                             "Brake"}
 	
 	local apm_status_message = {severity = 0, textnr = 0, timestamp=0}
-	modelInfo = model.getInfo()
-modelName = modelInfo.name
-scriptDirectory = "/SCRIPTS/" .. modelName
-
---Init A registers
-local A2 = model.getTelemetryChannel(1)
-if A2 .unit ~= 3 or A2 .range ~=1024 or A2 .offset ~=0
-then
-    A2.unit = 3
-    A2.range = 1024
-    A2.offset = 0
-    model.setTelemetryChannel(1, A2)
-end
-
-local A3 = model.getTelemetryChannel(2)
-if A3.unit ~= 3 or A3.range ~=362 or A3.offset ~=-180
-then
-    A3.unit = 3
-    A3.range = 362
-    A3.offset = -180
-    A3.alarm1 = -180
-    A3.alarm2 = -180
-    model.setTelemetryChannel(2, A3)
-end
-
-local A4 = model.getTelemetryChannel(3)
-if A4.unit ~= 3 or A4.range ~=362 or A4.offset ~=-180
-then
-    A4.unit = 3
-    A4.range = 362
-    A4.offset = -180
-    A4.alarm1 = -180
-    A4.alarm2 = -180
-    model.setTelemetryChannel(3, A4)
-end
-
+	
 	local arrowLine = {
 	  {-4, 5, 0, -4},
 	  {-3, 5, 0, -3},
@@ -165,10 +130,10 @@ end
 -- draw arrow
 	local function drawArrow()
 	  
-	  sinCorr = math.sin(math.rad(getValue("COG")-prearmheading))
-	  cosCorr = math.cos(math.rad(getValue("COG")-prearmheading))
-	  -- working but without good gps a lot of movments// sinCorr = math.sin(math.rad(getValue("COG"))-headfromh)
-	  -- working but without good gps a lot of movments// cosCorr = math.cos(math.rad(getValue("COG"))-headfromh)	  
+	  sinCorr = math.sin(math.rad(getValue("Hdg")-prearmheading))
+	  cosCorr = math.cos(math.rad(getValue("Hdg")-prearmheading))
+	  -- working but without good gps a lot of movments// sinCorr = math.sin(math.rad(getValue("Hdg"))-headfromh)
+	  -- working but without good gps a lot of movments// cosCorr = math.cos(math.rad(getValue("Hdg"))-headfromh)	  
 	  for index, point in pairs(arrowLine) do
 	    X1 = CenterXcolArrow + offsetX + math.floor(point[1] * cosCorr - point[2] * sinCorr + 0.5)
 	    Y1 = CenterYrowArrow + offsetY + math.floor(point[1] * sinCorr + point[2] * cosCorr + 0.5)
@@ -239,8 +204,8 @@ end
 	    lcd.drawText (195, 10, "--S",0)
 	  end
 	  
-	  hdop=round(getValue("HDOP"))
-	  if hdop <20 then
+	  hdop=round(getValue("A2"))/10
+	  if hdop <2.5 then
 	    lcd.drawNumber (180, 10, hdop, PREC1+LEFT+SMLSIZE )
 	  else
 	    lcd.drawNumber (180, 10, hdop, PREC1+LEFT+BLINK+INVERS+SMLSIZE)
@@ -330,7 +295,7 @@ end
 	  lcd.drawLine (htsapaneloffset + 154, 8, htsapaneloffset + 154, 63, SOLID, 0)
 	  --heading
 	  lcd.drawText(htsapaneloffset + 76,11,"Heading ",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos(),9,getValue("COG"),MIDSIZE+LEFT)
+	  lcd.drawNumber(lcd.getLastPos(),9,getValue("Hdg"),MIDSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),9,"\64",MIDSIZE)
 	  
 	  --altitude
@@ -339,7 +304,7 @@ end
 	  lcd.drawNumber(lcd.getLastPos()+3,22,getValue("Alt"),MIDSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),22,"m",MIDSIZE)
 	  --vspeed
-	  vspd= getValue("VSI")
+	  vspd= getValue("VSpd")
 	  if vspd == 0 then
 	    lcd.drawText(lcd.getLastPos(), 25,"==",0)
 	  elseif vspd >0 then
@@ -350,14 +315,14 @@ end
 	  lcd.drawNumber(lcd.getLastPos(),25,vspd,0+LEFT)
 	 
 	  lcd.drawText(htsapaneloffset + 76,35,"Max",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos()+8,35,getValue("Alt-"),SMLSIZE+LEFT)
+	  lcd.drawNumber(lcd.getLastPos()+8,35,getValue("AltM"),SMLSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),35,"m",SMLSIZE)
 	  
 	  --Armed time
 	  lcd.drawTimer(htsapaneloffset + 106,42,model.getTimer(0).value,MIDSIZE)
 	  
 	  lcd.drawText(htsapaneloffset + 76,56,"Speed",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue("GSPD"),MIDSIZE+LEFT)
+	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue("GSpd"),MIDSIZE+LEFT)
 	  
 	end
 	
@@ -374,7 +339,7 @@ end
 	  end
 	  
 	  lcd.drawText(134, 0, "TX:", INVERS)
-	  lcd.drawNumber(160, 0, getValue("tx-voltage")*10,0+PREC1+INVERS)
+	  lcd.drawNumber(160, 0, getValue(189)/10,0+PREC1+INVERS)
 	  lcd.drawText(lcd.getLastPos(), 0, "v", INVERS)
 	  
 	  lcd.drawText(172, 0, "rssi:", INVERS)
@@ -387,18 +352,18 @@ end
 	  --Used on power panel -- still to check if all needed
 
 	  --tension=getValue("VFAS") --
-	  --current=getValue("Curr") ---
+	  --current=getValue(Curr) ---
 	  consumption=getValue("mAh")---
 	  --watts=getValue("Watt") ---
-	  --tension_min=getValue("VFAS-") ---
-	  --current_max=getValue("Curr-") ---
-	  --watts_max=getValue("Watt+")  ---
-	  --cellmin=getValue("Cels-") --- 214 = cell-min
+	  --tension_min=getValue(246) ---
+	  --current_max=getValue(247) ---
+	  --watts_max=getValue(248)  ---
+	  --cellmin=getValue("Cmin") --- 214 = cell-min
 	  
-	  lcd.drawNumber(30,13,getValue("VFAS")*10,DBLSIZE+PREC1)
+	  lcd.drawNumber(30,13,getValue("VFAS"),DBLSIZE+PREC1)
 	  lcd.drawText(lcd.getLastPos(),14,"V",0)
 	  
-	  lcd.drawNumber(67,9,getValue("Curr")*10,MIDSIZE+PREC1)
+	  lcd.drawNumber(67,9,getValue("Curr"),MIDSIZE+PREC1)
 	  lcd.drawText(lcd.getLastPos(),10,"A",0)
 	 
 	  
@@ -416,7 +381,7 @@ end
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
 	  
 	  
-	  lcd.drawNumber(42,47,getValue("Cels-")*100,DBLSIZE+PREC2)
+	  lcd.drawNumber(42,47,getValue("Cmin"),DBLSIZE+PREC2)
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,48,"V",SMLSIZE)
 	  lcd.drawText(xposCons,56,"C-min",SMLSIZE)
@@ -444,7 +409,7 @@ end
 	 
 	  --prearmheading =63
 	  if apmarmed ~=1 then -- report last heading bevor arming. this can used for display position relative to copter
-	    prearmheading=getValue("COG")
+	    prearmheading=getValue("Hdg")
 	    pilotlat = math.rad(getValue("latitude"))
 	    pilotlon = math.rad(getValue("longitude"))
 	  end
@@ -500,7 +465,7 @@ end
 	
 --FlightModes
 	local function Flight_modes()
-          FmodeNr = getValue("FMod")+1
+          FmodeNr = getValue("Fuel")+1
 	  if FmodeNr<1 or FmodeNr>17 then
 	    FmodeNr=13
 	  end

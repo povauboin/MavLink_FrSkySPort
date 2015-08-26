@@ -250,7 +250,7 @@ void _MavLink_receive() {
           ap_fixtype = mavlink_msg_gps_raw_int_get_fix_type(&msg);                               // 0 = No GPS, 1 =No Fix, 2 = 2D Fix, 3 = 3D Fix
           ap_sat_visible =  mavlink_msg_gps_raw_int_get_satellites_visible(&msg);          // numbers of visible satelites
           gps_status = (ap_sat_visible*10) + ap_fixtype; 
-          ap_gps_hdop = mavlink_msg_gps_raw_int_get_eph(&msg)/4;
+          ap_gps_hdop = mavlink_msg_gps_raw_int_get_eph(&msg);
           // Max 8 bit
           if(ap_gps_hdop == 0 || ap_gps_hdop > 255)
             ap_gps_hdop = 255;
