@@ -231,6 +231,9 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
             latlong=((abs(ap_longitude)/100)*6)  | 0xC0000000;
           else
             latlong=((abs(ap_longitude)/100)*6)  | 0x80000000;
+        debugSerial.print(millis());
+        debugSerial.print("\t((abs(ap_longitude)/100)*6)");
+        debugSerial.println(latlong);
           FrSkySPort_SendPackage(FR_ID_LATLONG,latlong);
         }
         break;
@@ -240,6 +243,9 @@ void FrSkySPort_ProcessSensorRequest(uint8_t sensorId)
             latlong=((abs(ap_latitude)/100)*6) | 0x40000000;
           else
             latlong=((abs(ap_latitude)/100)*6);
+        debugSerial.print(millis());
+        debugSerial.print("\t((abs(ap_latitude)/100)*6)");
+        debugSerial.println(latlong);
           FrSkySPort_SendPackage(FR_ID_LATLONG,latlong);
         }
         break;  
