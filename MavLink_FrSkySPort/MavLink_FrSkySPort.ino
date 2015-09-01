@@ -120,7 +120,7 @@
 
 // *** DEBUG other things:
 //#define DEBUG_AVERAGE_VOLTAGE
-#define DEBUG_LIPO_SINGLE_CELL_MONITOR
+//#define DEBUG_LIPO_SINGLE_CELL_MONITOR
 
 
 /* 
@@ -128,13 +128,19 @@
  * *** Variables Definitions:                          ***
  * *******************************************************
  */
+ 
 /* 
  * *******************************************************
  * *** Wolke´s Single-Lipo-Cell-Monitor Definitions:   ***
  * *******************************************************
  */
 #ifdef USE_SINGLE_CELL_MONITOR
+  
+  // configure number maximum connected analog inputs(cells)
+  // if you build an six cell network then MAXCELLS is 6
   #define MAXCELLS 6
+  
+  // construct and init LSCM (LipoSingleCellMonitor)
   LSCM lscm( MAXCELLS, 13, 0.99);
 #endif
 

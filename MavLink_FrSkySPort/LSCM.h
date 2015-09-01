@@ -33,9 +33,10 @@ public:
     
     
 private:
+    
     void initLSCM(uint8_t cells, uint8_t analogReadReso, float smoothness);
 
-        //cell voltage divider. this is dependent from your resitor voltage divider network
+    //cell voltage divider. this is dependent from your resitor voltage divider network
     double _LIPOCELL_1TO8[13] =
     {
         1905.331599479, // 277.721518987, //1897.85344189,// 10bit 237.350026082,   3,97
