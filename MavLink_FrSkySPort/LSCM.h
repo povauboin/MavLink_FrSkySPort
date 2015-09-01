@@ -17,26 +17,62 @@
 class LSCM {
 
 public:
-    // ----- Overloaded Constructor -----
-    // cells, how many cells connected. analogReadResolution of adac 13 bit on teensy3. smoothness, of low pass filter 0.0001 is max 0.99 is off
+    
+    /**
+    \ingroup MavLink_FrSkySPort
+    \brief Overloaded Constructor of LSCM Object
+    \descriptions construct LSCM minimal with cells.
+    \example LSCM lscm( 3, 13, 0.99);
+    \args
+    \cells how many cells connected
+    \analogReadResolution on teensy3.x 13 bit as default
+    \smoothness value of low pass filtering, 0.0001 is max 0.99 is off (default)
+    */
     LSCM( uint8_t cells, uint8_t analogReadResolution, float smoothness);
     LSCM( uint8_t cells, uint8_t analogReadResolution);
     LSCM( uint8_t cells);
     
-    // ----- LSCM Process -----
+    /**
+    \brief main-process-call of LSCM. 
+    \descriptions: must called in main loop.
+    */
     void process();
     
+    /**
+    \brief returns disered Cell voltage 0-n based on lipocells. 
+    \descriptions returned an uint32_t of called lipocell.
+    */   
     uint32_t getCellVoltageAsUint32_T(uint8_t cell);
+
+    /**
+    \brief returns Cell voltage sum from al Cells. 
+    \descriptions returned an int32_t Cell sum.
+    */ 
     int32_t getAllLipoCells();
+    
+    /**
+    \brief returns quantity of really connected cells. 
+    \descriptions returned an uint8_t of real connected cells.
+    */ 
     uint8_t getCellsInUse();
+    
     //uint8_t getMaxCells();
     
     
 private:
     
+    /**
+    \descriptions init LSCM object variables and arrays. automatically called by constructor
+    */
     void initLSCM(uint8_t cells, uint8_t analogReadReso, float smoothness);
 
-    //cell voltage divider. this is dependent from your resitor voltage divider network
+    
+    
+    /**
+    \brief main Array which holds software deviders. 
+    \descriptions this divider are used if LSCM object will init. Users need to adjust this values
+    \descriptions in dependecy to their resistor network 
+    */
     double _LIPOCELL_1TO8[13] =
     {
         1905.331599479, // 277.721518987, //1897.85344189,// 10bit 237.350026082,   3,97
@@ -52,6 +88,7 @@ private:
         0.0,
         0.0
     };
+    
     
     double *_individualcelldivider;
     uint8_t _analogread_threshold;         // threshold for connected zelldetection in mV
