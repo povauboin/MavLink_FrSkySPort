@@ -198,9 +198,9 @@ void _MavLink_receive() {
          */
         case MAVLINK_MSG_ID_SYS_STATUS:
           #ifdef USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR
-            ap_voltage_battery = alllipocells;
+            ap_voltage_battery = lscm.getAllLipoCells();
             //no lipo to network connected use reported mavlink_msg voltage
-            if(cells_in_use == 0) ap_voltage_battery = mavlink_msg_sys_status_get_voltage_battery(&msg);
+            if(lscm.getCellsInUse() == 0) ap_voltage_battery = mavlink_msg_sys_status_get_voltage_battery(&msg);
           #else
             ap_voltage_battery = mavlink_msg_sys_status_get_voltage_battery(&msg);  // 1 = 1mV
           #endif
@@ -219,8 +219,8 @@ void _MavLink_receive() {
           #endif
           uint8_t temp_cell_count;
           #ifdef USE_SINGLE_CELL_MONITOR
-            ap_cell_count = cells_in_use;
-            if (cells_in_use == 0){
+            ap_cell_count =  lscm.getCellsInUse();
+            if (lscm.getCellsInUse() == 0){
               if (ap_voltage_battery > 21000) temp_cell_count = 6;
               else if (ap_voltage_battery > 17500) temp_cell_count = 5;
               else if (ap_voltage_battery > 12750) temp_cell_count = 4;
