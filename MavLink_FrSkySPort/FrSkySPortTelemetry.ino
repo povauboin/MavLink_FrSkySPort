@@ -23,9 +23,11 @@
  */
 FrSkySportSensorFas fas;                               // Create FAS sensor with default ID
 FrSkySportSensorFuel fuel;                             // Create FUEL sensor with default ID
-FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
-#if (MAXCELLS > 6) 
-  FrSkySportSensorFlvss flvss2(FrSkySportSensor::ID15);  // Create FLVSS sensor with given ID
+#ifdef USE_SINGLE_CELL_MONITOR
+  FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
+  #if (MAXCELLS > 6) 
+    FrSkySportSensorFlvss flvss2(FrSkySportSensor::ID15);  // Create FLVSS sensor with given ID
+  #endif
 #endif
 FrSkySportSensorGps gps;                               // Create GPS sensor with default ID
 FrSkySportSensorRpm rpm;                               // Create RPM sensor with default ID
@@ -63,11 +65,15 @@ uint32_t handle_A2_A3_value(uint32_t value)
 void FrSkySPort_Init()
 {
   // Configure the telemetry serial port and sensors (remember to use & to specify a pointer to sensor)
-#if (MAXCELLS <= 6)
-    telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-#else
-    telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-#endif
+  #ifdef USE_SINGLE_CELL_MONITOR
+    #if (MAXCELLS <= 6)
+      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+    #else
+      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+    #endif
+  #else
+      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+  #endif
 
 }
 
@@ -223,7 +229,7 @@ void FrSkySportTelemetry_FLVSS() {
       case 6:
         flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
         break;
-#if (MAXCELLS > 6)
+      #if (MAXCELLS > 6)
       case 7:
         flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
         flvss2.setData(zelle[6] / 1000.0);
@@ -248,10 +254,10 @@ void FrSkySportTelemetry_FLVSS() {
         flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
         flvss2.setData(zelle[6] / 1000.0, zelle[7] / 1000.0, zelle[8] / 1000.0, zelle[9] / 1000.0, zelle[10] / 1000.0, zelle[11] / 1000.0);
         break;
-#endif
+      #endif
     
   }
-  #endif  
+  #endif
 }
 
 /* 

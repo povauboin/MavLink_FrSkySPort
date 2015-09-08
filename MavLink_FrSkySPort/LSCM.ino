@@ -8,7 +8,7 @@
  * detailed informations and schematics here
  *
  */
-
+#ifdef USE_SINGLE_CELL_MONITOR
 /*
  * *******************************************************
  * *** Setup Wolke´ Lipo-Single-Cell-Monitor:          ***
@@ -24,8 +24,6 @@ void LSCM_setup()  {
     individualcelldivider[i] = LIPOCELL_1TO8[i];
     smoothedVal[i] = 900.0;
   }
-
-
 }
 
 /*
@@ -113,10 +111,4 @@ void LSCM_process() {
     debugSerial.println();
   #endif
 }
-
-
-
-
-
-
-
+#endif

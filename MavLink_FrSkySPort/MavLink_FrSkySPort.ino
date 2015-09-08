@@ -76,10 +76,10 @@
  * *** Enable Addons:                                  ***
  * *******************************************************
  */
-#define USE_SINGLE_CELL_MONITOR                         // Setup in LSCM Tab
-#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
-#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC )
-#define USE_TEENSY_LED_SUPPORT                          // Enable LED-Controller functionality
+//#define USE_SINGLE_CELL_MONITOR                         // Setup in LSCM Tab
+//#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
+//#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - do not disable if you use TEENSY_LED_SUPPORT.
+//#define USE_TEENSY_LED_SUPPORT                          // Enable LED-Controller functionality
 
 /*
  * *******************************************************
@@ -141,7 +141,6 @@
  * *** Wolke´s Single-Lipo-Cell-Monitor Definitions:   ***
  * *******************************************************
  */
-#ifdef USE_SINGLE_CELL_MONITOR
   //cell voltage divider. this is dependent from your resitor voltage divider network
   double LIPOCELL_1TO8[13] =
   {
@@ -158,7 +157,7 @@
     0.0,
     0.0
   };
-  
+#ifdef USE_SINGLE_CELL_MONITOR
   double individualcelldivider[MAXCELLS+1];
   uint8_t analogread_threshold = 100;         // threshold for connected zelldetection in mV
   uint8_t cells_in_use = MAXCELLS;
@@ -168,7 +167,6 @@
   float lp_filter_val = 0.99; // this determines smoothness  - .0001 is max  0.99 is off (no smoothing)
   double smoothedVal[MAXCELLS+1]; // this holds the last loop value
 #endif
-
 /* 
  * *******************************************************
  * *** Mavlink Definitions:                            ***
@@ -370,8 +368,5 @@ void loop()  {
       Teensy_LED_process();                 // Process LED-Controller
     #endif
   }
-
 }
-
-
 
