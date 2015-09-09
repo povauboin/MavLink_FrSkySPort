@@ -204,12 +204,12 @@ void FrSkySportTelemetry_FLVSS() {
         debugSerial.print("\tZelle[");
         debugSerial.print(i);
         debugSerial.print("]: ");
-        debugSerial.print(zelle[i] / 1000.0);
+        debugSerial.print((lscm.getCellVoltageAsUint32_T(i) / 1000.0);
         debugSerial.println("Volt");
         
       }
     #endif
-  //if (zelle[cells_in_use-1] > 0)
+    
     switch(lscm.getCellsInUse()) {
       case 1:
         flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0);
