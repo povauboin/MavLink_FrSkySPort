@@ -322,7 +322,7 @@
 	  lcd.drawTimer(htsapaneloffset + 106,42,model.getTimer(0).value,MIDSIZE)
 	  
 	  lcd.drawText(htsapaneloffset + 76,56,"Speed",SMLSIZE)
-	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue("GSpd"),MIDSIZE+LEFT)
+	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue("GSpd")*3.6,MIDSIZE+LEFT)
 	  
 	end
 	
