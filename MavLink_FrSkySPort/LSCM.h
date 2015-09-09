@@ -21,16 +21,16 @@ public:
     /**
     \ingroup MavLink_FrSkySPort
     \brief Overloaded Constructor of LSCM Object
-    \descriptions construct LSCM minimal with cells.
-    \example LSCM lscm( 3, 13, 0.99);
+    \descriptions construct LSCM minimal with debug option and cells count.
+    \example LSCM lscm(false, 3, 13, 0.99);
     \args
     \cells how many cells connected
     \analogReadResolution on teensy3.x 13 bit as default
     \smoothness value of low pass filtering, 0.0001 is max 0.99 is off (default)
     */
-    LSCM( uint8_t cells, uint8_t analogReadResolution, float smoothness);
-    LSCM( uint8_t cells, uint8_t analogReadResolution);
-    LSCM( uint8_t cells);
+    LSCM(bool debug, uint8_t cells, uint8_t analogReadResolution, float smoothness);
+    LSCM(bool debug, uint8_t cells, uint8_t analogReadResolution);
+    LSCM(bool debug, uint8_t cells);
     
     /**
     \brief main-process-call of LSCM. 
@@ -56,7 +56,11 @@ public:
     */ 
     uint8_t getCellsInUse();
     
-    //uint8_t getMaxCells();
+    /**
+    \brief quantity of cells at init. 
+    \descriptions returned an uint8_t of real connected cells.
+    */
+    uint8_t getMaxCells();
     
     
 private:
@@ -64,7 +68,7 @@ private:
     /**
     \descriptions init LSCM object variables and arrays. automatically called by constructor
     */
-    void initLSCM(uint8_t cells, uint8_t analogReadReso, float smoothness);
+    void initLSCM(bool debug, uint8_t cells, uint8_t analogReadReso, float smoothness);
 
     
     
@@ -89,7 +93,7 @@ private:
         0.0
     };
     
-    
+    bool _debug;
     double *_individualcelldivider;
     uint8_t _analogread_threshold;         // threshold for connected zelldetection in mV
     uint8_t _cells_in_use;

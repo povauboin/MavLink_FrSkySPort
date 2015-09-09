@@ -120,7 +120,7 @@
 
 // *** DEBUG other things:
 //#define DEBUG_AVERAGE_VOLTAGE
-//#define DEBUG_LIPO_SINGLE_CELL_MONITOR
+#define DEBUG_LIPO_SINGLE_CELL_MONITOR
 
 
 /* 
@@ -138,10 +138,15 @@
   
   // configure number maximum connected analog inputs(cells)
   // if you build an six cell network then MAXCELLS is 6
-  #define MAXCELLS 6
+  #define MAXCELLS 3
   
   // construct and init LSCM (LipoSingleCellMonitor)
-  LSCM lscm( MAXCELLS, 13, 0.99);
+ 
+  #ifdef DEBUG_LIPO_SINGLE_CELL_MONITOR
+    LSCM lscm(true, MAXCELLS, 13, 0.99);
+  #else
+    LSCM lscm(false, MAXCELLS, 13, 0.99);
+  #endif
 #endif
 
 /* 
@@ -295,8 +300,8 @@ bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initial
  */
 void setup()  {
 
- // delay(100000);
- 
+  delay(1000);
+  Serial.println("Hello");
 
   #ifdef USE_TEENSY_LED_SUPPORT
     Teensy_LED_Init();                      // Init LED Controller
@@ -312,6 +317,7 @@ void setup()  {
  * *******************************************************
  */
 void loop()  {
+  
   #ifdef USE_SINGLE_CELL_MONITOR
     lscm.process();                         // Read Lipo Cell Informations from Network
   #endif
