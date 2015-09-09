@@ -12,24 +12,24 @@
 #include "LSCM.h"
 
 // ----- Initialization and Default Values -----
-LSCM::LSCM(bool debug, uint8_t cells)
+LSCM::LSCM(uint8_t cells)
 {
  
-  initLSCM(debug, cells, 13, 0.99);    
+  initLSCM(cells, 13, 0.99);    
     
 }
 
-LSCM::LSCM(bool debug, uint8_t cells, uint8_t analogReadReso)
+LSCM::LSCM(uint8_t cells, uint8_t analogReadReso)
 {
   
-   initLSCM(debug, cells, analogReadReso, 0.99);   
+   initLSCM(cells, analogReadReso, 0.99);   
     
 }
 
-LSCM::LSCM(bool debug, uint8_t cells, uint8_t analogReadReso, float smoothness)
+LSCM::LSCM(uint8_t cells, uint8_t analogReadReso, float smoothness)
 {
   
-   initLSCM(debug, cells, analogReadReso, smoothness);
+   initLSCM(cells, analogReadReso, smoothness);
     
 }
 
@@ -139,12 +139,18 @@ uint8_t LSCM::getMaxCells()
   return _maxcells;
 }
 
+void LSCM::setDebug(bool debug)
+{
+  _debug = debug;
+}
+
 
 // private functions
 
-void LSCM::initLSCM(bool debug, uint8_t cells, uint8_t analogReadReso, float smoothness)
+void LSCM::initLSCM(uint8_t cells, uint8_t analogReadReso, float smoothness)
 {
-  _debug = debug;
+  
+  _debug = false;
   _maxcells = cells;
   _cells_in_use = cells;
   _lp_filter_val = smoothness;

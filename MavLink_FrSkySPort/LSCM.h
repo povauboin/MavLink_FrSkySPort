@@ -21,16 +21,16 @@ public:
     /**
     \ingroup MavLink_FrSkySPort
     \brief Overloaded Constructor of LSCM Object
-    \descriptions construct LSCM minimal with debug option and cells count.
+    \descriptions construct LSCM minimal with cells count.
     \example LSCM lscm(false, 3, 13, 0.99);
     \args
     \cells how many cells connected
     \analogReadResolution on teensy3.x 13 bit as default
     \smoothness value of low pass filtering, 0.0001 is max 0.99 is off (default)
     */
-    LSCM(bool debug, uint8_t cells, uint8_t analogReadResolution, float smoothness);
-    LSCM(bool debug, uint8_t cells, uint8_t analogReadResolution);
-    LSCM(bool debug, uint8_t cells);
+    LSCM(uint8_t cells, uint8_t analogReadResolution, float smoothness);
+    LSCM(uint8_t cells, uint8_t analogReadResolution);
+    LSCM(uint8_t cells);
     
     /**
     \brief main-process-call of LSCM. 
@@ -62,13 +62,19 @@ public:
     */
     uint8_t getMaxCells();
     
+    /**
+    \brief debug. 
+    \descriptions enable disable debug.
+    */
+    void setDebug(bool debug);
+    
     
 private:
     
     /**
     \descriptions init LSCM object variables and arrays. automatically called by constructor
     */
-    void initLSCM(bool debug, uint8_t cells, uint8_t analogReadReso, float smoothness);
+    void initLSCM(uint8_t cells, uint8_t analogReadReso, float smoothness);
 
     
     

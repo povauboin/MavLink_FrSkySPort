@@ -120,7 +120,7 @@
 
 // *** DEBUG other things:
 //#define DEBUG_AVERAGE_VOLTAGE
-#define DEBUG_LIPO_SINGLE_CELL_MONITOR
+//#define DEBUG_LIPO_SINGLE_CELL_MONITOR
 
 
 /* 
@@ -134,20 +134,22 @@
  * *** Wolke´s Single-Lipo-Cell-Monitor Definitions:   ***
  * *******************************************************
  */
-#ifdef USE_SINGLE_CELL_MONITOR
+
+#ifdef USE_SINGLE_CELL_MONITOR)
   
   // configure number maximum connected analog inputs(cells)
   // if you build an six cell network then MAXCELLS is 6
   #define MAXCELLS 3
   
   // construct and init LSCM (LipoSingleCellMonitor)
- 
-  #ifdef DEBUG_LIPO_SINGLE_CELL_MONITOR
-    LSCM lscm(true, MAXCELLS, 13, 0.99);
-  #else
-    LSCM lscm(false, MAXCELLS, 13, 0.99);
-  #endif
+  LSCM lscm(MAXCELLS, 13, 0.99);
+  
 #endif
+
+
+
+
+  
 
 /* 
  * *******************************************************
@@ -300,13 +302,14 @@ bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initial
  */
 void setup()  {
 
-  delay(1000);
-  Serial.println("Hello");
-
   #ifdef USE_TEENSY_LED_SUPPORT
     Teensy_LED_Init();                      // Init LED Controller
   #endif
-
+  
+  #ifdef DEBUG_LIPO_SINGLE_CELL_MONITOR
+  lscm.setDebug(true);                      // Enable LSCM debug
+  #endif
+  
   Mavlink_setup();                          // Init Mavlink
   
 }
