@@ -10,6 +10,7 @@
  * To Use this script in Simulation Mode (#define SIMULATION_MODE)
  * In SIMULATION_MODE script can run stand alone on your development environment, but no input is possible.
  */
+#ifdef USE_TEENSY_LED_SUPPORT
 //#####################################################################################################
 //### MAIN CONFIG PART                                                                              ###
 //#####################################################################################################
@@ -45,9 +46,16 @@
   int LED_MODE_SWITCH;
   int LED_DIMM_CHAN;
 #else
-  #define LED_MODE_SWITCH 10   // Channel Number of RC Channel used for manual Lightmode
-  #define LED_DIMM_CHAN   11   // Channel Number of RC Channel used for dimming LEDs
+  #ifdef USE_RC_CHANNELS
+    #define LED_MODE_SWITCH 10   // Channel Number of RC Channel used for manual Lightmode
+    #define LED_DIMM_CHAN   11   // Channel Number of RC Channel used for dimming LEDs
+  #else
+    int LED_MODE_SWITCH;
+    int LED_DIMM_CHAN;
+    int ap_chan_raw[18];
+  #endif
 #endif
+
 
 //#####################################################################################################
 //### FASTLED CONFIG                                                                                ###
@@ -162,11 +170,7 @@ int dir = RIGHT;
 //#####################################################################################################
 //### PROGRAM SETUP                                                                                 ###
 //#####################################################################################################
-#ifdef standalone
-void setup() {        // uncomment in SIMULATION_MODE
-#else
 void Teensy_LED_Init()  {   // comment in SIMULATION_MODE
-#endif
   // Add "Teensy_LED_Init();" to begin of MavLink_FrSkySPort.ino setup() part
 /*  Cabling (new):
    1. POS_LEDS_ARMED
@@ -236,11 +240,7 @@ void Teensy_LED_Init()  {   // comment in SIMULATION_MODE
 //#####################################################################################################
 //### PROGRAM LOOP                                                                                  ###
 //#####################################################################################################
-#ifdef standalone
-void loop() {         // uncomment in SIMULATION_MODE
-#else
 void Teensy_LED_process() {   // comment in SIMULATION_MODE
-#endif
   float dim = 0.25;
   currentmillis = millis();
   ap_base_mode_last = ap_base_mode;
@@ -1146,3 +1146,4 @@ void rotor_lights(byte hue, float dim) {
   http://forum.arduino.cc/index.php?topic=198987.0
   http://forum.arduino.cc/index.php?topic=299023.0
 */
+#endif

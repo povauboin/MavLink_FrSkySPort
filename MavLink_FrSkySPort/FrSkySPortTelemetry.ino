@@ -23,9 +23,11 @@
  */
 FrSkySportSensorFas fas;                               // Create FAS sensor with default ID
 FrSkySportSensorFuel fuel;                             // Create FUEL sensor with default ID
-FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
-#if (MAXCELLS > 6) 
-  FrSkySportSensorFlvss flvss2(FrSkySportSensor::ID15);  // Create FLVSS sensor with given ID
+#ifdef USE_SINGLE_CELL_MONITOR
+  FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
+  #if (MAXCELLS > 6) 
+    FrSkySportSensorFlvss flvss2(FrSkySportSensor::ID15);  // Create FLVSS sensor with given ID
+  #endif
 #endif
 FrSkySportSensorGps gps;                               // Create GPS sensor with default ID
 FrSkySportSensorRpm rpm;                               // Create RPM sensor with default ID
@@ -55,6 +57,7 @@ uint32_t handle_A2_A3_value(uint32_t value)
   return (value *330-165)/0xFF;
 }
 
+unsigned long GPS_debug_time = 500;
 /* 
  * *******************************************************
  * *** Initialize FrSkySPortTelemetry                  ***
@@ -63,11 +66,15 @@ uint32_t handle_A2_A3_value(uint32_t value)
 void FrSkySPort_Init()
 {
   // Configure the telemetry serial port and sensors (remember to use & to specify a pointer to sensor)
-#if (MAXCELLS <= 6)
-    telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-#else
-    telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-#endif
+  #ifdef USE_SINGLE_CELL_MONITOR
+    #if (MAXCELLS <= 6)
+      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+    #else
+      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+    #endif
+  #else
+      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+  #endif
 
 }
 
@@ -222,7 +229,7 @@ void FrSkySportTelemetry_FLVSS() {
       case 6:
         flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
         break;
-#if (MAXCELLS > 6)
+      #if (MAXCELLS > 6)
       case 7:
         flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
         flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0);
@@ -247,10 +254,10 @@ void FrSkySportTelemetry_FLVSS() {
         flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
         flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0, lscm.getCellVoltageAsUint32_T(7) / 1000.0, lscm.getCellVoltageAsUint32_T(8) / 1000.0, lscm.getCellVoltageAsUint32_T(9) / 1000.0, lscm.getCellVoltageAsUint32_T(10) / 1000.0, lscm.getCellVoltageAsUint32_T(11) / 1000.0);
         break;
-#endif
+      #endif
     
   }
-  #endif  
+  #endif
 }
 
 /* 
@@ -274,61 +281,60 @@ void FrSkySportTelemetry_GPS() {
     */      
     gps.setData(ap_latitude / 1E7, ap_longitude / 1E7,    // Latitude and longitude in degrees decimal (positive for N/E, negative for S/W)
               ap_gps_altitude / 10.0,         // Altitude (AMSL, NOT WGS84), in meters * 1000 (positive for up). Note that virtually all GPS modules provide the AMSL altitude in addition to the WGS84 altitude.
-              ap_gps_speed / 100.0,            // GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
+              ap_gps_speed * 10.0,// / 100.0,            // GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
               ap_heading ,                     // Heading, in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
               ap_gps_hdop);                   // GPS HDOP horizontal dilution of position in cm (m*100)
 //              ap_cog,                         // Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
-
+  
     #ifdef DEBUG_FrSkySportTelemetry_GPS
-      debugSerial.print(millis());
-      debugSerial.print("\tAPM Latitude:\t");
-      debugSerial.print(ap_latitude);
-      debugSerial.print("\tAPM Longitude:\t\t");
-      debugSerial.println(ap_longitude);
-      debugSerial.print(millis());
-      debugSerial.print("\tFrSky Latitude:\t");
-      debugSerial.print(ap_latitude/1E7);
-      debugSerial.print("\tFrSky Longitude:\t");
-      debugSerial.println(ap_longitude/1E7);
-      debugSerial.print(millis());
-      debugSerial.print("\tGPSAlt: ");
-      debugSerial.print(ap_gps_altitude / 10.0);
-      debugSerial.print("cm");
-      debugSerial.print("\tGPSSpeed: ");
-      debugSerial.print((ap_gps_speed / 100.0 ));
-      debugSerial.print("m/s");
-      
-      debugSerial.print("\tCog: ");
-      debugSerial.print(ap_cog);
-      debugSerial.print("°");
-      
-      debugSerial.print("\tHeading: ");
-      debugSerial.print(ap_heading);
-      debugSerial.print("°");
-      debugSerial.print("\tHDOP (A2): ");
-      debugSerial.print(ap_gps_hdop);
-      /*
-      debugSerial.print("\tDATE: ");
-      debugSerial.print(year(ap_gps_time_unix_utc));
-      debugSerial.print("-");
-      debugSerial.print(month(ap_gps_time_unix_utc));
-      debugSerial.print("-");
-      debugSerial.print(day(ap_gps_time_unix_utc));
-      debugSerial.print("\tTIME: ");
-      debugSerial.print(hour(ap_gps_time_unix_utc));
-      debugSerial.print(":");
-      debugSerial.print(minute(ap_gps_time_unix_utc));
-      debugSerial.print(":");
-      debugSerial.print(second(ap_gps_time_unix_utc));
-      */
-      debugSerial.println();
-      debugSerial.println();
+      if (millis() > GPS_debug_time) {
+        debugSerial.print(millis());
+        debugSerial.print("\tAPM Latitude:\t");
+        debugSerial.print(ap_latitude);
+        debugSerial.print("\tAPM Longitude:\t\t");
+        debugSerial.println(ap_longitude);
+        debugSerial.print(millis());
+        debugSerial.print("\tFrSky Latitude:\t");
+        debugSerial.print(ap_latitude/1E7);
+        debugSerial.print("\tFrSky Longitude:\t");
+        debugSerial.println(ap_longitude/1E7);
+        debugSerial.print(millis());
+        debugSerial.print("\tGPSAlt: ");
+        debugSerial.print(ap_gps_altitude / 10.0);
+        debugSerial.print("cm");
+        debugSerial.print("\tGPSSpeed: ");
+        debugSerial.print((ap_gps_speed / 100.0 ));
+        debugSerial.print("m/s");
+        
+        debugSerial.print("\tCog: ");
+        debugSerial.print(ap_cog);
+        debugSerial.print("°");
+        
+        debugSerial.print("\tHeading: ");
+        debugSerial.print(ap_heading);
+        debugSerial.print("°");
+        debugSerial.print("\tHDOP (A2): ");
+        debugSerial.print(ap_gps_hdop);
+        /*
+        debugSerial.print("\tDATE: ");
+        debugSerial.print(year(ap_gps_time_unix_utc));
+        debugSerial.print("-");
+        debugSerial.print(month(ap_gps_time_unix_utc));
+        debugSerial.print("-");
+        debugSerial.print(day(ap_gps_time_unix_utc));
+        debugSerial.print("\tTIME: ");
+        debugSerial.print(hour(ap_gps_time_unix_utc));
+        debugSerial.print(":");
+        debugSerial.print(minute(ap_gps_time_unix_utc));
+        debugSerial.print(":");
+        debugSerial.print(second(ap_gps_time_unix_utc));
+        */
+        debugSerial.println();
+        debugSerial.println();
+        GPS_debug_time = millis() + 500;
+      }
     #endif
-  
-  
-  
   }
-
 }
 
 /* 
