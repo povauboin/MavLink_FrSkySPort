@@ -204,56 +204,55 @@ void FrSkySportTelemetry_FLVSS() {
         debugSerial.print("\tZelle[");
         debugSerial.print(i);
         debugSerial.print("]: ");
-        debugSerial.print(zelle[i] / 1000.0);
+        debugSerial.print((lscm.getCellVoltageAsUint32_T(i) / 1000.0);
         debugSerial.println("Volt");
         
       }
     #endif
-  //if (zelle[cells_in_use-1] > 0)
-  
-    switch(cells_in_use) {
+    
+    switch(lscm.getCellsInUse()) {
       case 1:
-        flvss1.setData(zelle[0] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0);
         break;
       case 2:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0);
         break;
       case 3:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0);
         break;
       case 4:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0);
         break;
       case 5:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0);
         break;
       case 6:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
         break;
       #if (MAXCELLS > 6)
       case 7:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
-        flvss2.setData(zelle[6] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
+        flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0);
         break;
       case 8:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
-        flvss2.setData(zelle[6] / 1000.0, zelle[7] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
+        flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0, lscm.getCellVoltageAsUint32_T(7) / 1000.0);
         break;
       case 9:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
-        flvss2.setData(zelle[6] / 1000.0, zelle[7] / 1000.0, zelle[8] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
+        flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0, lscm.getCellVoltageAsUint32_T(7) / 1000.0, lscm.getCellVoltageAsUint32_T(8) / 1000.0);
         break;
       case 10:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
-        flvss2.setData(zelle[6] / 1000.0, zelle[7] / 1000.0, zelle[8] / 1000.0, zelle[9] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
+        flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0, lscm.getCellVoltageAsUint32_T(7) / 1000.0, lscm.getCellVoltageAsUint32_T(8) / 1000.0, lscm.getCellVoltageAsUint32_T(9) / 1000.0);
         break;
       case 11:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
-        flvss2.setData(zelle[6] / 1000.0, zelle[7] / 1000.0, zelle[8] / 1000.0, zelle[9] / 1000.0, zelle[10] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
+        flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0, lscm.getCellVoltageAsUint32_T(7) / 1000.0, lscm.getCellVoltageAsUint32_T(8) / 1000.0, lscm.getCellVoltageAsUint32_T(9) / 1000.0, lscm.getCellVoltageAsUint32_T(10) / 1000.0);
         break;
       case 12:
-        flvss1.setData(zelle[0] / 1000.0, zelle[1] / 1000.0, zelle[2] / 1000.0, zelle[3] / 1000.0, zelle[4] / 1000.0, zelle[5] / 1000.0);
-        flvss2.setData(zelle[6] / 1000.0, zelle[7] / 1000.0, zelle[8] / 1000.0, zelle[9] / 1000.0, zelle[10] / 1000.0, zelle[11] / 1000.0);
+        flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0, lscm.getCellVoltageAsUint32_T(1) / 1000.0, lscm.getCellVoltageAsUint32_T(2) / 1000.0, lscm.getCellVoltageAsUint32_T(3) / 1000.0, lscm.getCellVoltageAsUint32_T(4) / 1000.0, lscm.getCellVoltageAsUint32_T(5) / 1000.0);
+        flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0, lscm.getCellVoltageAsUint32_T(7) / 1000.0, lscm.getCellVoltageAsUint32_T(8) / 1000.0, lscm.getCellVoltageAsUint32_T(9) / 1000.0, lscm.getCellVoltageAsUint32_T(10) / 1000.0, lscm.getCellVoltageAsUint32_T(11) / 1000.0);
         break;
       #endif
     
