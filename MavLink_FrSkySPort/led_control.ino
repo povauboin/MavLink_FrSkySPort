@@ -285,10 +285,12 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
   switch (LED_MODE) {
     case 1:   // NO_GPS Flight modes
       default_mode(ON, dim);
+      rear_arms_F(OFF, dim);
       break;
     case 2:   // GPS    Flight modes
       default_mode(ON, dim);
       side_arms(ON, dim);
+      rear_arms_F(OFF, dim);
       break;
     case 3:   // MANUAL Flight modes
       //default_mode(OFF, dim);
@@ -371,13 +373,15 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
       front_light(OFF, dim);
       break_light(OFF, dim);
       landing_light(ON, dim);*/
-      rotor_lights(39, dim);
+      /*rotor_lights(39, dim);
       get_armed_status(ON, dim);
       get_gps_status(ON, dim);
-      flash_pos_light(ON, dim);
+      flash_pos_light(ON, dim);*/
+      cust_leds(ON, 0, NUM_LEDS_TOTAL, dim);
       break;
     case 105:   // USER Mode 5 - all off
       FastLED.clear();
+      //cust_leds(ON, 0, NUM_LEDS_TOTAL, dim);
       break;
     case 999:   // disarmed
       front_arms(OFF, dim);
@@ -872,6 +876,42 @@ void rear_arms(int STATUS, float dim) {
   }
 }
 
+void rear_arms_F(int STATUS, float dim) {
+  if (NUM_LEDS_REARARMS > 0) {
+    for (int i = 0; i < NUM_LEDS_REARARMS; i++) {
+      if (STATUS == 1) {
+        leds[POS_LEDS_REARARMS[0] + i] = CHSV(96,255,255*dim);
+        //leds[POS_LEDS_REARARMS[1] + i] = CHSV(96,255,255*dim);
+        //leds[POS_LEDS_REARARMS[2] + i] = CHSV(96,255,255*dim);
+        leds[POS_LEDS_REARARMS[3] + i] = CHSV(96,255,255*dim);
+      } else {
+        leds[POS_LEDS_REARARMS[0] + i] = CHSV(0, 0, 0);
+        //leds[POS_LEDS_REARARMS[1] + i] = CHSV(0, 0, 0);
+        //leds[POS_LEDS_REARARMS[2] + i] = CHSV(0, 0, 0);
+        leds[POS_LEDS_REARARMS[3] + i] = CHSV(0, 0, 0);
+      }
+    }
+  }
+}
+
+void rear_arms_R(int STATUS, float dim) {
+  if (NUM_LEDS_REARARMS > 0) {
+    for (int i = 0; i < NUM_LEDS_REARARMS; i++) {
+      if (STATUS == 1) {
+        //leds[POS_LEDS_REARARMS[0] + i] = CHSV(96,255,255*dim);
+        leds[POS_LEDS_REARARMS[1] + i] = CHSV(96,255,255*dim);
+        leds[POS_LEDS_REARARMS[2] + i] = CHSV(96,255,255*dim);
+        //leds[POS_LEDS_REARARMS[3] + i] = CHSV(96,255,255*dim);
+      } else {
+        //leds[POS_LEDS_REARARMS[0] + i] = CHSV(0, 0, 0);
+        leds[POS_LEDS_REARARMS[1] + i] = CHSV(0, 0, 0);
+        leds[POS_LEDS_REARARMS[2] + i] = CHSV(0, 0, 0);
+        //leds[POS_LEDS_REARARMS[3] + i] = CHSV(0, 0, 0);
+      }
+    }
+  }
+}
+
 //#####################################################################################################
 //### DEFAULT LANDING LIGHT                                                                         ###
 //#####################################################################################################
@@ -892,6 +932,7 @@ void landing_light(int STATUS, float dim) {
   if (STATUS == 2) {
     if ( rel_alt - alt_land < ground_level && ap_base_mode == 1 ) {
       STATUS = 1;
+      dim = 1;
     } else if ( rel_alt - alt_land > ground_level && ap_base_mode == 1 ) {
       STATUS = 0;
     }
@@ -934,9 +975,9 @@ void landing_light(int STATUS, float dim) {
     }
     // needed because Landinglight of REAR has 1 LED more
     if (STATUS == 1) {
-      leds[POS_LEDS_LANDING[3] + NUM_LEDS_LANDING2] = CHSV(0,0,255*dim);
+      leds[POS_LEDS_LANDING[2] + NUM_LEDS_LANDING2] = CHSV(0,0,255*dim);
     } else {
-      leds[POS_LEDS_LANDING[3] + NUM_LEDS_LANDING2] = CHSV(0, 0, 0);
+      leds[POS_LEDS_LANDING[2] + NUM_LEDS_LANDING2] = CHSV(0, 0, 0);
     }
   }
 }
@@ -1136,6 +1177,17 @@ void rotor_lights(byte hue, float dim) {
         break;
     }
     targetmillis_RL = currentmillis + DELAY;
+  }
+}
+
+//#####################################################################################################
+//### Activate defined LEDS                                                                         ###
+//#####################################################################################################
+void cust_leds(int STATUS, int START_POS, int END_POS, float dim) {
+  for (int i = START_POS; i < END_POS; i++) {
+    if (STATUS == 1) {
+      leds[i] = CHSV(0, 0, 255*dim);
+    }
   }
 }
 

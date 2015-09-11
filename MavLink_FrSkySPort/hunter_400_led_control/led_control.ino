@@ -10,6 +10,7 @@
  * To Use this script in Simulation Mode (#define SIMULATION_MODE)
  * In SIMULATION_MODE script can run stand alone on your development environment, but no input is possible.
  */
+#ifdef USE_TEENSY_LED_SUPPORT
 //#####################################################################################################
 //### MAIN CONFIG PART                                                                              ###
 //#####################################################################################################
@@ -24,6 +25,7 @@
 //### DEBUG OPTIONS                                                                                 ###
 //#####################################################################################################
 //#define DEBUG_LANDUNG
+//#define DEBUG_ROTOR_LIGHTS
 
 //#####################################################################################################
 //### DEFAULT VARIABLES                                                                             ###
@@ -44,9 +46,16 @@
   int LED_MODE_SWITCH;
   int LED_DIMM_CHAN;
 #else
-  #define LED_MODE_SWITCH 10   // Channel Number of RC Channel used for manual Lightmode
-  #define LED_DIMM_CHAN   11   // Channel Number of RC Channel used for dimming LEDs
+  #ifdef USE_RC_CHANNELS
+    #define LED_MODE_SWITCH 10   // Channel Number of RC Channel used for manual Lightmode
+    #define LED_DIMM_CHAN   11   // Channel Number of RC Channel used for dimming LEDs
+  #else
+    int LED_MODE_SWITCH;
+    int LED_DIMM_CHAN;
+    int ap_chan_raw[18];
+  #endif
 #endif
+
 
 //#####################################################################################################
 //### FASTLED CONFIG                                                                                ###
@@ -161,11 +170,7 @@ int dir = RIGHT;
 //#####################################################################################################
 //### PROGRAM SETUP                                                                                 ###
 //#####################################################################################################
-#ifdef standalone
-void setup() {        // uncomment in SIMULATION_MODE
-#else
 void Teensy_LED_Init()  {   // comment in SIMULATION_MODE
-#endif
   // Add "Teensy_LED_Init();" to begin of MavLink_FrSkySPort.ino setup() part
 /*  Cabling (new):
    1. POS_LEDS_ARMED
@@ -235,11 +240,7 @@ void Teensy_LED_Init()  {   // comment in SIMULATION_MODE
 //#####################################################################################################
 //### PROGRAM LOOP                                                                                  ###
 //#####################################################################################################
-#ifdef standalone
-void loop() {         // uncomment in SIMULATION_MODE
-#else
 void Teensy_LED_process() {   // comment in SIMULATION_MODE
-#endif
   float dim = 0.25;
   currentmillis = millis();
   ap_base_mode_last = ap_base_mode;
@@ -259,17 +260,17 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
      * from MavLink_FrSkySPort.ino
      * ap_chan_raw[i]  => RC channel i input value, in microseconds. A value of UINT16_MAX (65535U)
      */
-    if ( ap_chan_raw[LED_MODE_SWITCH] <= 1100 ) {
+    if ( ap_chan_raw[LED_MODE_SWITCH] <= 1150 ) {
       get_mode();   // DEFAULT, LED Mode - auto set by FC
-    } else if ( ap_chan_raw[LED_MODE_SWITCH] <= 1360 ) {
+    } else if ( ap_chan_raw[LED_MODE_SWITCH] <= 1350 ) {
       LED_MODE = 101; // USER_DEFINED LED Mode 1
-    } else if ( ap_chan_raw[LED_MODE_SWITCH] <= 1490 ) {
+    } else if ( ap_chan_raw[LED_MODE_SWITCH] <= 1450 ) {
       LED_MODE = 102; // USER_DEFINED LED Mode 2
-    } else if ( ap_chan_raw[LED_MODE_SWITCH] <= 1620 ) {
+    } else if ( ap_chan_raw[LED_MODE_SWITCH] <= 1550 ) {
       LED_MODE = 103; // USER_DEFINED LED Mode 3
     } else if ( ap_chan_raw[LED_MODE_SWITCH] <= 1850 ) {
       LED_MODE = 104; // USER_DEFINED LED Mode 4
-    } else if ( ap_chan_raw[LED_MODE_SWITCH] >  1750 ) {
+    } else if ( ap_chan_raw[LED_MODE_SWITCH] >  1850 ) {
       LED_MODE = 105; // USER_DEFINED LED Mode 5
     } else {
       get_mode();   // DEFAULT, LED Mode - auto set by FC
@@ -284,10 +285,12 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
   switch (LED_MODE) {
     case 1:   // NO_GPS Flight modes
       default_mode(ON, dim);
+      rear_arms_F(OFF, dim);
       break;
     case 2:   // GPS    Flight modes
       default_mode(ON, dim);
       side_arms(ON, dim);
+      rear_arms_F(OFF, dim);
       break;
     case 3:   // MANUAL Flight modes
       //default_mode(OFF, dim);
@@ -364,19 +367,21 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
       flash_pos_light(ON, dim);
       break;
     case 104:   // USER Mode 4
-      front_arms(OFF, dim);
+      /*front_arms(OFF, dim);
       side_arms(OFF, dim);
       rear_arms(OFF, dim);
       front_light(OFF, dim);
       break_light(OFF, dim);
+      landing_light(ON, dim);*/
+      /*rotor_lights(39, dim);
       get_armed_status(ON, dim);
       get_gps_status(ON, dim);
-      landing_light(ON, dim);
-      flash_pos_light(ON, dim);
-      rotor_lights(39, dim);
+      flash_pos_light(ON, dim);*/
+      cust_leds(ON, 0, NUM_LEDS_TOTAL, dim);
       break;
     case 105:   // USER Mode 5 - all off
       FastLED.clear();
+      //cust_leds(ON, 0, NUM_LEDS_TOTAL, dim);
       break;
     case 999:   // disarmed
       front_arms(OFF, dim);
@@ -871,6 +876,42 @@ void rear_arms(int STATUS, float dim) {
   }
 }
 
+void rear_arms_F(int STATUS, float dim) {
+  if (NUM_LEDS_REARARMS > 0) {
+    for (int i = 0; i < NUM_LEDS_REARARMS; i++) {
+      if (STATUS == 1) {
+        leds[POS_LEDS_REARARMS[0] + i] = CHSV(96,255,255*dim);
+        //leds[POS_LEDS_REARARMS[1] + i] = CHSV(96,255,255*dim);
+        //leds[POS_LEDS_REARARMS[2] + i] = CHSV(96,255,255*dim);
+        leds[POS_LEDS_REARARMS[3] + i] = CHSV(96,255,255*dim);
+      } else {
+        leds[POS_LEDS_REARARMS[0] + i] = CHSV(0, 0, 0);
+        //leds[POS_LEDS_REARARMS[1] + i] = CHSV(0, 0, 0);
+        //leds[POS_LEDS_REARARMS[2] + i] = CHSV(0, 0, 0);
+        leds[POS_LEDS_REARARMS[3] + i] = CHSV(0, 0, 0);
+      }
+    }
+  }
+}
+
+void rear_arms_R(int STATUS, float dim) {
+  if (NUM_LEDS_REARARMS > 0) {
+    for (int i = 0; i < NUM_LEDS_REARARMS; i++) {
+      if (STATUS == 1) {
+        //leds[POS_LEDS_REARARMS[0] + i] = CHSV(96,255,255*dim);
+        leds[POS_LEDS_REARARMS[1] + i] = CHSV(96,255,255*dim);
+        leds[POS_LEDS_REARARMS[2] + i] = CHSV(96,255,255*dim);
+        //leds[POS_LEDS_REARARMS[3] + i] = CHSV(96,255,255*dim);
+      } else {
+        //leds[POS_LEDS_REARARMS[0] + i] = CHSV(0, 0, 0);
+        leds[POS_LEDS_REARARMS[1] + i] = CHSV(0, 0, 0);
+        leds[POS_LEDS_REARARMS[2] + i] = CHSV(0, 0, 0);
+        //leds[POS_LEDS_REARARMS[3] + i] = CHSV(0, 0, 0);
+      }
+    }
+  }
+}
+
 //#####################################################################################################
 //### DEFAULT LANDING LIGHT                                                                         ###
 //#####################################################################################################
@@ -933,9 +974,9 @@ void landing_light(int STATUS, float dim) {
     }
     // needed because Landinglight of REAR has 1 LED more
     if (STATUS == 1) {
-      leds[POS_LEDS_LANDING[3] + NUM_LEDS_LANDING2] = CHSV(0,0,255*dim);
+      leds[POS_LEDS_LANDING[2] + NUM_LEDS_LANDING2] = CHSV(0,0,255*dim);
     } else {
-      leds[POS_LEDS_LANDING[3] + NUM_LEDS_LANDING2] = CHSV(0, 0, 0);
+      leds[POS_LEDS_LANDING[2] + NUM_LEDS_LANDING2] = CHSV(0, 0, 0);
     }
   }
 }
@@ -1038,6 +1079,12 @@ void rotor_lights(byte hue, float dim) {
   int DELAY = 500;
 
   if (currentmillis >= targetmillis_RL) {
+    #ifdef DEBUG_ROTOR_LIGHTS
+      debugSerial.print(millis());
+      debugSerial.print("\tRotor Lights Position: ");
+      debugSerial.println(pos_RL);
+    #endif
+    FastLED.clear();
     switch(pos_RL) {
       case 0:
         if (NUM_LEDS_FRONTARM_R > 0) {
@@ -1128,7 +1175,18 @@ void rotor_lights(byte hue, float dim) {
         pos_RL = 0;
         break;
     }
-    targetmillis_RL = lastmillis + DELAY;
+    targetmillis_RL = currentmillis + DELAY;
+  }
+}
+
+//#####################################################################################################
+//### Activate defined LEDS                                                                         ###
+//#####################################################################################################
+void cust_leds(int STATUS, int START_POS, int END_POS, float dim) {
+  for (int i = START_POS; i < END_POS; i++) {
+    if (STATUS == 1) {
+      leds[i] = CHSV(0, 0, 255*dim);
+    }
   }
 }
 
@@ -1139,3 +1197,4 @@ void rotor_lights(byte hue, float dim) {
   http://forum.arduino.cc/index.php?topic=198987.0
   http://forum.arduino.cc/index.php?topic=299023.0
 */
+#endif

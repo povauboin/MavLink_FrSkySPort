@@ -77,10 +77,10 @@
  * *** Enable Addons:                                  ***
  * *******************************************************
  */
-//#define USE_SINGLE_CELL_MONITOR                         // Setup in LSCM Tab
-//#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
-//#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - do not disable if you use TEENSY_LED_SUPPORT.
-//#define USE_TEENSY_LED_SUPPORT                          // Enable LED-Controller functionality
+#define USE_SINGLE_CELL_MONITOR                         // Setup in LSCM Tab
+#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
+#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - do not disable if you use TEENSY_LED_SUPPORT.
+#define USE_TEENSY_LED_SUPPORT                          // Enable LED-Controller functionality
 
 
 /* 
