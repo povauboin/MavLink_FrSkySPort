@@ -1,6 +1,6 @@
 #MAVLink to FrSky S.Port Protocol Converter
 
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/tele1simu.jpg)
+![Main Screen](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/Telemetryscreen%2001.jpg)
 
 ##For more Informations have a look at our [Wiki](https://github.com/Clooney82/MavLink_FrSkySPort/wiki)
 
@@ -38,7 +38,7 @@ Have a look at the 3 pictures in MavLink_FrSkySPort Directory to see how you mus
 
 The main focus of this script and teensy modification is the exact monitoring of the flight battery capacity and voltage. The consumption in mA / h and watt-hours can be calibrated on a separate model script. Moreover, by the modification described below on teensy, which are allowed lipo monitors individual cell voltage. The radar on the left represents the position and the orientation of the vehicle.
 
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/tele1simu.jpg)
+![Main Screen](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/Telemetryscreen%2001.jpg)
 
 
 The interface between the APM/PixHawk and the FrSky X series receiver is a small Teensy 3.1 board running a custom protocol translator from Mavlink to SPort telemetry.
@@ -92,7 +92,7 @@ Also, this script relies heavily on voice alerts and prompts.
 
 The screen explanation:
 
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/tele1+lables.jpeg)
+![Screen explanations](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/tele1+lables.jpeg)
 
 A-Current Flight Mode Active as reported by the Flight Controller. If blinking the vehicle is not Armed.
 
@@ -142,7 +142,7 @@ W-Vertical Speed in meters per minute
 
 AudioMessage Minimum Cell Info
 =======================
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/cellinfo.jpg)
+![cellinfo](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/Config%20-%20cellinfo.png)
 
 the script is optional to use. It's enable audio messages to status of lowest lipo cell.
 this script allows you to setup your cell audio info-messages, warning-messages and alarm-messages.
@@ -179,10 +179,10 @@ S6 25,2V |  11k  |  1k6 |  39.4176445024
 
 all needed resistors found in E24 series. the divider are defined in MavLink_FrSkySPort.ino. if you use other resistors all dividers must recalculated.
 
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/resistor_network.jpg)
+![Resistor Network](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/Wiring%20-%20Resistor%20Network.jpg)
 
 
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/CellsScreen.jpg)
+![Cells Screen](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/CellsScreen.jpg)
 
 
 Lipo 1x1... mAh and Wh telemetry screen meter calibration
@@ -226,7 +226,7 @@ mAh and Wh telemetry screen meter calibration
 Telemetry screen battery calibration with the help of a lipo charger. Most chargers inform us about the amount of energy in Wh and mAh which flows during charging in the battery. If we now compare the values of the charger (reference) with the values of the telemetry screen it should be possible to make a fairly accurate comparison.
 In our case, we take the model scripts offset.lua to help.
  
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/offset.jpg)
+![offset](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/Config%20-%20offset.png)
 
 We can set from the linear function (Wh = P x t and Ah = V x I xt) dependent Percentage offset for mAh and Wh here. "BatCap Wh" is needed by Wh consumption Gauge. This simply hold the Real Battery capacity in Wh. This is needed to display the Wh Gauge consumption correctly.
 
@@ -259,14 +259,14 @@ the means for our Wh offset is rounded 14%
 
 when we perform these calculations for all batteries, we can use later an average.
 
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/chargermah.jpeg)
+![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/chargermah.jpeg)
 
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/chargerwh.jpeg)
+![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/chargerwh.jpeg)
 
 At the very end we make it up a flight test and compare the new values of the telemetry again with the values of the charger to recharge the batteries. Now should the values of the telemetry prefer a little higher than the be the charger. 1-5%. Higher values on the telemetry display of course prevent a negative charging of the batteries.
 
 after calibration
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/after-ofsettcalibration.jpeg)
+![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/after-ofsettcalibration.jpeg)
 
 LED-Control Cableing
 --------------------
@@ -277,7 +277,7 @@ Connect 5V to DIR and VCC of 74HCT245 and 5V on ws2812b LEDs.
 Connect Teensy GND to GND of 74HCT245 and WS2812b LEDs.
 Connect 74HCT245 B1 to a 100 Ohm Resistor and wire it to Din of WS2812b LED.
 
-![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/connecting_leds.jpg)
+![](https://raw.githubusercontent.com/Clooney82/MavLink_FrSkySPort/s-c-l-v-rc-opentx2.1/images/connecting_leds.jpg)
 
 Known Issues
 ============
