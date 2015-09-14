@@ -295,6 +295,14 @@ bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initial
 void setup()  {
 
  // delay(100000);
+ 
+#ifdef USE_SINGLE_CELL_MONITOR
+    // Set your custom values (double) for LSCM software divider here.
+    // Dependent to your resistor network you can call this function with 1-12 parameter.
+    
+    //lscm.setCustomCellDevider(1905.331599479, 929.011553273, 615.667808219); // This is an example for three cells 
+#endif
+
 
 #ifdef DEBUG_LIPO_SINGLE_CELL_MONITOR
     lscm.setDebug(true);                      // Enable LSCM debug

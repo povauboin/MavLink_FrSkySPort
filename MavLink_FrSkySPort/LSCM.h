@@ -22,7 +22,7 @@ public:
     \ingroup MavLink_FrSkySPort
     \brief Overloaded Constructor of LSCM Object
     \descriptions construct LSCM minimal with cells count.
-    \example LSCM lscm(false, 3, 13, 0.99);
+    \example LSCM lscm(3, 13, 0.99);
     \args
     \cells how many cells connected
     \analogReadResolution on teensy3.x 13 bit as default
@@ -58,7 +58,7 @@ public:
     
     /**
     \brief quantity of cells at init. 
-    \descriptions returned an uint8_t of real connected cells.
+    \descriptions returned an uint8_t of constructer maxcells.
     */
     uint8_t getMaxCells();
     
@@ -67,6 +67,28 @@ public:
     \descriptions enable disable debug.
     */
     void setDebug(bool debug);
+
+    /**
+    \brief Overloaded Function of LSCM setCustomCelldivider
+    */
+    void setCustomCellDevider(double a);
+    void setCustomCellDevider(double a, double b);
+    void setCustomCellDevider(double a, double b, double c);
+    void setCustomCellDevider(double a, double b, double c, double d);
+    void setCustomCellDevider(double a, double b, double c, double d, double e);
+    void setCustomCellDevider(double a, double b, double c, double d, double e, double f);
+    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+                              double g);
+    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+                              double g, double h);
+    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+                              double g, double h, double i);
+    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+                              double g, double h, double i, double j);
+    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+                              double g, double h, double i, double j, double k);
+    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+                              double g, double h, double i, double j, double k, double l);
     
     
 private:
@@ -76,27 +98,30 @@ private:
     */
     void initLSCM(uint8_t cells, uint8_t analogReadReso, float smoothness);
 
-    
+    /**
+    \descriptions set Celldivider
+    */
+    void setCellDevider(double a, double b, double c, double d, double e, double f,
+                        double g, double h, double i, double j, double k, double l);    
     
     /**
     \brief main Array which holds software deviders. 
-    \descriptions this divider are used if LSCM object will init. Users need to adjust this values
-    \descriptions in dependecy to their resistor network 
+    \descriptions this 13bit default divider are used if LSCM object will init. do not change this!
     */
     double _LIPOCELL_1TO8[13] =
     {
-        1905.331599479, // 277.721518987, //1897.85344189,// 10bit 237.350026082,   3,97
-        929.011553273,  // 137.358490566, //926.799312208,// 10bit 116.006256517,   8,03
-        615.667808219,  // 91.373534338,  //618.198183455,// 10bit 77.3509473318,  12,04
-        0.0, // 470.134166514,// 10bit 58.7966886122,
-        0.0, // 370.317778975,// 10bit 46.3358699051,
-        0.0, // 315.045617465,// 10bit 39.4176445024,
-        0.0, // diverders 7-12 not defined because my network includes only 6 voltage dividers
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0
+      1913.528953519,
+      933.688035297,
+      622.955076603,
+      473.787040052,
+      373.105567418,
+      317.423580786,
+      0.0, // diverders 7-12 not defined because my network includes only 6 voltage dividers
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
     };
     
     bool _debug;
