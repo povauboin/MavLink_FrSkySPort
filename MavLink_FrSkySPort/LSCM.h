@@ -71,23 +71,23 @@ public:
     /**
     \brief Overloaded Function of LSCM setCustomCelldivider
     */
-    void setCustomCellDevider(double a);
-    void setCustomCellDevider(double a, double b);
-    void setCustomCellDevider(double a, double b, double c);
-    void setCustomCellDevider(double a, double b, double c, double d);
-    void setCustomCellDevider(double a, double b, double c, double d, double e);
-    void setCustomCellDevider(double a, double b, double c, double d, double e, double f);
-    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+    void setCustomCellDivider(double a);
+    void setCustomCellDivider(double a, double b);
+    void setCustomCellDivider(double a, double b, double c);
+    void setCustomCellDivider(double a, double b, double c, double d);
+    void setCustomCellDivider(double a, double b, double c, double d, double e);
+    void setCustomCellDivider(double a, double b, double c, double d, double e, double f);
+    void setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                               double g);
-    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+    void setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                               double g, double h);
-    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+    void setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                               double g, double h, double i);
-    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+    void setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                               double g, double h, double i, double j);
-    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+    void setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                               double g, double h, double i, double j, double k);
-    void setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+    void setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                               double g, double h, double i, double j, double k, double l);
     
     
@@ -101,7 +101,7 @@ private:
     /**
     \descriptions set Celldivider
     */
-    void setCellDevider(double a, double b, double c, double d, double e, double f,
+    void setCellDivider(double a, double b, double c, double d, double e, double f,
                         double g, double h, double i, double j, double k, double l);    
     
     /**

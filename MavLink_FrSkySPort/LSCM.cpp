@@ -144,70 +144,70 @@ void LSCM::setDebug(bool debug)
   _debug = debug;
 }
 
-void LSCM::setCustomCellDevider(double a)
+void LSCM::setCustomCellDivider(double a)
 {
-  setCellDevider(a, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);  
+  setCellDivider(a, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b)
+void LSCM::setCustomCellDivider(double a, double b)
 {
-  setCellDevider(a, b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  setCellDivider(a, b, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c)
+void LSCM::setCustomCellDivider(double a, double b, double c)
 {
-  setCellDevider(a, b, c, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);  
+  setCellDivider(a, b, c, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d)
+void LSCM::setCustomCellDivider(double a, double b, double c, double d)
 {
-  setCellDevider(a, b, c, d, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  setCellDivider(a, b, c, d, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d, double e)
+void LSCM::setCustomCellDivider(double a, double b, double c, double d, double e)
 {
-  setCellDevider(a, b, c, d, e, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  setCellDivider(a, b, c, d, e, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d, double e, double f)
+void LSCM::setCustomCellDivider(double a, double b, double c, double d, double e, double f)
 {
-  setCellDevider(a, b, c, d, e, f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  setCellDivider(a, b, c, d, e, f, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+void LSCM::setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                                 double g)
 {
-  setCellDevider(a, b, c, d, e, f, g, 0.0, 0.0, 0.0, 0.0, 0.0);  
+  setCellDivider(a, b, c, d, e, f, g, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+void LSCM::setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                                 double g, double h)
 {
-  setCellDevider(a, b, c, d, e, f, g, h, 0.0, 0.0, 0.0, 0.0);  
+  setCellDivider(a, b, c, d, e, f, g, h, 0.0, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+void LSCM::setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                                 double g, double h, double i)
 {
-  setCellDevider(a, b, c, d, e, f, g, h, i, 0.0, 0.0, 0.0);  
+  setCellDivider(a, b, c, d, e, f, g, h, i, 0.0, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+void LSCM::setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                                 double g, double h, double i, double j)
 {
-  setCellDevider(a, b, c, d, e, f, g, h, i, j, 0.0, 0.0);  
+  setCellDivider(a, b, c, d, e, f, g, h, i, j, 0.0, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+void LSCM::setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                                 double g, double h, double i, double j, double k)
 {
-  setCellDevider(a, b, c, d, e, f, g, h, i, j, k, 0.0);  
+  setCellDivider(a, b, c, d, e, f, g, h, i, j, k, 0.0);
 }
 
-void LSCM::setCustomCellDevider(double a, double b, double c, double d, double e, double f,
+void LSCM::setCustomCellDivider(double a, double b, double c, double d, double e, double f,
                                 double g, double h, double i, double j, double k, double l)
 {
-  setCellDevider(a, b, c, d, e, f, g, h, i, j, k, l);  
+  setCellDivider(a, b, c, d, e, f, g, h, i, j, k, l);
 }
 
 
@@ -239,7 +239,7 @@ void LSCM::initLSCM(uint8_t cells, uint8_t analogReadReso, float smoothness)
   }
 }
 
-void LSCM::setCellDevider(double a, double b, double c, double d, double e, double f,
+void LSCM::setCellDivider(double a, double b, double c, double d, double e, double f,
                           double g, double h, double i, double j, double k, double l)
 {
   if(_maxcells < 1) return;

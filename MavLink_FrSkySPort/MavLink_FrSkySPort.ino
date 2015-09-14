@@ -300,7 +300,7 @@ void setup()  {
     // Set your custom values (double) for LSCM software divider here.
     // Dependent to your resistor network you can call this function with 1-12 parameter.
     
-    //lscm.setCustomCellDevider(1905.331599479, 929.011553273, 615.667808219); // This is an example for three cells 
+    //lscm.setCustomCellDivider(1905.331599479, 929.011553273, 615.667808219); // This is an example for three cells
 #endif
 
 
