@@ -398,6 +398,9 @@ void FrSkySportTelemetry_RPM() {
 
     //returns 0 if statusDequeue is empty
     my_dequeue_status_value = statusDequeue();
+    // if statusDequeue() returns 0 we set armed status from ap_status_value
+    if(my_dequeue_status_value == 0)
+      my_dequeue_status_value = ap_status_value;
     dequeue_request = actualtime;
   }
 
