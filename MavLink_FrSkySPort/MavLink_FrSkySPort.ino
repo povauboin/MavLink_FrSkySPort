@@ -53,7 +53,6 @@
 #include "GCS_MAVLink.h"
 //#include "mavlink.h"
 #include "LSCM.h"
-
 /*
  * *******************************************************
  * *** Basic Configuration:                            ***

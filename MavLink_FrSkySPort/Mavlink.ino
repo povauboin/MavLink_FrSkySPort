@@ -456,7 +456,7 @@ void _MavLink_receive() {
         case MAVLINK_MSG_ID_STATUSTEXT:     //253
           mavlink_msg_statustext_decode(&msg,&statustext);
           ap_status_severity = statustext.severity;
-          ap_status_send_count = 5;
+          ap_status_send_count = 1; // since messages are queued we only need one send_count
           parseStatusText(statustext.severity, statustext.text);
           
           #ifdef DEBUG_APM_STATUSTEXT

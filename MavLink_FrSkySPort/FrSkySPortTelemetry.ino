@@ -42,6 +42,14 @@ FrSkySportTelemetry telemetry;                         // Create Variometer tele
  * *** Define some Variables:                          ***
  * *******************************************************
  */
+
+// Status message rigbuffer vars
+const int8_t statusRingsize = 30;
+int32_t statusRingHead = 0;
+int32_t statusRingTail = 0;
+int32_t statusRing[statusRingsize];
+uint32_t my_dequeue_status_value = 0;
+
 float FASCurrent = 0.0;
 float FASVoltage = 0.0;
 
@@ -204,7 +212,7 @@ void FrSkySportTelemetry_FLVSS() {
         debugSerial.print("\tZelle[");
         debugSerial.print(i);
         debugSerial.print("]: ");
-        debugSerial.print((lscm.getCellVoltageAsUint32_T(i) / 1000.0);
+        debugSerial.print(lscm.getCellVoltageAsUint32_T(i) / 1000.0);
         debugSerial.println("Volt");
         
       }
@@ -354,15 +362,23 @@ void FrSkySportTelemetry_RPM() {
   {
     // Add bits 2-15
     ap_status_value |= (((ap_status_severity+1)&0x0F)<<1) |((ap_status_text_id&0x3FF)<<5);
+
+    // put message into status queue if queue is smaller than 15 items
+    // ap_status_send_count is set to 1. this happens only ones.
+    if(statusQueuelevel()<30)
+      statusEqueue(ap_status_value);
+
     ap_status_send_count--;
     if(ap_status_send_count == 0)
     {
        // Reset severity and text-message after we have sent the message
        ap_status_severity = 0; 
        ap_status_text_id = 0;
-    }          
+    }
   }
+
   #ifdef DEBUG_FrSkySportTelemetry_RPM
+  if(ap_status_value>0){
     debugSerial.print(millis());
     debugSerial.print("\tRPM (Throttle/battery_remain): ");
     debugSerial.print(ap_throttle * 200+ap_battery_remaining*2);
@@ -371,10 +387,23 @@ void FrSkySportTelemetry_RPM() {
     debugSerial.print("\tT2 (Armed Status + Severity + Statustext): ");
     debugSerial.print(ap_status_value);
     debugSerial.println();
+  }
   #endif
+
+  // we dequeue status every 1400ms T2 sensor sends all 1000ms.
+
+  static long dequeue_request = 0;
+  long actualtime = millis();
+  if(actualtime > dequeue_request + 1400){
+
+    //returns 0 if statusDequeue is empty
+    my_dequeue_status_value = statusDequeue();
+    dequeue_request = actualtime;
+  }
+
   rpm.setData(ap_throttle * 200+ap_battery_remaining*2,    // * 2 if number of blades on Taranis is set to 2 + First 4 digits reserved for battery remaining in %
               gps_status,         // (ap_sat_visible * 10) + ap_fixtype eg. 83 = 8 sattelites visible, 3D lock 
-              ap_status_value);   // Armed Status + Severity + Statustext
+              my_dequeue_status_value);   // Armed Status + Severity + Statustext
 
 
 }
@@ -454,6 +483,48 @@ void FrSkySportTelemetry_FUEL() {
   #endif
   if(ap_custom_mode >= 0) {
     fuel.setData(ap_custom_mode);
+  }
+}
+
+
+/*
+ * *****************************************************
+ * *** Helper function "queue buffer" to queue       ***
+ * *** Armed Status, Severity - Statustext messages  ***
+ * *****************************************************
+ * Used for Flight Mode
+ */
+
+  // Put something into the buffer. Returns 0 when the buffer was full,
+  // 1 when the stuff was put sucessfully into the buffer
+int statusEqueue(int32_t val) {
+  int32_t newtail = (statusRingTail + 1) % statusRingsize;
+  if (newtail == statusRingHead) {
+     // Buffer is full, do nothing
+     return 0;
+  }
+  else {
+     statusRing[statusRingTail] = val;
+     statusRingTail = newtail;
+     return 1;
+  }
+}
+
+// Return number of elements in the queue.
+int statusQueuelevel () {
+   return statusRingTail - statusRingHead + (statusRingHead > statusRingTail ? statusRingsize : 0);
+}
+
+// Get something from the queue. 0 will be returned if the queue
+// is empty
+int32_t statusDequeue () {
+  if (statusRingHead == statusRingTail) {
+     return 0;
+  }
+  else {
+     uint32_t val = statusRing[statusRingHead];
+     statusRingHead  = (statusRingHead + 1) % statusRingsize;
+     return val;
   }
 }
 
