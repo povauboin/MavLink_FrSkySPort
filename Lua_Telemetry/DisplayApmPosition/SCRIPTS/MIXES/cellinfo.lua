@@ -33,7 +33,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 
 	newtime=getTime()
 	if newtime-lastimeplaysound>=repeattime then
-		cellmin=getValue(214) + 0.0001 --- 214 = cell-min
+		cellmin=getValue("Cmin") + 0.0001 --- 214 = cell-min
 		lastimeplaysound = newtime
 		
 		firstitem = math.floor(cellmin)
