@@ -339,7 +339,7 @@
 	  end
 	  
 	  lcd.drawText(134, 0, "TX:", INVERS)
-	  lcd.drawNumber(160, 0, getValue(189)/10,0+PREC1+INVERS)
+	  lcd.drawNumber(160, 0, getValue(189),0+PREC1+INVERS)
 	  lcd.drawText(lcd.getLastPos(), 0, "v", INVERS)
 	  
 	  lcd.drawText(172, 0, "rssi:", INVERS)
@@ -375,7 +375,7 @@
 	  lcd.drawText(xposCons,32,"m",SMLSIZE)
 	  lcd.drawText(xposCons,38,"Ah",SMLSIZE)
 	  
-	  lcd.drawNumber(67,33,( watthours + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) ) *10 ,MIDSIZE+PREC1)
+	  lcd.drawNumber(67,33,( watthours + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) ) ,MIDSIZE+PREC1)
 	  xposCons=lcd.getLastPos()
 	  lcd.drawText(xposCons,32,"w",SMLSIZE)
 	  lcd.drawText(xposCons,38,"h",SMLSIZE)
@@ -418,7 +418,7 @@
 	    lastarmed=apmarmed
 	    if apmarmed==1 then
 	      model.setTimer(0,{ mode=1, start=0, value= SumFlight, countdownBeep=0, minuteBeep=1, persistent=1 })
-	      playFile("SOUNDS/en/SARM.wav")
+	      playFile("/SOUNDS/en/SARM.wav")
 	      playFile("/SOUNDS/en/AVFM"..(FmodeNr-1).."A.wav")
 	      
 	    else
@@ -426,7 +426,7 @@
 	      SumFlight = model.getTimer(0).value
 	      model.setTimer(0,{ mode=0, start=0, value= model.getTimer(0).value, countdownBeep=0, minuteBeep=1, persistent=1 })
 	      
-	      playFile("SOUNDS/en/SDISAR.wav")
+	      playFile("/SOUNDS/en/SDISAR.wav")
 	    end
 	    
 	  end
@@ -456,7 +456,7 @@
 	  -- play sound
 	  if apm_status_message.textnr >0 then
 	    if last_apm_message_played ~= apm_status_message.textnr then
-	      playFile("SOUNDS/en/MSG"..apm_status_message.textnr..".wav")
+	      playFile("/SOUNDS/en/MSG"..apm_status_message.textnr..".wav")
 	      last_apm_message_played = apm_status_message.textnr
 	    end
 	  end
