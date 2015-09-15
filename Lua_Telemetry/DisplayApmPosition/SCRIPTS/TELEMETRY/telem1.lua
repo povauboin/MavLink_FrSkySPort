@@ -480,7 +480,7 @@
 -- play alarm wh reach maximum level
 	local function playMaxWhReached()
 	  
-	  if (watthours  + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) ) >= maxconsume then
+	  if maxconsume > 0 and (watthours  + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) ) >= maxconsume then
 	    localtimetwo = localtimetwo + (getTime() - oldlocaltimetwo)
 	    if localtimetwo >=800 then --8s
 	      playFile("/SOUNDS/en/ALARM3K.wav")
