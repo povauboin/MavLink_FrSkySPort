@@ -1,1 +1,0 @@
-11/14/2014 create first version of my simple APM/Pixhawk telemetry script.
