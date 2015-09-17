@@ -317,9 +317,13 @@
 	  lcd.drawText(htsapaneloffset + 76,35,"Max",SMLSIZE)
 	  lcd.drawNumber(lcd.getLastPos()+8,35,getValue("AltM"),SMLSIZE+LEFT)
 	  lcd.drawText(lcd.getLastPos(),35,"m",SMLSIZE)
-	  
+
 	  --Armed time
-	  lcd.drawTimer(htsapaneloffset + 106,42,model.getTimer(0).value,MIDSIZE)
+	  lcd.drawTimer(htsapaneloffset + 83,42,model.getTimer(0).value,MIDSIZE)
+
+          --Model Runtime
+          lcd.drawNumber(lcd.getLastPos()+8,45,model.getTimer(1).value/3600.0,SMLSIZE+LEFT+PREC1)
+          lcd.drawText(lcd.getLastPos()+3,45,"h",SMLSIZE)
 	  
 	  lcd.drawText(htsapaneloffset + 76,56,"Speed",SMLSIZE)
 	  lcd.drawNumber(lcd.getLastPos()+8, 53,getValue("GSpd")*3.6,MIDSIZE+LEFT)
@@ -400,7 +404,7 @@
 	  maxconsume = model.getGlobalVariable(8, 2)
 	end
 	
-	
+
 --APM Armed and errors
 	local function armed_status()
 	  
@@ -418,6 +422,7 @@
 	    lastarmed=apmarmed
 	    if apmarmed==1 then
 	      model.setTimer(0,{ mode=1, start=0, value= SumFlight, countdownBeep=0, minuteBeep=1, persistent=1 })
+              model.setTimer(1,{ mode=1, start=0, value= PersitentSumFlight, countdownBeep=0, minuteBeep=0, persistent=2 })
 	      playFile("/SOUNDS/en/SARM.wav")
 	      playFile("/SOUNDS/en/AVFM"..(FmodeNr-1).."A.wav")
 	      
@@ -425,6 +430,7 @@
 	      
 	      SumFlight = model.getTimer(0).value
 	      model.setTimer(0,{ mode=0, start=0, value= model.getTimer(0).value, countdownBeep=0, minuteBeep=1, persistent=1 })
+              model.setTimer(1,{ mode=0, start=0, value= model.getTimer(1).value, countdownBeep=0, minuteBeep=0, persistent=2 })
 	      
 	      playFile("/SOUNDS/en/SDISAR.wav")
 	    end

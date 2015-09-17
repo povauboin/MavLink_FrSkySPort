@@ -20,7 +20,7 @@
 -- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 --
  
-local inputs = { {"Main Ser.", VALUE,0,156,156}, {"Serv 1", VALUE, 0, 156, 0}, {"Serv 2", VALUE, 0, 156, 0}, {"Serv 3", VALUE, 0, 250, 0}, {"Repeat", VALUE, 0, 10, 5}  }
+local inputs = { {"Main Ser.", VALUE,0,156,0}, {"Serv 1", VALUE, 0, 156, 0}, {"Serv 2", VALUE, 0, 156, 0}, {"Serv 3", VALUE, 0, 156, 0}, {"Repeat", VALUE, 0, 10, 5}  }
 
 
 local checkforserviceinterval = 1500 -- 15 seconds
@@ -56,7 +56,7 @@ local function run_func(mainservice, serviceone, servicetwo, servicethree, repea
             testthree = repeats
         end
         
-        if timertwotime >= mainservice * 3600 then
+        if mainservice > 0 and timertwotime >= mainservice * 3600 then
            mainreached = repeats 
         end
         
