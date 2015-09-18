@@ -67,7 +67,7 @@ local function run_func(mainservice, serviceone, servicetwo, servicethree, repea
     if checkfortimetesttime-lastcheckfortimetesttime>=checkforserviceinterval then
 
         if testone>0 then
-            playFile("/SOUNDS/en/ServiceOne.wav")
+            playFile("/SOUNDS/en/ServOne.wav")
             testone = testone - 1
             
             -- uncomment next three lines (if than) to test timer function in a loop. set "service 1" to something modulo 10.
@@ -78,17 +78,17 @@ local function run_func(mainservice, serviceone, servicetwo, servicethree, repea
         end
 
         if testtwo>0 then
-            playFile("/SOUNDS/en/ServiceTwo.wav")
+            playFile("/SOUNDS/en/ServTwo.wav")
             testtwo = testtwo - 1
         end
 
         if testthree>0 then
-            playFile("/SOUNDS/en/ServiceThree.wav")
+            playFile("/SOUNDS/en/ServThre.wav")
             testthree = testthree - 1
         end      
 
         if mainreached > 0 then
-            playFile("/SOUNDS/en/ServiceMain.wav")
+            playFile("/SOUNDS/en/ServMain.wav")
             mainreached = mainreached -1
 
             -- reset servicetime
