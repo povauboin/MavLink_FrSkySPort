@@ -1,31 +1,30 @@
-
 /*
 APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1  http://www.pjrc.com/teensy/index.html
  based on ideas found here http://code.google.com/p/telemetry-convert/
  ******************************************************
  Cut board on the backside to separate Vin from VUSB
- 
+
  Connection on Teensy2:
  SPort S --> TX1 Pin 4
  SPort + --> Vin
  SPort  - --> GND
- 
+
  APM Telemetry DF13-5  Pin 7 --> RX2
  APM Telemetry DF13-5  Pin 8 --> TX2
  APM Telemetry DF13-5  Pin GND --> GND
 
  Note that when used with other telemetry device (3DR Radio 433 or 3DR Bluetooth tested) in parallel on the same port the Teensy should only Receive, so please remove it's TX output (RX input on PixHawk or APM)
- 
- Analog input  --> A0 (pin14) on Teensy 3.1 ( max 3.3 V ) - Not used 
- 
- 
+
+ Analog input  --> A0 (pin14) on Teensy 3.1 ( max 3.3 V ) - Not used
+
+
  This is the data we send to FrSky, you can change this to have your own
  set of data
- 
+
 ******************************************************
 Data transmitted to FrSky Taranis:
 
-Cell            ( Voltage of Cell=Cells/(Number of cells). [V]) 
+Cell            ( Voltage of Cell=Cells/(Number of cells). [V])
 Cells           ( Voltage from LiPo [V] )
 A2              ( HDOP value * 25 - 8 bit resolution)
 A3              ( Roll angle from -Pi to +Pi radians, converted to a value between 0 and 1024)
@@ -57,7 +56,7 @@ AccZ            ( Z Axis average vibration m/s?)
 
 
 #define _MavLinkSerial      Serial1 // Teensy2 = Serial1 | Pro Mini Serial
-#define debugSerial          Serial 
+#define debugSerial          Serial
 #define START                     1
 #define MSG_RATE                 10 // Hertz
 #define FRSKY_PORT                4 // Teensy2 = pin 4 | Pro Mini = pin 9
@@ -91,13 +90,13 @@ AccZ            ( Z Axis average vibration m/s?)
 //#define USE_SINGLE_CELL_MONITOR
 //#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // use this only with enabled USE_SINGLE_CELL_MONITOR
 #ifdef USE_SINGLE_CELL_MONITOR
-// configure number maximum connected analog inputs(cells) if you build an six cell network then MAXCELLS is 6 
+// configure number maximum connected analog inputs(cells) if you build an six cell network then MAXCELLS is 6
 #define MAXCELLS 6
 #endif
 /// ~ Wolke lipo-single-cell-monitor
 
 // ******************************************
-// Message #0  HEARTHBEAT 
+// Message #0  HEARTHBEAT
 uint8_t    ap_type = 0;
 uint8_t    ap_autopilot = 0;
 uint8_t    ap_base_mode = 0;
@@ -105,16 +104,16 @@ int32_t    ap_custom_mode = -1;
 uint8_t    ap_system_status = 0;
 uint8_t    ap_mavlink_version = 0;
 
-// Message # 1  SYS_STATUS 
+// Message # 1  SYS_STATUS
 uint16_t   ap_voltage_battery = 0;       // 1000 = 1V
 int16_t    ap_current_battery = 0;      //  10 = 1A
 int8_t    ap_battery_remaining = 0;   // Remaining battery energy: (0%: 0, 100%: 100), -1: autopilot estimate the remaining battery
 
-// Message #24  GPS_RAW_INT 
+// Message #24  GPS_RAW_INT
 uint8_t    ap_fixtype = 3;                //   0= No GPS, 1 = No Fix, 2 = 2D Fix, 3 = 3D Fix
 uint8_t    ap_sat_visible = 0;            // number of visible satelites
 
-// FrSky Taranis uses the first recieved lat/long as homeposition. 
+// FrSky Taranis uses the first recieved lat/long as homeposition.
 int32_t    ap_latitude = 0;               // 585522540;
 int32_t    ap_longitude = 0;              // 162344467;
 int32_t    ap_gps_altitude = 0;           // 1000 = 1m
@@ -124,7 +123,7 @@ uint16_t   ap_gps_hdop = 255;             // GPS HDOP horizontal dilution of pos
 // uint16_t    ap_cog = 0;                // Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
 
 
-// Message #74 VFR_HUD 
+// Message #74 VFR_HUD
 uint32_t  ap_groundspeed = 0;       // Current ground speed in m/s
 uint32_t  ap_heading = 0;           // Current heading in degrees, in compass units (0..360, 0=north)
 uint16_t  ap_throttle = 0;          // Current throttle setting in integer percent, 0 to 100
@@ -173,7 +172,7 @@ mavlink_statustext_t statustext;
 // These are special for FrSky
 int32_t     vfas = 0;                // 100 = 1,0V
 int32_t     gps_status = 0;     // (ap_sat_visible * 10) + ap_fixtype
-// ex. 83 = 8 sattelites visible, 3D lock 
+// ex. 83 = 8 sattelites visible, 3D lock
 uint8_t   ap_cell_count = 0;
 
 // ******************************************
@@ -224,23 +223,23 @@ double smoothedVal[MAXCELLS+1]; // this holds the last loop value
 // ******************************************
 void setup()  {
 
- 
+
   _MavLinkSerial.begin(MavLinkSerialBaud);
   //debugSerial.begin(57600);
   delay(1000);
    FrSkySPort_Init();
-   
+
   MavLink_Connected = 0;
   MavLink_Connected_timer=millis();
   hb_timer = millis();
   hb_count = 0;
 
- 
+
   pinMode(led,OUTPUT);
   pinMode(12,OUTPUT);
 
   pinMode(14,INPUT);
-  
+
 //
   analogReference(EXTERNAL);
 
@@ -278,10 +277,10 @@ void loop()  {
     smoothedVal[i] = ( aread[i] * (1 - lp_filter_val)) + (smoothedVal[i]  *  lp_filter_val);
     aread[i] = round(smoothedVal[i]);
     cell[i] = double (aread[i]/individualcelldivider[i]) * 1000;
-    
+
     //debugSerial.print( cell[i]);
-    //debugSerial.print( ", "); 
-    
+    //debugSerial.print( ", ");
+
     if( i == 0 ) zelle[i] = round(cell[i]);
     else zelle[i] =  round(cell[i] - cell[i-1]);
   }
@@ -293,19 +292,19 @@ void loop()  {
   debugSerial.println(cell[0]);
   debugSerial.println("-------");
  *//*
- 
+
   for(int i = 0; i < MAXCELLS; i++){
-    
+
     debugSerial.print( aread[i]);
-    debugSerial.print( ", ");    
-  }  
+    debugSerial.print( ", ");
+  }
   debugSerial.print("cells in use: ");
   debugSerial.print(cells_in_use);
   debugSerial.print( ", ");
   debugSerial.print(", sum ");
   debugSerial.println(alllipocells);
   */
-  
+
 #endif
   /// ~Wolke lipo-single-cell-monitor
 
@@ -333,7 +332,7 @@ void loop()  {
   if((millis() - MavLink_Connected_timer) > 1500)  {   // if no HEARTBEAT from APM  in 1.5s then we are not connected
     MavLink_Connected=0;
     hb_count = 0;
-  } 
+  }
 
   _MavLink_receive();                   // Check MavLink communication
 
@@ -342,14 +341,14 @@ void loop()  {
 }
 
 
-void _MavLink_receive() { 
+void _MavLink_receive() {
   mavlink_message_t msg;
   mavlink_status_t status;
 
-  while(_MavLinkSerial.available()) 
-  { 
+  while(_MavLinkSerial.available())
+  {
     uint8_t c = _MavLinkSerial.read();
-    if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status)) 
+    if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status))
     {
       switch(msg.msgid)
       {
@@ -363,11 +362,11 @@ void _MavLink_receive() {
         debugSerial.print(", custom_mode: ");
         debugSerial.print(mavlink_msg_heartbeat_get_custom_mode(&msg));
         debugSerial.println();
-#endif              
-        MavLink_Connected_timer=millis(); 
-        if(!MavLink_Connected); 
+#endif
+        MavLink_Connected_timer=millis();
+        if(!MavLink_Connected);
         {
-          hb_count++;   
+          hb_count++;
           if((hb_count++) > 10) {        // If  received > 10 heartbeats from MavLink then we are connected
             MavLink_Connected=1;
             hb_count=0;
@@ -380,7 +379,7 @@ void _MavLink_receive() {
         ap_status_severity = statustext.severity;
         ap_status_send_count = 5;
         parseStatusText(statustext.severity, statustext.text);
-        
+
 #ifdef DEBUG_STATUS
         debugSerial.print(millis());
         debugSerial.print("\tMAVLINK_MSG_ID_STATUSTEXT: severity ");
@@ -390,7 +389,7 @@ void _MavLink_receive() {
         debugSerial.println();
 #endif
         break;
-break; 
+break;
       case MAVLINK_MSG_ID_SYS_STATUS :   // 1
 #ifdef USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR
         ap_voltage_battery = alllipocells;
@@ -423,7 +422,7 @@ break;
           else if(ap_voltage_battery > 4250) temp_cell_count = 2;
           else temp_cell_count = 0;
           if(temp_cell_count > ap_cell_count)
-            ap_cell_count = temp_cell_count;          
+            ap_cell_count = temp_cell_count;
         }
         break;
 #else
@@ -441,7 +440,7 @@ break;
       case MAVLINK_MSG_ID_GPS_RAW_INT:   // 24
         ap_fixtype = mavlink_msg_gps_raw_int_get_fix_type(&msg);                               // 0 = No GPS, 1 =No Fix, 2 = 2D Fix, 3 = 3D Fix
         ap_sat_visible =  mavlink_msg_gps_raw_int_get_satellites_visible(&msg);          // numbers of visible satelites
-        gps_status = (ap_sat_visible*10) + ap_fixtype; 
+        gps_status = (ap_sat_visible*10) + ap_fixtype;
         ap_gps_hdop = mavlink_msg_gps_raw_int_get_eph(&msg)/4;
         // Max 8 bit
         if(ap_gps_hdop == 0 || ap_gps_hdop > 255)
@@ -454,9 +453,9 @@ break;
         }
         else
         {
-          ap_gps_speed = 0;  
+          ap_gps_speed = 0;
         }
-#ifdef DEBUG_GPS_RAW    
+#ifdef DEBUG_GPS_RAW
         /*debugSerial.print(millis());
         debugSerial.print("\tMAVLINK_MSG_ID_GPS_RAW_INT: fixtype: ");
         debugSerial.print(ap_fixtype);
@@ -475,7 +474,7 @@ break;
         debugSerial.print(mavlink_msg_gps_raw_int_get_lon(&msg));
         //debugSerial.print(", alt: ");
         //debugSerial.print(mavlink_msg_gps_raw_int_get_alt(&msg));
-        debugSerial.println();                                     
+        debugSerial.println();
 #endif
         break;
 
@@ -509,7 +508,7 @@ break;
           ap_pitch_angle = 180-mavlink_msg_attitude_get_pitch(&msg)*180/3.1416; //value comes in rads, convert to deg
         }
         ap_yaw_angle = (mavlink_msg_attitude_get_yaw(&msg)+3.1416)*162.9747; //value comes in rads, add pi and scale to 0 to 1024
-      
+
 #ifdef DEBUG_ATTITUDE
         debugSerial.print("MAVLINK Roll Angle: ");
         debugSerial.print(mavlink_msg_attitude_get_roll(&msg));
@@ -546,7 +545,7 @@ break;
         debugSerial.print(ap_climb_rate);
         debugSerial.println();
 #endif
-        break; 
+        break;
       default:
         break;
       }
@@ -554,8 +553,3 @@ break;
     }
   }
 }
-
-
-
-
-
