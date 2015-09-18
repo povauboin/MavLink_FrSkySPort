@@ -77,6 +77,10 @@
 	local upppp = 20480
 	local divvv = 2048 --12 mal teilen
 	
+        -- gps
+        local gpsLatLon = {}
+        local LocationLat = 0
+        local LocationLon = 0
 	
 	--Timer 0 is time while vehicle is armed
 	
@@ -221,8 +225,8 @@
 	  
 	  --pilotlat = math.rad(getValue("pilot-latitude")) --not use taranis first lat and long here
 	  --pilotlon = math.rad(getValue("pilot-longitude"))
-	  curlat = math.rad(getValue("latitude"))
-	  curlon = math.rad(getValue("longitude"))
+	  curlat = math.rad(LocationLat)
+	  curlon = math.rad(LocationLon)
 	  
 	  
 	  if pilotlat~=0 and curlat~=0 and pilotlon~=0 and curlon~=0 then
@@ -283,7 +287,7 @@
 	  for j=21, 61, 4 do
 	    lcd.drawPoint(167+22, j)
 	  end
-	  lcd.drawNumber(180, 57,hypdist, SMLSIZE)
+	  lcd.drawNumber(189, 57,hypdist, SMLSIZE)
 	  lcd.drawText(lcd.getLastPos(), 57, "m", SMLSIZE)
 	end
 	
@@ -410,12 +414,23 @@
 	  
 	  t2 = getValue("T2")
 	  apmarmed = t2%0x02
-	 
-	  --prearmheading =63
+
+          -- opentx2.1.3 lua support for latitude and longitude
+          -- added on opentx commit c0dee366c0ae3f9776b3ba305cc3eb6bdeec593a
+          gpsLatLon = getValue("GPS")
+          if (type(gpsLatLon) == "table") then
+              if gpsLatLon["lat"] ~= NIL then
+                LocationLat = gpsLatLon["lat"]
+              end
+              if gpsLatLon["lon"] ~= NIL then
+                LocationLon = gpsLatLon["lon"]
+              end
+          end
+
 	  if apmarmed ~=1 then -- report last heading bevor arming. this can used for display position relative to copter
 	    prearmheading=getValue("Hdg")
-	    pilotlat = math.rad(getValue("latitude"))
-	    pilotlon = math.rad(getValue("longitude"))
+	    pilotlat = math.rad(LocationLat)
+	    pilotlon = math.rad(LocationLon)
 	  end
 	  
 	  if lastarmed~=apmarmed then
