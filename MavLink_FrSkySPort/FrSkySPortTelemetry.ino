@@ -21,7 +21,9 @@
  * *** Define FrSkySPortTelemetry Sensors:             ***
  * *******************************************************
  */
-FrSkySportSensorFas fas;                               // Create FAS sensor with default ID
+#ifndef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+  FrSkySportSensorFas fas;                               // Create FAS sensor with default ID
+#endif
 FrSkySportSensorFuel fuel;                             // Create FUEL sensor with default ID
 #ifdef USE_SINGLE_CELL_MONITOR
   FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
@@ -76,14 +78,25 @@ void FrSkySPort_Init()
   // Configure the telemetry serial port and sensors (remember to use & to specify a pointer to sensor)
   #ifdef USE_SINGLE_CELL_MONITOR
     #if (MAXCELLS <= 6)
-      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #else
+        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #endif
     #else
-      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #else
+        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #endif
     #endif
   #else
+    #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+    #else
       telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+    #endif
   #endif
-
 }
 
 /* 
@@ -176,22 +189,24 @@ void FrSkySPort_Process()
  * set Current source to FAS in menu to use this data for current readings
  */
 void FrSkySportTelemetry_FAS() {
-  FASVoltage = readAndResetAverageVoltage();
-  if ( FASVoltage > 0 ) {                                 // only progress if we have a Battery Voltage
-    //FASCurrent = readAndResetAverageCurrent();            // read Average Current
-    #ifdef DEBUG_FrSkySportTelemetry_FAS
-      debugSerial.print(millis());
-      debugSerial.println("FrSkySportTelemetry_FAS:");
-      debugSerial.print("\tVFAS (0x0210): ");
-      debugSerial.print(FASVoltage / 10.0 );
-      debugSerial.print("\tCurr (0x0200): ");
-      //debugSerial.print(FASCurrent);
-      debugSerial.print(ap_current_battery / 10.0);
-      debugSerial.println();
-    #endif
-    fas.setData(ap_current_battery / 10.0,    // Current consumption in amps
-                FASVoltage / 10.0);           // Battery voltage in volts
-  }
+  #ifndef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+    FASVoltage = readAndResetAverageVoltage();
+    if ( FASVoltage > 0 ) {                                 // only progress if we have a Battery Voltage
+      //FASCurrent = readAndResetAverageCurrent();            // read Average Current
+      #ifdef DEBUG_FrSkySportTelemetry_FAS
+        debugSerial.print(millis());
+        debugSerial.println("FrSkySportTelemetry_FAS:");
+        debugSerial.print("\tVFAS (0x0210): ");
+        debugSerial.print(FASVoltage / 10.0 );
+        debugSerial.print("\tCurr (0x0200): ");
+        //debugSerial.print(FASCurrent);
+        debugSerial.print(ap_current_battery / 10.0);
+        debugSerial.println();
+      #endif
+      fas.setData(ap_current_battery / 10.0,    // Current consumption in amps
+                  FASVoltage / 10.0);           // Battery voltage in volts
+    }
+  #endif
 }
 
 /* 

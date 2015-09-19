@@ -76,11 +76,11 @@
  * *** Enable Addons:                                  ***
  * *******************************************************
  */
-//#define USE_SINGLE_CELL_MONITOR                         // Setup in LSCM Tab
+//#define USE_FAS_SENSOR_INSTEAD_OF_APM_DATA              // Enable  if you use a FrSky FAS   Sensor.
+//#define USE_SINGLE_CELL_MONITOR                         // Disable if you use a FrSky FLVSS Sensor. - Setup in LSCM Tab
 //#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
-//#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - do not disable if you use TEENSY_LED_SUPPORT.
+//#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - enable if you use TEENSY_LED_SUPPORT.
 //#define USE_TEENSY_LED_SUPPORT                          // Enable LED-Controller functionality
-
 
 /* 
  * *******************************************************
@@ -169,8 +169,8 @@ int32_t     ap_latitude           =   0;    // Latitude (WGS84), in degrees * 1E
 int32_t     ap_longitude          =   0;    // Longitude (WGS84), in degrees * 1E7
 int32_t     ap_gps_altitude       =   0;    // Altitude (AMSL, NOT WGS84), in meters * 1000 (positive for up). 
                                             // Note that virtually all GPS modules provide the AMSL altitude in addition to the WGS84 altitude.
-  int32_t latitude  = 0;
-  int32_t longitude = 0;
+//int32_t latitude  = 0;
+//int32_t longitude = 0;
 int32_t     ap_gps_speed          =   0;    // GPS ground speed (m/s * 100)
 uint16_t    ap_gps_hdop           = 255;    // GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
 //uint16_t    ap_gps_vdop           =   0;    // GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
@@ -295,22 +295,22 @@ void setup()  {
 
  // delay(100000);
  
-#ifdef USE_SINGLE_CELL_MONITOR
+  #ifdef USE_SINGLE_CELL_MONITOR
     // Set your custom values (double) for LSCM software divider here.
     // Dependent to your resistor network you can call this function with 1-12 parameter.
     
     //lscm.setCustomCellDivider(1905.331599479, 929.011553273, 615.667808219); // This is an example for three cells
-#endif
+  #endif
 
 
-#ifdef DEBUG_LIPO_SINGLE_CELL_MONITOR
+  #ifdef DEBUG_LIPO_SINGLE_CELL_MONITOR
     lscm.setDebug(true);                      // Enable LSCM debug
-#endif
+  #endif
   
   
-#ifdef USE_TEENSY_LED_SUPPORT
+  #ifdef USE_TEENSY_LED_SUPPORT
     Teensy_LED_Init();                      // Init LED Controller
-#endif
+  #endif
   
   Mavlink_setup();                          // Init Mavlink
   
