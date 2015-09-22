@@ -77,6 +77,7 @@
  * *******************************************************
  */
 //#define USE_FAS_SENSOR_INSTEAD_OF_APM_DATA              // Enable  if you use a FrSky FAS   Sensor.
+//#define USE_FLVSS_FAKE_SENSOR_DATA                      // Enable  if you want send fake cell info calculated from VFAS, please set MAXCELLs according your Number of LiPo Cells
 //#define USE_SINGLE_CELL_MONITOR                         // Disable if you use a FrSky FLVSS Sensor. - Setup in LSCM Tab
 //#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
 //#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - enable if you use TEENSY_LED_SUPPORT.
@@ -109,7 +110,7 @@
 // *** DEBUG FrSkySPort Telemetry:
 //#define DEBUG_FrSkySportTelemetry
 //#define DEBUG_FrSkySportTelemetry_FAS
-//#define DEBUG_FrSkySportTelemetry_FLVSS
+#define DEBUG_FrSkySportTelemetry_FLVSS
 //#define DEBUG_FrSkySportTelemetry_GPS
 //#define DEBUG_FrSkySportTelemetry_RPM
 //#define DEBUG_FrSkySportTelemetry_A3A4
@@ -127,6 +128,10 @@
  * *** Variables Definitions:                          ***
  * *******************************************************
  */
+// configure number maximum connected analog inputs(cells)
+// if you build an six cell network then MAXCELLS is 6
+#define MAXCELLS 3
+
 /* 
  * *******************************************************
  * *** Mavlink Definitions:                            ***
@@ -264,17 +269,12 @@ bool          MavLink_Connected     =     0;  // Connected or Not
 unsigned long start_telemetry       = 30000;  // Start Telemetry after 30s (or 5s after init)
 bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initialized
 
-
 /*
  * *******************************************************
  * *** Wolke´s Single-Lipo-Cell-Monitor Definitions:   ***
  * *******************************************************
  */
 #ifdef USE_SINGLE_CELL_MONITOR
-  // configure number maximum connected analog inputs(cells)
-  // if you build an six cell network then MAXCELLS is 6
-  #define MAXCELLS 3
-
   // construct and init LSCM (LipoSingleCellMonitor)
   LSCM lscm(MAXCELLS, 13, 0.99);
 #endif
