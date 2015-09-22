@@ -1,4 +1,43 @@
 /*
+ * MavLink_FrSkySPort
+ * https://github.com/Clooney82/MavLink_FrSkySPort
+ * 
+ *  Original Author: Jochen Tuchbreiter (2013)  under (GPL3)
+ *  https://code.google.com/p/telemetry-convert/
+ * 
+ *  Improved by:   
+ *    (2014) Rolf Blomgren   
+ *    (2014) Christian Swahn
+ *    https://github.com/chsw/MavLink_FrSkySPort   
+ * 
+ *    (2014) Luis Vale   
+ *    https://github.com/lvale/MavLink_FrSkySPort
+ *    
+ *    (2015) Michael Wolkstein
+ *    https://github.com/wolkstein/MavLink_FrSkySPort
+ *    
+ *    (2015) Fnoop Dogg
+ *    https://github.com/fnoopdogg/MavLink_FrSkySPort
+ *    
+ *    (2015) Jochen Kielkopf
+ *    https://github.com/Clooney82/MavLink_FrSkySPort
+ * 
+ * This program is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ *
+ * ====================================================================================================
+ * 
  * APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1  http://www.pjrc.com/teensy/index.html
  *  based on ideas found here http://code.google.com/p/telemetry-convert/
  * ******************************************************

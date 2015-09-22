@@ -1,30 +1,45 @@
-#include <FastLED.h>
-
 /*
-* Lighting Controller for ArduCopter based on Teensy 3.1 and
-* APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1
-*
-* Teensy 3.1 PIN 6 is used for controlling WS2812B LEDs
-* Keep in mind teensy only provide 3.3V Output, to control WS2812B LEDs you need to shift this to 5V.
-* possible Solution:  *1: https://www.pjrc.com/teensy/td_libs_OctoWS2811.html
-*                     *2: http://forums.adafruit.com/viewtopic.php?f=47&t=48908&p=246902#p246902
-*
-* To Use this script in Simulation Mode (#define SIMULATION_MODE)
-* In SIMULATION_MODE script can run stand alone on your development environment, but no input is possible.
-*
-* This is a simple Version of Led-Control addon for MavLink_FrSkySPort.
-* This can be used for a normal Quadcopter with identical number of LEDs per arm.
-*
-* SIMPLE VERSION
-*
-* IF YOU WANT TO USE IT, REPACE led_control.ino for upper dir with this version.
-*
-*/
+ * led_control.ino part of MavLink_FrSkySPort
+ *
+ * Copyright (C) 2015 Jochen Kielkopf
+ * https://github.com/Clooney82/MavLink_FrSkySPort
+ * 
+ * modified by Alf Pettersson
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ *
+ * ====================================================================================================
+ *
+ * Lighting Controller for ArduCopter based on Teensy 3.1 and
+ * APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1
+ *
+ * Teensy 3.1 PIN 6 is used for controlling WS2812B LEDs
+ * Keep in mind teensy only provide 3.3V Output, to control WS2812B LEDs you need to shift this to 5V.
+ * possible Solution:  *1: https://www.pjrc.com/teensy/td_libs_OctoWS2811.html
+ *                     *2: http://forums.adafruit.com/viewtopic.php?f=47&t=48908&p=246902#p246902
+ *
+ * To Use this script in Simulation Mode (#define SIMULATION_MODE)
+ * In SIMULATION_MODE script can run stand alone on your development environment, but no input is possible.
+ */
+#ifdef USE_TEENSY_LED_SUPPORT
 //#####################################################################################################
 //### MAIN CONFIG PART                                                                              ###
 //#####################################################################################################
 //### INCLUDES                                                                                      ###
 //#####################################################################################################
+#include <FastLED.h>
 
 
 //#define SIMULATION_MODE // uncomment to enable simulation mode
@@ -832,4 +847,4 @@ void LarsonScanner(byte LS_hue, int START_POS, int END_POS, float dim) {
 		targetmillis_LS = lastmillis + DELAY;
 	}
 }
-
+#endif
