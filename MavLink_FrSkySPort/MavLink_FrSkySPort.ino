@@ -110,7 +110,7 @@
 // *** DEBUG FrSkySPort Telemetry:
 //#define DEBUG_FrSkySportTelemetry
 //#define DEBUG_FrSkySportTelemetry_FAS
-#define DEBUG_FrSkySportTelemetry_FLVSS
+//#define DEBUG_FrSkySportTelemetry_FLVSS
 //#define DEBUG_FrSkySportTelemetry_GPS
 //#define DEBUG_FrSkySportTelemetry_RPM
 //#define DEBUG_FrSkySportTelemetry_A3A4
