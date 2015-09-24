@@ -104,15 +104,12 @@ void Mavlink_config_connection() {
     debugSerial.println("\tSetting up Mavlink streams");
   #endif
   digitalWrite(led,HIGH);
+  // mavlink_msg_request_data_stream_pack(0xFF,0xBE,&msg,1,1,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
   mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
   len = mavlink_msg_to_send_buffer(buf, &msg);
   _MavLinkSerial.write(buf,len);
   delay(10);
   mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_EXTRA2, MSG_RATE, START);
-  len = mavlink_msg_to_send_buffer(buf, &msg);
-  _MavLinkSerial.write(buf,len);
-  delay(10);
-  mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_EXTRA3, MSG_RATE, START);
   len = mavlink_msg_to_send_buffer(buf, &msg);
   _MavLinkSerial.write(buf,len);
   delay(10);
@@ -492,35 +489,6 @@ void _MavLink_receive() {
             debugSerial.println();
           #endif
           break; 
-        /*
-         * *****************************************************
-         * *** MAVLINK Message #241 - VIBRATION                 ***
-         * *****************************************************
-         */
-        case MAVLINK_MSG_ID_VIBRATION:
-          vibration_x   = mavlink_msg_vibration_get_vibration_x(&msg);
-          vibration_y = mavlink_msg_vibration_get_vibration_y(&msg);
-          vibration_z = mavlink_msg_vibration_get_vibration_z(&msg);
-          clipping_0 = mavlink_msg_vibration_get_clipping_0(&msg);
-          clipping_1 = mavlink_msg_vibration_get_clipping_1(&msg);
-          clipping_2 = mavlink_msg_vibration_get_clipping_2(&msg);
-          #ifdef DEBUG_APM_VIBRATION
-            debugSerial.print(millis());
-            debugSerial.print("\tMAVLINK_MSG_ID_VIBRATION: vibration_x: ");
-            debugSerial.print(vibration_x);
-            debugSerial.print(", vibration_y: ");
-            debugSerial.print(vibration_y);
-            debugSerial.print(", vibration_z: ");
-            debugSerial.print(vibration_z);
-            debugSerial.print(", clipping_0: ");
-            debugSerial.print(clipping_0);
-            debugSerial.print(", clipping_1: ");
-            debugSerial.print(clipping_1);
-            debugSerial.print(", clipping_2: ");
-            debugSerial.print(clipping_2);
-            debugSerial.println();
-          #endif
-          break;
         /*
          * *****************************************************
          * *** MAVLINK Message #253 - STATUSTEXT             ***

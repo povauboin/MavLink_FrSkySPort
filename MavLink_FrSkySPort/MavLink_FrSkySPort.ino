@@ -140,7 +140,6 @@
 //#define DEBUG_APM_GLOBAL_POSITION_INT_COV   // MSG #63  - planned - currently not implemented - not supported by APM
 //#define DEBUG_APM_RC_CHANNELS               // MSG #65
 //#define DEBUG_APM_VFR_HUD                   // MSG #74
-//#define DEBUG_APM_VIBRATION                 // MSG #241
 //#define DEBUG_APM_STATUSTEXT                // MSG #254 - 
 //#define DEBUG_APM_PARSE_STATUSTEXT
 //#define DEBUG_GIMBAL_HEARTBEAT
@@ -266,18 +265,6 @@ uint16_t    ap_throttle           = 0;    // Current throttle setting in integer
 int32_t     ap_bar_altitude       = 0;    // 100 = 1m
 int32_t     ap_climb_rate         = 0;    // 100 = 1m/s
 
-
-/* 
- * *******************************************************
- * *** Message #24  VIBRATION                          ***
- * *******************************************************
- */
-float vibration_x                 = 0; /*< Vibration levels on X-axis*/
-float vibration_y                 = 0; /*< Vibration levels on Y-axis*/
-float vibration_z                 = 0; /*< Vibration levels on Z-axis*/
-uint32_t clipping_0               = 0; /*< first accelerometer clipping count*/
-uint32_t clipping_1               = 0; /*< second accelerometer clipping count*/
-uint32_t clipping_2               = 0; /*< third accelerometer clipping count*/
 
 /* 
  * *******************************************************
