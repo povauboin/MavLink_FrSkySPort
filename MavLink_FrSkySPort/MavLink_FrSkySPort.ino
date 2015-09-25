@@ -1,4 +1,43 @@
 /*
+ * MavLink_FrSkySPort
+ * https://github.com/Clooney82/MavLink_FrSkySPort
+ * 
+ *  Original Author: Jochen Tuchbreiter (2013)  under (GPL3)
+ *  https://code.google.com/p/telemetry-convert/
+ * 
+ *  Improved by:   
+ *    (2014) Rolf Blomgren   
+ *    (2014) Christian Swahn
+ *    https://github.com/chsw/MavLink_FrSkySPort   
+ * 
+ *    (2014) Luis Vale   
+ *    https://github.com/lvale/MavLink_FrSkySPort
+ *    
+ *    (2015) Michael Wolkstein
+ *    https://github.com/wolkstein/MavLink_FrSkySPort
+ *    
+ *    (2015) Fnoop Dogg
+ *    https://github.com/fnoopdogg/MavLink_FrSkySPort
+ *    
+ *    (2015) Jochen Kielkopf
+ *    https://github.com/Clooney82/MavLink_FrSkySPort
+ * 
+ * This program is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ *
+ * ====================================================================================================
+ * 
  * APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1  http://www.pjrc.com/teensy/index.html
  *  based on ideas found here http://code.google.com/p/telemetry-convert/
  * ******************************************************
@@ -77,6 +116,7 @@
  * *******************************************************
  */
 //#define USE_FAS_SENSOR_INSTEAD_OF_APM_DATA              // Enable  if you use a FrSky FAS   Sensor.
+//#define USE_FLVSS_FAKE_SENSOR_DATA                      // Enable  if you want send fake cell info calculated from VFAS, please set MAXCELLs according your Number of LiPo Cells
 //#define USE_SINGLE_CELL_MONITOR                         // Disable if you use a FrSky FLVSS Sensor. - Setup in LSCM Tab
 //#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
 //#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - enable if you use TEENSY_LED_SUPPORT.
@@ -127,6 +167,10 @@
  * *** Variables Definitions:                          ***
  * *******************************************************
  */
+// configure number maximum connected analog inputs(cells)
+// if you build an six cell network then MAXCELLS is 6
+#define MAXCELLS 3
+
 /* 
  * *******************************************************
  * *** Mavlink Definitions:                            ***
@@ -264,17 +308,12 @@ bool          MavLink_Connected     =     0;  // Connected or Not
 unsigned long start_telemetry       = 30000;  // Start Telemetry after 30s (or 5s after init)
 bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initialized
 
-
 /*
  * *******************************************************
  * *** Wolke´s Single-Lipo-Cell-Monitor Definitions:   ***
  * *******************************************************
  */
 #ifdef USE_SINGLE_CELL_MONITOR
-  // configure number maximum connected analog inputs(cells)
-  // if you build an six cell network then MAXCELLS is 6
-  #define MAXCELLS 3
-
   // construct and init LSCM (LipoSingleCellMonitor)
   LSCM lscm(MAXCELLS, 13, 0.99);
 #endif

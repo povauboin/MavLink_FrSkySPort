@@ -1,3 +1,30 @@
+/*
+ * FrSkySPortTelemetry.ino part of MavLink_FrSkySPort
+ * https://github.com/Clooney82/MavLink_FrSkySPort
+ * 
+ * Copyright (C) 2015 Jochen Kielkopf
+ * https://github.com/Clooney82/MavLink_FrSkySPort
+ * 
+ * Improved by:
+ *    (2015) Michael Wolkstein
+ *    https://github.com/wolkstein/MavLink_FrSkySPort
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ * 
+ */
+
 /* 
  * *******************************************************
  * *** Inclueds needed for FrSkySPortTelemetry         ***
@@ -25,7 +52,7 @@
   FrSkySportSensorFas fas;                               // Create FAS sensor with default ID
 #endif
 FrSkySportSensorFuel fuel;                             // Create FUEL sensor with default ID
-#ifdef USE_SINGLE_CELL_MONITOR
+#if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
   FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
   #if (MAXCELLS > 6) 
     FrSkySportSensorFlvss flvss2(FrSkySportSensor::ID15);  // Create FLVSS sensor with given ID
@@ -76,7 +103,7 @@ unsigned long GPS_debug_time = 500;
 void FrSkySPort_Init()
 {
   // Configure the telemetry serial port and sensors (remember to use & to specify a pointer to sensor)
-  #ifdef USE_SINGLE_CELL_MONITOR
+  #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
     #if (MAXCELLS <= 6)
       #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
         telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
@@ -278,8 +305,69 @@ void FrSkySportTelemetry_FLVSS() {
         flvss2.setData(lscm.getCellVoltageAsUint32_T(6) / 1000.0, lscm.getCellVoltageAsUint32_T(7) / 1000.0, lscm.getCellVoltageAsUint32_T(8) / 1000.0, lscm.getCellVoltageAsUint32_T(9) / 1000.0, lscm.getCellVoltageAsUint32_T(10) / 1000.0, lscm.getCellVoltageAsUint32_T(11) / 1000.0);
         break;
       #endif
-    
-  }
+    }
+  #elif defined USE_FLVSS_FAKE_SENSOR_DATA
+    float fake_cell_voltage = (ap_voltage_battery / ap_cell_count) / 1000.0;
+    #ifdef DEBUG_FrSkySportTelemetry_FLVSS
+        debugSerial.print(millis());
+        debugSerial.print("\tmaxCells: ");
+        debugSerial.println(ap_cell_count);
+      for (int i=0; i < ap_cell_count; i++) {
+        debugSerial.print(millis());
+        debugSerial.print("\tZelle[");
+        debugSerial.print(i);
+        debugSerial.print("]: ");
+        debugSerial.print(fake_cell_voltage);
+        debugSerial.println("Volt");
+        
+      }
+    #endif
+    switch (ap_cell_count) {
+      case 1:
+        flvss1.setData(fake_cell_voltage);
+        break;
+      case 2:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage);
+        break;
+      case 3:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        break;
+      case 4:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        break;
+      case 5:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        break;
+      case 6:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        break;
+      #if (MAXCELLS > 6)
+      case 7:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        flvss2.setData(fake_cell_voltage);
+        break;
+      case 8:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        flvss2.setData(fake_cell_voltage, fake_cell_voltage);
+        break;
+      case 9:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        flvss2.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        break;
+      case 10:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        flvss2.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        break;
+      case 11:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        flvss2.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        break;
+      case 12:
+        flvss1.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        flvss2.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
+        break;
+      #endif
+    }    
   #endif
 }
 

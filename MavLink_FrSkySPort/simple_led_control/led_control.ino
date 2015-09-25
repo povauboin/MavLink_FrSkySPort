@@ -1,4 +1,25 @@
 /*
+ * led_control.ino part of MavLink_FrSkySPort
+ *
+ * Copyright (C) 2015 Jochen Kielkopf
+ * https://github.com/Clooney82/MavLink_FrSkySPort
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY, without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ *
+ * ====================================================================================================
+ *
  * Lighting Controller for ArduCopter based on Teensy 3.1 and
  * APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1
  * 
@@ -18,6 +39,7 @@
  * IF YOU WANT TO USE IT, REPACE led_control.ino for upper dir with this version.
  * 
  */
+#ifdef USE_TEENSY_LED_SUPPORT
 //#####################################################################################################
 //### MAIN CONFIG PART                                                                              ###
 //#####################################################################################################
@@ -775,3 +797,4 @@ void LarsonScanner(byte LS_hue, int START_POS, int END_POS, float dim) {
   http://forum.arduino.cc/index.php?topic=198987.0
   http://forum.arduino.cc/index.php?topic=299023.0
 */
+#endif
