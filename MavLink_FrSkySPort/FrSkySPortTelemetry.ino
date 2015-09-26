@@ -493,11 +493,11 @@ void FrSkySportTelemetry_RPM() {
   }
   #endif
 
-  // we dequeue status every 1050ms T2 sensor sends all 1000ms.
+  // we dequeue status every 1400ms T2 sensor sends all 1000ms.
 
   static long dequeue_request = 0;
   long actualtime = millis();
-  if(actualtime > dequeue_request + 1050){
+  if(actualtime > dequeue_request + 1400){
 
     //returns 0 if statusDequeue is empty
     my_dequeue_status_value = statusDequeue();
