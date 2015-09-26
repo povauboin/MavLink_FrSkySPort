@@ -51,13 +51,20 @@
 #ifndef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
   FrSkySportSensorFas fas;                               // Create FAS sensor with default ID
 #endif
+
 FrSkySportSensorFuel fuel;                             // Create FUEL sensor with default ID
+
+#ifdef SEND_STATUS_TEXT_MESSAGE
+  FrSkySportSensorFuel txtmsg(FrSkySportSensor::ID9);                             // Create FUEL sensor with given ID
+#endif
+
 #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
   FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
   #if (MAXCELLS > 6) 
     FrSkySportSensorFlvss flvss2(FrSkySportSensor::ID15);  // Create FLVSS sensor with given ID
   #endif
 #endif
+
 FrSkySportSensorGps gps;                               // Create GPS sensor with default ID
 FrSkySportSensorRpm rpm;                               // Create RPM sensor with default ID
 FrSkySportSensorAcc acc;                               // Create ACC sensor with default ID
@@ -103,25 +110,49 @@ unsigned long GPS_debug_time = 500;
 void FrSkySPort_Init()
 {
   // Configure the telemetry serial port and sensors (remember to use & to specify a pointer to sensor)
-  #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
-    #if (MAXCELLS <= 6)
-      #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
-        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+  #ifdef SEND_STATUS_TEXT_MESSAGE
+    #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
+      #if (MAXCELLS <= 6)
+        #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+          telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc, &txtmsg);
+        #else
+          telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc, &txtmsg);
+        #endif
       #else
-        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+        #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+          telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc, &txtmsg);
+        #else
+          telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc, &txtmsg);
+        #endif
       #endif
     #else
       #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
-        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc, &txtmsg);
       #else
-        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &gps, &sp2uart, &rpm, &vario, &fuel, &acc, &txtmsg);
       #endif
     #endif
   #else
-    #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
-      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+    #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
+      #if (MAXCELLS <= 6)
+        #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+          telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+        #else
+          telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+        #endif
+      #else
+        #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+          telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+        #else
+          telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+        #endif
+      #endif
     #else
-      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #else
+        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      #endif
     #endif
   #endif
 }
@@ -196,6 +227,14 @@ void FrSkySPort_Process()
    * *****************************************************
    */
   FrSkySportTelemetry_FUEL();
+
+  /* 
+   * *****************************************************
+   * *** Set TextMsg sensor data ()                    ***
+   * *****************************************************
+   */
+  FrSkySportTelemetry_TXTMSG();
+  
   /* 
    * *****************************************************
    * *** Send the telemetry data                       ***
@@ -592,6 +631,28 @@ void FrSkySportTelemetry_FUEL() {
   }
 }
 
+/* 
+ * *****************************************************
+ * *** Set TextMsg sensor data ()                    ***
+ * *****************************************************
+ */
+void FrSkySportTelemetry_TXTMSG() {
+  #ifdef SEND_STATUS_TEXT_MESSAGE
+    uint16_t data_word;
+    data_word = telem_text_get_word();
+    #ifdef DEBUG_FrSkySportTelemetry_TXTMSG
+      
+      debugSerial.print(millis());
+      debugSerial.print("\tTextMessage: ");
+      debugSerial.print(data_word);
+      debugSerial.println();
+      
+      //debug_print("FRSKY SENSOR_ID_RPM: %d", data_word);
+  
+    #endif
+    txtmsg.setData(data_word);
+  #endif
+}
 
 /*
  * *****************************************************

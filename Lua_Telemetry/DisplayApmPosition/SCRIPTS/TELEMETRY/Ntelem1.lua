@@ -14,35 +14,36 @@
 -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 -- GNU General Public License for more details.
 --
+-- You should have received a copy of the GNU General Public License
+-- along with this program; if not, write to the Free Software
+-- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+--
 ----------------------------------------------------------------------------------
 -- Date of last Change: 2015/09/22                                              --
 -- Version: 0.20                                                                --
 ----------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------
---                                                                              --
-----------------------------------------------------------------------------------
-
-----------------------------------------------------------------------------------
 -- Do some init tasks - PLEASE DO NOT EDIT                                      --
 ----------------------------------------------------------------------------------
-local _directory = {}
+_directory = {}
+Severity={}
 
 ----------------------------------------------------------------------------------
 -- User configurable part                                                       --
 ----------------------------------------------------------------------------------
-local play_sounds = 0
-
 -- Used Flight Mode for storeing config variables of telem script
 local used_flightmode   = 8
 
-local LANGUAGE = "en"
--- possibilities: en, de
+-- Setup Language you want. possibilities: en, de
+LANGUAGE = "en"
 
+-- Setup Path of your Soundfiles and Images
 _directory.sounds = "/SOUNDS/"..LANGUAGE.."/"
 _directory.pics   = "/BMP/"
 
-local FlightMode = { 
+-- Available FlightModes
+FlightMode = {
 		[0]  = "Stabilize",
 		[1]  = "Acro",
 		[2]  = "AltHold",
@@ -63,7 +64,6 @@ local FlightMode = {
 		[17] = "Brake"
 		}
 --		[--] = "12345678901234567890"
-
 
 -- SMLSIZE = 04x06
 -- DEFAULT = 05x07
@@ -87,7 +87,9 @@ model.setTimer(1, {mode=0, start=0, value= 0, countdownBeep=0, minuteBeep=0, per
 -- Variables Definitions                                                        --
 ----------------------------------------------------------------------------------
 
-local data = {}
+play_sounds = 0
+
+data = {}
 
 local home = {
 	set  = 0,
@@ -184,18 +186,18 @@ local function getTelemetry()
 	local gpsLatLon = {}
 
 	--local data = {}
-	
+
 	-- RPM Sensor Values
 	data.t1          = getValue("T1")			-- (ap_sat_visible * 10) + ap_fixtype
 	data.t2          = getValue("T2")			-- Armed Status + Severity + Statustext
 	data.rpm         = getValue("RPM")			-- ap_throttle * 200+ap_battery_remaining*2
-	
+
 	-- FAS Sensor Values
 	data.vfas        = getValue("VFAS")			-- Batt Voltage
 	--data.vfasmin     = getValue("VFAS-min")			-- min Batt Voltage
 	data.vfasmin     = getValue("VFAS-")			-- min Batt Voltage
 	data.curr        = getValue("Curr")			-- Current (mA)
-	
+
 	-- FLVSS Sensor Values
 	data.cels        = getValue("Cels")			-- Cells Voltage
 	data.c1          = getValue("Z1")			-- 1. Cell
@@ -208,7 +210,7 @@ local function getTelemetry()
 	--data.c8          = getValue("Z8")			-- 8. Cell
 	data.cmin        = getValue("Cmin")			-- lowest current Cell Voltage
 	data.cmini       = getValue("Cmin-")			-- lowest Cell Voltage
-	
+
 	-- Consumtion Values
 	data.mah         = getValue("mAh")			-- mAh
 	data.watt        = getValue("Watt")			-- Watts
@@ -236,7 +238,7 @@ local function getTelemetry()
 	data.distance    = getValue("distance")			-- GPS distance
 	data.hdop        = getValue("A2")/10			-- HDOP
 
-	
+
 	-- Angle Values
 	data.roll        = getValue("A3")			-- ap_roll_angle  + 180
 	data.pitch       = getValue("A4")			-- ap_pitch_angle + 180
@@ -246,7 +248,7 @@ local function getTelemetry()
 	--data.altmax      = getValue("AltM")			-- max altitude
 	data.altmax      = getValue("Alt+")			-- max altitude
 	data.vario       = getValue("VSpd")			-- ap_climb_rate
-	
+
 	-- acceleration Sensor Values
 	data.accx        = getValue("AccX")			-- AccX g
 	data.accy        = getValue("AccY")			-- AccY g
@@ -268,17 +270,17 @@ local function getTelemetry()
 
 	data.fixtype     = data.t1%10				-- Number of Sats
 	data.sats        = (data.t1 - data.fixtype)/10		-- 0 = no GPS, 1 = no Fix, 2 = 2D Fix, 3 = 3D Fix
-	
+
 	data.armed       = 0
 	data.armed       = data.t2%0x02				-- 0 = disarmed, 1 = armed
 	tmp = (data.t2 - data.armed)/0x02
 	data.severity    = tmp%0x10				-- Severity
 	tmp = (tmp - data.severity)/0x10
 	data.textid      = tmp%0x400				-- Text ID
-	
+
 	data.throttle    = data.rpm%200				-- Throttle in percent (0 = 0, 100, 100)
 	data.battremain  = (data.rpm - data.throttle)/2		-- Remaining Bat. capacitiy in percent
-	
+
 
 	--return data
 	return 0
@@ -288,7 +290,7 @@ end
 -- Telemetry background tasks                                                   --
 ----------------------------------------------------------------------------------
 local function doTelemetry()
-	
+
 	if lastArmed ~= data.armed then
 	  if data.armed then
 	    if data.fixtype == 3 then
@@ -323,15 +325,15 @@ local function doTelemetry()
 	  end
 	end
 
-        if data.FMod>NumFlighModes then
-          data.FMod=13
-        end
-        if data.FMod~=last_flight_mode then
-          -- play_sounds FlightMode
-          -- playFile("/SOUNDS/en/AVFM"..(data.FMod).."A.wav")
+  if data.FMod>NumFlighModes then
+  	data.FMod=13
+  end
+  if data.FMod~=last_flight_mode then
+  	-- play_sounds FlightMode
+    -- playFile("/SOUNDS/en/AVFM"..(data.FMod).."A.wav")
 	  playSound("FM", "flightmode")
-          last_flight_mode=data.FMod
-        end
+    last_flight_mode=data.FMod
+  end
 
 	if data.severity > 0 then
 	  if data.severity ~= apm_status_message.severity or data.textid ~= apm_status_message.textid then
@@ -340,14 +342,14 @@ local function doTelemetry()
 	    apm_status_message.timestamp = getTime()
 	  end
 	end
-	
+
 	if apm_status_message.timestamp > 0 and (apm_status_message.timestamp + 2*100) < getTime() then
 	  apm_status_message.severity = 0
 	  apm_status_message.textid = 0
 	  apm_status_message.timestamp = 0
 	  apm_status_message.last_played = 0
 	end
-	 
+
 	-- play sound
 	if apm_status_message.textid >0 then
 	  if apm_status_message.last_played ~= apm_status_message.textid then
@@ -390,18 +392,15 @@ local function calcWattHs()
 	if localtime >=10 then --100 ms
 	  watthours = watthours + ( getValue("Watt") * (localtime/360000) )
 	  localtime = 0
-	end  
+	end
 	oldlocaltime = getTime()
 	maxconsume = model.getGlobalVariable(3, used_flightmode)
 end
 
-
-
-
 ----------------------------------------------------------------------------------
 -- Draw Top Panel                                                               --
 ----------------------------------------------------------------------------------
-local function toppanel()
+function toppanel()
 	lcd.drawFilledRectangle(0, 0, 212, 9, 0)
 	if data.armed == 1 then
 	  lcd.drawText(1, 0, (FlightMode[data.FMod]), INVERS)
@@ -436,7 +435,7 @@ local function drawArrow()
 	  Y1 = CenterYrowArrow + offsetY + math.floor(point[1] * sinCorr + point[2] * cosCorr + 0.5)
 	  X2 = CenterXcolArrow + offsetX + math.floor(point[3] * cosCorr - point[4] * sinCorr + 0.5)
 	  Y2 = CenterYrowArrow + offsetY + math.floor(point[3] * sinCorr + point[4] * cosCorr + 0.5)
-	  
+
 	  if X1 == X2 and Y1 == Y2 then
 	    lcd.drawPoint(X1, Y1, SOLID, FORCE)
 	  else
@@ -445,7 +444,6 @@ local function drawArrow()
 	end
 
 end
-
 
 ----------------------------------------------------------------------------------
 -- draw Wh Gauge                                                                --
@@ -464,13 +462,13 @@ end
 ----------------------------------------------------------------------------------
 local function powerpanel()
 	local xposCons = 0
-	
+
 	--Used on power panel -- still to check if all needed
 	consumption=getValue("mAh")---
-	
+
 	lcd.drawNumber(30,13,data.vfas,DBLSIZE+PREC1)
 	lcd.drawText(lcd.getLastPos(),14,"V",0)
-	
+
 	lcd.drawNumber(67,9,data.curr,MIDSIZE+PREC1)
 	lcd.drawText(lcd.getLastPos(),10,"A",0)
 
@@ -497,15 +495,15 @@ end
 -- Altitude Panel                                                               --
 ----------------------------------------------------------------------------------
 local function htsapanel()
-	
+
 	local htsapaneloffset = 11
-	
+
 	lcd.drawLine (htsapaneloffset + 154, 8, htsapaneloffset + 154, 63, SOLID, 0)
 	--heading
 	lcd.drawText(htsapaneloffset + 76,11,"Heading ",SMLSIZE)
 	lcd.drawNumber(lcd.getLastPos(),9,data.gps_heading,MIDSIZE+LEFT)
 	lcd.drawText(lcd.getLastPos(),9,"\64",MIDSIZE)
-	  
+
 	--altitude
 	--Alt max
 	lcd.drawText(htsapaneloffset + 76,25,"Alt ",SMLSIZE)
@@ -524,10 +522,10 @@ local function htsapanel()
 	lcd.drawText(htsapaneloffset + 76,35,"Max",SMLSIZE)
 	lcd.drawNumber(lcd.getLastPos()+8,35,data.altmax,SMLSIZE+LEFT)
 	lcd.drawText(lcd.getLastPos(),35,"m",SMLSIZE)
-	
+
 	--Armed time
 	lcd.drawTimer(htsapaneloffset + 83,42,model.getTimer(0).value,MIDSIZE)
-	
+
 	--Model Runtime
 	lcd.drawNumber(lcd.getLastPos()+8,45,model.getTimer(1).value/3600.0,SMLSIZE+LEFT+PREC1)
 	lcd.drawText(lcd.getLastPos()+3,45,"h",SMLSIZE)
@@ -541,7 +539,7 @@ end
 -- GPS Panel                                                                    --
 ----------------------------------------------------------------------------------
 local function gpspanel()
-	
+
 	local z1 = 0
 	local z2 = 0
 	local hypdist = 0
@@ -551,11 +549,11 @@ local function gpspanel()
 	local divtmp = 1
 	local upppp = 20480
 	local divvv = 2048
-  
+
 	if data.fixtype >= 3 then
 	  lcd.drawText (168, 10, "3D",0)
 	  lcd.drawNumber (195, 10, data.sats, 0+LEFT)
-	  lcd.drawText (lcd.getLastPos(), 10, "S", 0)  
+	  lcd.drawText (lcd.getLastPos(), 10, "S", 0)
 	elseif data.fixtype>1 then
 	  lcd.drawText (168, 10, "2D", 0)
 	  lcd.drawNumber (195, 10, data.sats, 0+LEFT )
@@ -603,14 +601,14 @@ local function gpspanel()
 	      upppp = upppp/2
 	    end
 	  end
-	  
+
 	  upppp = 20480
 	  divvv = 2048 --12 mal teilen
-    
+
 	  offsetX = radarxtmp / divtmp
 	  offsetY = (radarytmp / divtmp)*-1
 	end
-	
+
 	lcd.drawText(187,37,"o",0)
 	lcd.drawRectangle(167, 19, 45, 45)
 	for j=169, 209, 4 do
@@ -623,34 +621,6 @@ local function gpspanel()
 	lcd.drawText(lcd.getLastPos(), 57, "m", SMLSIZE)
 end
 
-
-----------------------------------------------------------------------------------
---                                                                              --
-----------------------------------------------------------------------------------
-
-
-----------------------------------------------------------------------------------
---                                                                              --
-----------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ----------------------------------------------------------------------------------
 -- INIT FUNCTION                                                                --
 ----------------------------------------------------------------------------------
@@ -662,6 +632,21 @@ local function init()
 	  end
 	end
 	play_sounds = model.getGlobalVariable(0, 8)
+
+	for i=0,7 do
+			Severity[i]={}
+			Severity[i].Name=""
+			Severity[i].Sound="/SOUNDS/en/ER"..(i)..".wav"
+	end
+
+	Severity[0].Name="Emergency"
+	Severity[1].Name="Alert"
+	Severity[2].Name="Critical"
+	Severity[3].Name="Error"
+	Severity[4].Name="Warning"
+	Severity[5].Name="Notice"
+	Severity[6].Name="Info"
+	Severity[7].Name="Debug"
 end
 
 ----------------------------------------------------------------------------------
@@ -678,21 +663,21 @@ end
 -- RUN FUNCTION                                                                 --
 ----------------------------------------------------------------------------------
 local function run()
-	--lcd.lock()
+
 	lcd.clear()
-	
+
 	background()
-	
+
 	toppanel()
-	
+
 	powerpanel()
-	
+
 	htsapanel()
-	
+
 	gpspanel()
-	
+
 	drawArrow()
-	
+
 	drawWhGauge()
 
 end

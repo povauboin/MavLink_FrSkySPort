@@ -2,7 +2,7 @@
 -- Offset lua
 --
 -- Copyright (C) 2014 Michael Wolkstein
--- 
+--
 -- https://github.com/Clooney82/MavLink_FrSkySPort
 --
 -- (2015) Improved by:
@@ -41,9 +41,11 @@ local function run_func(offsetmah, offsetwatth, batcapwh, batcapmah)
 	if oldoffsetmah ~= offsetmah or oldoffsetwatth ~= offsetwatth or oldbatcapwh ~= batcapwh or oldbatcapmah ~= batcapmah then
 	  batcapmah = batcapmah / 100
 	  model.setGlobalVariable(1, used_flightmode, offsetmah)   --mA/h
-          model.setGlobalVariable(2, used_flightmode, offsetwatth) --Wh
-          model.setGlobalVariable(3, used_flightmode, batcapwh)    --Wh
-	  model.setGlobalVariable(4, used_flightmode, batcapmah)   --mAh
+    model.setGlobalVariable(2, used_flightmode, offsetwatth) --Wh
+    model.setGlobalVariable(3, used_flightmode, batcapwh)    --Wh
+		model.setGlobalVariable(4, used_flightmode, batcapmah)   --mAh
+		--model.setGlobalVariable(4, used_flightmode, batcapmah/1000)   --mAh
+		--model.setGlobalVariable(5, used_flightmode, batcapmah-(batcapmah/1000))   --mAh
 	  oldoffsetmah   = offsetmah
 	  oldoffsetwatth = offsetwatth
 	  oldbatcapwh    = batcapwh

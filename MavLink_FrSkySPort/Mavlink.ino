@@ -531,7 +531,10 @@ void _MavLink_receive() {
           ap_status_severity = statustext.severity;
           ap_status_send_count = 1; // since messages are queued we only need one send_count
           parseStatusText(statustext.severity, statustext.text);
-          
+          #ifdef SEND_STATUS_TEXT_MESSAGE
+            sprintf(status_text_buffer, "%d%s", statustext.severity & 0x7, statustext.text);
+            frsky_send_text_message(status_text_buffer);
+          #endif
           #ifdef DEBUG_APM_STATUSTEXT
             debugSerial.print(millis());
             debugSerial.print("\tMAVLINK_MSG_ID_STATUSTEXT: severity ");

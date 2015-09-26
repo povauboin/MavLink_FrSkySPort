@@ -1,6 +1,27 @@
 --
 -- config lua
+--
+-- Copyright (C) 2014 Michael Wolkstein
+--
 -- https://github.com/Clooney82/MavLink_FrSkySPort
+--
+-- (2015) Improved by:
+--        Jochen Kielkopf
+--        https://github.com/Clooney82/MavLink_FrSkySPort
+--
+-- This program is free software; you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation; either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY, without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+-- GNU General Public License for more details.
+--
+-- You should have received a copy of the GNU General Public License
+-- along with this program; if not, write to the Free Software
+-- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 --
 
 local inputs = {
@@ -49,23 +70,23 @@ local function run_func(playsound, voltwarnlevel, voltcritcal, horn, repeattimes
 	  model.setGlobalVariable(0, used_flightmode, playsound)
 	  old_playsound = playsound
 	end
-	
+
 	-- Script Part
 	repeattime = repeattimeseconds*100
 	drop = celldropmvolts/10
 	if horn > 0 then
 		hornfile="/SOUNDS/en/ALARM"..horn.."K.wav"
 	end
-	
+
 	newtime=getTime()
 	if newtime-lasttimeplaysound>=repeattime then
 	  cellmin=getValue("Cmin") + 0.0001 --- 214 = cell-min
 	  lasttimeplaysound = newtime
-	  
+
 	  firstitem = math.floor(cellmin)
 	  miditem = math.floor((cellmin-firstitem) * 10)
 	  lastitem = round((((cellmin-firstitem) * 10)-math.floor(((cellmin-firstitem) * 10))) *10)
-	  
+
 	  if cellmin<=2.0 then --silent
 	  elseif cellmin<=voltcritcal/100 then --critical
 	    if horn>0 then
