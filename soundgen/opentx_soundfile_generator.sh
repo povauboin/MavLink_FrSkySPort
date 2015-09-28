@@ -89,7 +89,7 @@ SOURCE_DIRECTORY="$(dirname $0)"
 SOURCE_FILE="$1"
 DESTINATION_DIRECTORY_SOUNDS="$SOURCE_DIRECTORY/SOUNDS"
 VOICE="Samantha"
-LANG="en"
+LANG="en"		# supported languages: en, de, pt
 Hz="32000"  # sample rate to encode the audio at, noted in Hz. 32000Hz = 32KHz. Higher is higher quality (16000, 22000, 32000).
 
 # =================================================================================================
@@ -145,7 +145,7 @@ if [ -f "$SOURCE_FILE" ]; then				# Check Soure File
 
 	# Read and proccess CSV file
 	IFS=","  # File Delimiter
-	while read directory file_name text_to_say[en] text_to_say[de] ; do
+	while read directory file_name text_to_say[en] text_to_say[de] text_to_say[pt]; do
 		directory="$LANG/$VOICE$directory"
 		# Check that varable contain data
 		if [ "$directory" != "Directory" ] && [ -n "$directory" ] && [ -n "$file_name" ] && [ -n "${text_to_say[$LANG]}" ]; then
