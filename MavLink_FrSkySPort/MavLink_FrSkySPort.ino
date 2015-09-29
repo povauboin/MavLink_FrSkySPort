@@ -16,9 +16,6 @@
  *    (2015) Michael Wolkstein
  *    https://github.com/wolkstein/MavLink_FrSkySPort
  *    
- *    (2015) Fnoop Dogg
- *    https://github.com/fnoopdogg/MavLink_FrSkySPort
- *    
  *    (2015) Jochen Kielkopf
  *    https://github.com/Clooney82/MavLink_FrSkySPort
  * 
