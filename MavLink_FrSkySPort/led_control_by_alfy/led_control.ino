@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jochen Kielkopf
  * https://github.com/Clooney82/MavLink_FrSkySPort
- * 
+ *
  * modified by Alf Pettersson
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,18 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ *
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this Program, or any covered work, by linking or
+ * combining it with FrSkySportTelemetry library (or a modified
+ * version of that library), containing parts covered by the terms
+ * of FrSkySportTelemetry library, the licensors of this Program
+ * grant you additional permission to convey the resulting work.
+ * {Corresponding Source for a non-source form of such a combination
+ * shall include the source code for the parts of FrSkySportTelemetry
+ * library used as well as that of the covered work.}
  *
  * ====================================================================================================
  *
@@ -73,7 +83,7 @@ int LED_DIMM_CHAN;
 #define LEDTYPE   NEOPIXEL
 
 #define NUM_ARMS 4
-#define NUM_LEDS_PER_STRIP 16 
+#define NUM_LEDS_PER_STRIP 16
 
 CRGB leds[NUM_ARMS][NUM_LEDS_PER_STRIP];
 
@@ -95,11 +105,11 @@ int state_ARMED = 0;
 #define BACK  4
 #define SIDE  5
 #define FLASH  6
-int  LED_DEF[NUM_ARMS][NUM_LEDS_PER_STRIP] = {{FRONT, FRONT, FRONT, FRONT, FLASH, FLASH,  BACK, FLASH, FLASH, FRONT, FRONT, FRONT, FRONT, FRONT, FRONT, FRONT }, 
+int  LED_DEF[NUM_ARMS][NUM_LEDS_PER_STRIP] = {{FRONT, FRONT, FRONT, FRONT, FLASH, FLASH,  BACK, FLASH, FLASH, FRONT, FRONT, FRONT, FRONT, FRONT, FRONT, FRONT },
                                               {FRONT, FRONT, FRONT, FRONT, FLASH, FLASH,  BACK, FLASH, FLASH, FRONT, FRONT, FRONT, FRONT, FRONT, FRONT, FRONT },
                                               {BACK,   BACK,  BACK,  BACK, FLASH, FLASH, FRONT, FLASH, FLASH,  BACK,  BACK,  BACK,   GPS,  BACK,  BACK, ARMED },
                                               {BACK,   BACK,  BACK,  BACK, FLASH, FLASH, FRONT, FLASH, FLASH,  BACK,  BACK,  BACK,   GPS,  BACK,  BACK, ARMED }};
- 
+
 int LED_MODE = 999;
 int FL_RUN = 0;
 
@@ -267,10 +277,10 @@ void Teensy_LED_process() {   // comment in SIMULATION_MODE
 		LarsonScanner(0, 0, NUM_LEDS_PER_STRIP, dim);
 		break;
 	case 8:   // AUTO_TUNE, ...
-                LarsonScanner(0, 0, NUM_LEDS_PER_STRIP, dim);		
+                LarsonScanner(0, 0, NUM_LEDS_PER_STRIP, dim);
                 front_arms(ON, dim);
 		rear_arms(ON, dim);
-		
+
 		break;
 	case 101:   // USER Mode 1
 		LarsonScanner(0, 0, NUM_LEDS_PER_STRIP, dim);

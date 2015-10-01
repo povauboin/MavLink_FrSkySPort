@@ -1,38 +1,46 @@
 /*
  * Average.ino part of MavLink_FrSkySPort
- *  by
- *  Original Author: Jochen Tuchbreiter (2013)  under (GPL3)
- *  https://code.google.com/p/telemetry-convert/
- * 
- *  Improved by:   
- *    (2014) Rolf Blomgren   
+ * https://github.com/Clooney82/MavLink_FrSkySPort
+ *
+ * Copyright (C) 2014) Rolf Blomgren
+ *  http://diydrones.com/forum/topics/amp-to-frsky-x8r-sport-converter
+ *
+ *  Improved by:
  *    (2014) Christian Swahn
- *    https://github.com/chsw/MavLink_FrSkySPort   
- * 
- *    (2014) Luis Vale   
+ *    https://github.com/chsw/MavLink_FrSkySPort
+ *
+ *    (2014) Luis Vale
  *    https://github.com/lvale/MavLink_FrSkySPort
- *    
+ *
  *    (2015) Michael Wolkstein
  *    https://github.com/wolkstein/MavLink_FrSkySPort
- *    
+ *
  *    (2015) Jochen Kielkopf
  *    https://github.com/Clooney82/MavLink_FrSkySPort
- * 
- * https://github.com/Clooney82/MavLink_FrSkySPort
- * 
- * This program is free software; you can redistribute it and/or modify 
+ *
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY, without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ *
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this Program, or any covered work, by linking or
+ * combining it with FrSkySportTelemetry library (or a modified
+ * version of that library), containing parts covered by the terms
+ * of FrSkySportTelemetry library, the licensors of this Program
+ * grant you additional permission to convey the resulting work.
+ * {Corresponding Source for a non-source form of such a combination
+ * shall include the source code for the parts of FrSkySportTelemetry
+ * library used as well as that of the covered work.}
  *
  */
 // Used to calculate an average vibration level using accelerometers
@@ -74,7 +82,7 @@ void storeVoltageReading(uint16_t value)
     else
     {
       // Reported voltage seems to still increase. Save this sample
-      voltageLast = value; 
+      voltageLast = value;
     }
     return;
   }
@@ -114,7 +122,7 @@ uint16_t readAndResetAverageVoltage()
 {
   if(voltageCount < 1)
     return 0;
-    
+
   uint16_t avg = voltageSum / voltageCount;
 
 #ifdef DEBUG_AVERAGE_VOLTAGE
@@ -125,10 +133,10 @@ uint16_t readAndResetAverageVoltage()
   debugSerial.print("\tAverage Voltage: ");
   debugSerial.print(avg);
   debugSerial.print(" V");
-  debugSerial.println();      
+  debugSerial.println();
 #endif
 
-  
+
   voltageSum = 0;
   voltageCount = 0;
 
@@ -142,7 +150,7 @@ uint16_t readAndResetMinimumVoltage()
 {
   uint16_t tmp = voltageMinimum;
   voltageMinimum = 0;
-  return tmp;  
+  return tmp;
 }
 
 // Calculates and returns the average current value received through mavlink since the last time this function was called.
@@ -152,7 +160,7 @@ uint16_t readAndResetAverageCurrent()
 {
   if(currentCount < 1)
     return 0;
-  
+
   uint16_t avg = currentSum >= 0 ? currentSum / currentCount : 0;
 
   currentSum = 0;
@@ -259,7 +267,7 @@ int32_t fetchAccZ()
 void parseStatusText(int32_t severity, String text)
 {
   uint16_t textId = 0;
-  
+
   // Texts with textId = 0 will be ignored
 
   // motors.pde
@@ -301,18 +309,18 @@ void parseStatusText(int32_t severity, String text)
   else if(text == "DISARMING MOTORS")                                      textId = 89;
   else if(text == "Throttle armed!")                                       textId = 120;
   else if(text == "Throttle disarmed!")                                    textId = 121;
-  
+
   // plane/copter sensors.pde
   else if(text == "Calibrating barometer")                                 textId = 90;
   else if(text == "barometer calibration complete")                        textId = 91;
   else if(text == "zero airspeed calibrated")                              textId = 92;
-  
+
   // control_autotune.pde
   else if(text == "AutoTune: Started")                                     textId = 24;
   else if(text == "AutoTune: Stopped")                                     textId = 25;
   else if(text == "AutoTune: Success")                                     textId = 26;
   else if(text == "AutoTune: Failed")                                      textId = 27;
-  
+
   // crash_check.pde
   else if(text == "Crash: Disarming")                                      textId = 28;
   else if(text == "Parachute: Released!")                                  textId = 29;
@@ -325,10 +333,10 @@ void parseStatusText(int32_t severity, String text)
   // events.pde
   else if(text == "Low Battery!")                                          textId = 32;
   else if(text == "Lost GPS!")                                             textId = 33;
-  
+
   // switches.pde
   else if(text == "Trim saved")                                            textId = 34;
-  
+
   // Compassmot.pde
   else if(text == "compass disabled\n")                                    textId = 35;
   else if(text == "check compass")                                         textId = 36;
@@ -340,24 +348,24 @@ void parseStatusText(int32_t severity, String text)
   else if(text == "THROTTLE")                                              textId = 42;
   else if(text == "Calibration Successful!")                               textId = 43;
   else if(text == "Failed!")                                               textId = 44;
-  
-  // copter/plane GCS_Mavlink.pde  
+
+  // copter/plane GCS_Mavlink.pde
   else if(text == "bad rally point message ID")                            textId = 45;
   else if(text == "bad rally point message count")                         textId = 46;
   else if(text == "error setting rally point")                             textId = 47;
   else if(text == "bad rally point index")                                 textId = 48;
   else if(text == "failed to set rally point")                             textId = 49;
   else if(text == "Initialising APM...")                                   textId = 93;
-  
+
   // copter/plane Log.pde
   else if(text.startsWith("Erasing logs"))                                 textId = 50;
   else if(text.startsWith("Log erase complete"))                           textId = 51;
-  
+
   // motor_test.pde
   else if(text == "Motor Test: RC not calibrated")                         textId = 52;
   else if(text == "Motor Test: vehicle not landed")                        textId = 53;
   else if(text == "Motor Test: Safety Switch")                             textId = 54;
-  
+
   // plane/copter system.pde
   else if(text == "No dataflash inserted")                                 textId = 55;
   else if(text == "No dataflash card inserted")                            textId = 55; // Duplicate
@@ -369,7 +377,7 @@ void parseStatusText(int32_t severity, String text)
   else if(text.endsWith("Ready to FLY."))                                  textId = 61;
   else if(text == "Beginning INS calibration; do not move plane")          textId = 97;
   else if(text == "NO airspeed")                                           textId = 62;
-  
+
   // AntennaTracker GCS_Mavnlink.pde
   else if(text == "command received: ")                                    textId = 59;
   else if(text == "new HOME received")                                     textId = 60;
@@ -377,15 +385,15 @@ void parseStatusText(int32_t severity, String text)
   // AntennaTracker system.pde
   else if(text.endsWith("Ready to track.  "))                              textId = 98;
   else if(text == "Beginning INS calibration; do not move tracker")        textId = 99;
-  
+
   // Arduplane.pde
   else if(text == "Disable fence failed (autodisable)")                    textId = 63;
   else if(text == "Fence disabled (autodisable)")                          textId = 64;
   else if(text.startsWith("FBWA tdrag mode"))                              textId = 110;
-  
+
   // Arduplane attitude.pde
   else if(text == "Demo Servos!")                                          textId = 65;
-  
+
   // Arduplane commands.pde
   else if(text == "Resetting prev_WP")                                     textId = 66;
   else if(text == "init home")                                             textId = 67;
@@ -393,7 +401,7 @@ void parseStatusText(int32_t severity, String text)
   else if(text == "verify_nav: LOITER time complete")                      textId = 69;
   else if(text == "verify_nav: LOITER orbits complete")                    textId = 70;
   else if(text == "Reached home")                                          textId = 71;
-  
+
   // Arduplane events.pde
   else if(text == "Failsafe - Short event on, ")                           textId = 72;
   else if(text == "Failsafe - Long event on, ")                            textId = 73;
@@ -404,13 +412,13 @@ void parseStatusText(int32_t severity, String text)
   else if(text == "command received: ")                                    textId = 76;
   else if(text == "fencing must be disabled")                              textId = 77;
   else if(text == "bad fence point")                                       textId = 78;
-  
+
   // Arduplane commands_logic.pde
   else if(text == "verify_nav: Invalid or no current Nav cmd")             textId = 79;
   else if(text == "verify_conditon: Invalid or no current Condition cmd")  textId = 80;
   else if(text == "Enable fence failed (cannot autoenable")                textId = 81;
   else if(text == "verify_conditon: Unsupported command")                  textId = 124;
-  
+
   // Arduplane geofence.pde
   else if(text == "geo-fence loaded")                                      textId = 82;
   else if(text == "geo-fence setup error")                                 textId = 83;
@@ -436,14 +444,14 @@ void parseStatusText(int32_t severity, String text)
 
   // Arducopter commands_logic.pde
   else if(text.startsWith("Reached Command #"))                            textId = 88;
-  
+
   // Libraries GCS_Common.cpp
   else if(text == "flight plan update rejected")                           textId = 86;
   else if(text == "flight plan received")                                  textId = 87;
 
   // Gcs_Mavlink.pde
   else if(text.startsWith("Frame: "))                                      textId = 0;
-  
+
   // System version (received when connecting Mission planner)
   else if(text.startsWith("ArduCopter V"))                                 textId = 0;
   else if(text.startsWith("ArduPlane V"))                                  textId = 0;
@@ -465,6 +473,3 @@ void parseStatusText(int32_t severity, String text)
   debugSerial.println();
 #endif
 }
-
-
-

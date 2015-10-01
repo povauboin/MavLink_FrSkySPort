@@ -1,33 +1,43 @@
 /*
  * led_control.ino part of MavLink_FrSkySPort
- * 
+ *
  * Copyright (C) 2015 Jochen Kielkopf
  * https://github.com/Clooney82/MavLink_FrSkySPort
- * 
- * This program is free software; you can redistribute it and/or modify 
+ *
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY, without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ *
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this Program, or any covered work, by linking or
+ * combining it with FrSkySportTelemetry library (or a modified
+ * version of that library), containing parts covered by the terms
+ * of FrSkySportTelemetry library, the licensors of this Program
+ * grant you additional permission to convey the resulting work.
+ * {Corresponding Source for a non-source form of such a combination
+ * shall include the source code for the parts of FrSkySportTelemetry
+ * library used as well as that of the covered work.}
  *
  * ====================================================================================================
  *
  * Lighting Controller for ArduCopter based on Teensy 3.1 and
  * APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1
- * 
+ *
  * Teensy 3.1 PIN 6 is used for controlling WS2812B LEDs
  * Keep in mind teensy only provide 3.3V Output, to control WS2812B LEDs you need to shift this to 5V.
- * possible Solution:  *1: https://www.pjrc.com/teensy/td_libs_OctoWS2811.html                      
+ * possible Solution:  *1: https://www.pjrc.com/teensy/td_libs_OctoWS2811.html
  *                     *2: http://forums.adafruit.com/viewtopic.php?f=47&t=48908&p=246902#p246902
- * 
+ *
  * To Use this script in Simulation Mode (#define SIMULATION_MODE)
  * In SIMULATION_MODE script can run stand alone on your development environment, but no input is possible.
  */
@@ -220,38 +230,38 @@ void Teensy_LED_Init()  {   // comment in SIMULATION_MODE
 */
   POS_LEDS_ARMED             = 0;
   POS_LEDS_GPS               = POS_LEDS_ARMED             + NUM_LEDS_ARMED;
-  
+
   POS_LEDS_REARARMS[0]       = POS_LEDS_GPS               + NUM_LEDS_GPS;
   POS_LEDS_FLASH[0]          = POS_LEDS_REARARMS[0]       + NUM_LEDS_REARARMS;
   POS_LEDS_REARARMS[1]       = POS_LEDS_FLASH[0]          + NUM_LEDS_FLASH;
-  
+
   POS_LEDS_BREAKLIGHT        = POS_LEDS_REARARMS[1]       + NUM_LEDS_REARARMS;
-  
+
   POS_LEDS_REARARMS[2]       = POS_LEDS_BREAKLIGHT        + NUM_LEDS_BREAKLIGHT;
   POS_LEDS_FLASH[1]          = POS_LEDS_REARARMS[2]       + NUM_LEDS_REARARMS;
   POS_LEDS_REARARMS[3]       = POS_LEDS_FLASH[1]          + NUM_LEDS_FLASH;
-  
+
   POS_LEDS_SIDEARMS[RIGHT]   = POS_LEDS_REARARMS[3]       + NUM_LEDS_REARARMS;
-  
+
   POS_LEDS_FRONTARM_R[RIGHT] = POS_LEDS_SIDEARMS[RIGHT]   + NUM_LEDS_SIDEARMS;
   POS_LEDS_FLASH[2]          = POS_LEDS_FRONTARM_R[RIGHT] + NUM_LEDS_FRONTARM_R;
   POS_LEDS_FRONTARM_F[RIGHT] = POS_LEDS_FLASH[2]          + NUM_LEDS_FLASH;
-  
+
   POS_LEDS_FRONTLIGHT        = POS_LEDS_FRONTARM_F[RIGHT] + NUM_LEDS_FRONTARM_F;
-  
+
   POS_LEDS_FRONTARM_F[LEFT]  = POS_LEDS_FRONTLIGHT        + NUM_LEDS_FRONTLIGHT;
   POS_LEDS_FLASH[3]          = POS_LEDS_FRONTARM_F[LEFT]  + NUM_LEDS_FRONTARM_F;
   POS_LEDS_FRONTARM_R[LEFT]  = POS_LEDS_FLASH[3]          + NUM_LEDS_FLASH;
-  
+
   POS_LEDS_LANDING[0]        = POS_LEDS_FRONTARM_R[LEFT]  + NUM_LEDS_FRONTARM_R;
   POS_LEDS_LANDING[1]        = POS_LEDS_LANDING[0]        + NUM_LEDS_LANDING1;
 
   POS_LEDS_SIDEARMS[LEFT]    = POS_LEDS_LANDING[1]        + NUM_LEDS_LANDING1;
 
-  POS_LEDS_LANDING[2]        = POS_LEDS_SIDEARMS[LEFT]    + NUM_LEDS_SIDEARMS;  
+  POS_LEDS_LANDING[2]        = POS_LEDS_SIDEARMS[LEFT]    + NUM_LEDS_SIDEARMS;
   POS_LEDS_LANDING[3]        = POS_LEDS_LANDING[2]        + NUM_LEDS_LANDING2;
   POS_LEDS_LANDING[4]        = POS_LEDS_LANDING[3]        + NUM_LEDS_LANDING1;
-  
+
   FastLED.addLeds<LEDTYPE, DATA_PIN, RGBORDER>(leds, NUM_LEDS_TOTAL);
   #ifdef standalone
     Serial.begin(9600);
@@ -427,7 +437,7 @@ byte rc_dimmer() {          // ppm to byte (min 0 / max 255)
   double factor = (PWM_MAX - PWM_MIN) / 255;
   /*
    * double ppm_val = ap_chan_raw[LED_DIMM_CHAN] - PWM_MIN;
-   * float dim = ppm_val / factor; 
+   * float dim = ppm_val / factor;
    */
   byte TARGET_DIM;
   if ( (ap_chan_raw[LED_DIMM_CHAN] - PWM_MIN ) / factor > 255 ) {
@@ -483,7 +493,7 @@ void fc_simulation_mode() {
       ap_fixtype = 2;
       ap_sat_visible = random(SIM_LOOP, 6);
     }
-    
+
     if (SIM_LOOP > 8) {
       ap_fixtype = 3;
       ap_sat_visible = random(6, 20);
@@ -515,14 +525,14 @@ void fc_simulation_mode() {
     if (SIM_LOOP > max_loops - 10) {
       ap_throttle = 0;
     }
-    
+
     if (SIM_LOOP > max_loops - 5) {
       ap_throttle = 0;
       ap_base_mode = 0;
       ap_custom_mode = 0;
       LED_MODE = 0;
     }
-    
+
     if (SIM_LOOP > max_loops) {
       SIM_LOOP = 0;
     } else {
@@ -565,7 +575,7 @@ void fc_simulation_mode() {
     Serial.print(" ALT: ");
     Serial.print(ap_bar_altitude);
     Serial.println();
-    
+
     targetmillisfc_sim_mode = currentmillis + 3000;
   }
 }
@@ -580,32 +590,32 @@ void get_mode() {
    *  LED_MODE  TYPE
    *  1         NO_GPS Flight modes
    *  2         GPS    Flight modes
-   *  3         MANUAL Flight modes    
-   *  4         AUTO   Flight modes    
-   *  5         LAND    
-   *  6         BRAKE    
-   *  7         FLIP    
+   *  3         MANUAL Flight modes
+   *  4         AUTO   Flight modes
+   *  5         LAND
+   *  6         BRAKE
+   *  7         FLIP
    *  8         AUTO_TUNE, ...
    *  999       DISARMED
-   *      
+   *
    *  VALUE  MEANING    LED_MODE
-   *  0      Stabilize  1    
-   *  1      Acro       3    
-   *  2      AltHold    1    
-   *  3      Auto       4    
-   *  4      Guided     4    
-   *  5      Loiter     2    
-   *  6      RTL        4    
-   *  7      Circle     4    
-   *  9      Land       5    
-   *  11     Drift      3    
-   *  13     Sport      1    
-   *  14     Flip       7    
-   *  15     AutoTune   8    
-   *  16     PosHold    2    
+   *  0      Stabilize  1
+   *  1      Acro       3
+   *  2      AltHold    1
+   *  3      Auto       4
+   *  4      Guided     4
+   *  5      Loiter     2
+   *  6      RTL        4
+   *  7      Circle     4
+   *  9      Land       5
+   *  11     Drift      3
+   *  13     Sport      1
+   *  14     Flip       7
+   *  15     AutoTune   8
+   *  16     PosHold    2
    *  17     Brake      6
    *  ...    ...        ...
-   *  
+   *
    *  Mapping of AC Flight modes to LED lighting modes.
    */
   if (ap_base_mode == 1) {
@@ -665,13 +675,13 @@ void get_armed_status(int STATUS, float dim) {
     for (int i = 0; i < NUM_LEDS_ARMED; i++) {
       if (STATUS == 1) {
         switch (ap_base_mode) {
-          case 0:  
+          case 0:
             leds[i+POS_LEDS_ARMED] = CHSV(39,255,255*dim);
             break;
           case 1:
             leds[i+POS_LEDS_ARMED] = CHSV(96,255,255*dim);
             break;
-          default: 
+          default:
             leds[i+POS_LEDS_ARMED] = CHSV(0, 0, 0);
             break;
         }
@@ -707,7 +717,7 @@ void get_gps_status(int STATUS, float dim) {
         case 2: // green
           COLOR = CHSV(96,255,128*dim);
           FREQ = 750;
-          break;         
+          break;
         case 3: // const green
           COLOR = CHSV(96,255,255*dim);
           FREQ = 0;
@@ -795,7 +805,7 @@ void break_light(int STATUS, float dim) {
     }
   }
 
-  
+
 }
 
 //#####################################################################################################
@@ -1110,12 +1120,12 @@ void rotor_lights(byte hue, float dim) {
       case 0:
         if (NUM_LEDS_FRONTARM_R > 0) {
           for (int i = 0; i < NUM_LEDS_FRONTARM_R; i++) {
-            leds[i + POS_LEDS_FRONTARM_R[RIGHT]] = CHSV(0, 0, 0); 
+            leds[i + POS_LEDS_FRONTARM_R[RIGHT]] = CHSV(0, 0, 0);
           }
         }
         if (NUM_LEDS_FRONTARM_F > 0) {
           for (int i = 0; i < NUM_LEDS_FRONTARM_F; i++) {
-            leds[i + POS_LEDS_FRONTARM_F[RIGHT]] = CHSV(hue, 255, 255*dim); 
+            leds[i + POS_LEDS_FRONTARM_F[RIGHT]] = CHSV(hue, 255, 255*dim);
           }
         }
         pos_RL++;
@@ -1123,8 +1133,8 @@ void rotor_lights(byte hue, float dim) {
       case 1:
         if (NUM_LEDS_FRONTARM_F > 0) {
           for (int i = 0; i < NUM_LEDS_FRONTARM_F; i++) {
-            leds[i + POS_LEDS_FRONTARM_F[RIGHT]] = CHSV(0, 0, 0); 
-            leds[i + POS_LEDS_FRONTARM_F[LEFT]] = CHSV(hue, 255, 255*dim); 
+            leds[i + POS_LEDS_FRONTARM_F[RIGHT]] = CHSV(0, 0, 0);
+            leds[i + POS_LEDS_FRONTARM_F[LEFT]] = CHSV(hue, 255, 255*dim);
           }
         }
         pos_RL++;
@@ -1132,12 +1142,12 @@ void rotor_lights(byte hue, float dim) {
       case 2:
         if (NUM_LEDS_FRONTARM_F > 0) {
           for (int i = 0; i < NUM_LEDS_FRONTARM_F; i++) {
-            leds[i + POS_LEDS_FRONTARM_F[LEFT]] = CHSV(0, 0, 0); 
+            leds[i + POS_LEDS_FRONTARM_F[LEFT]] = CHSV(0, 0, 0);
           }
         }
         if (NUM_LEDS_FRONTARM_R > 0) {
           for (int i = 0; i < NUM_LEDS_FRONTARM_R; i++) {
-            leds[i + POS_LEDS_FRONTARM_R[LEFT]] = CHSV(hue, 255, 255*dim); 
+            leds[i + POS_LEDS_FRONTARM_R[LEFT]] = CHSV(hue, 255, 255*dim);
           }
         }
         pos_RL++;
@@ -1145,12 +1155,12 @@ void rotor_lights(byte hue, float dim) {
       case 3:
         if (NUM_LEDS_FRONTARM_R > 0) {
           for (int i = 0; i < NUM_LEDS_FRONTARM_R; i++) {
-            leds[i + POS_LEDS_FRONTARM_R[LEFT]] = CHSV(0, 0, 0); 
+            leds[i + POS_LEDS_FRONTARM_R[LEFT]] = CHSV(0, 0, 0);
           }
         }
         if (NUM_LEDS_REARARMS > 0) {
           for (int i = 0; i < NUM_LEDS_REARARMS; i++) {
-            leds[i + POS_LEDS_REARARMS[0]] = CHSV(39, 255, 255*dim); 
+            leds[i + POS_LEDS_REARARMS[0]] = CHSV(39, 255, 255*dim);
           }
         }
         pos_RL++;
@@ -1158,8 +1168,8 @@ void rotor_lights(byte hue, float dim) {
       case 4:
         if (NUM_LEDS_REARARMS > 0) {
           for (int i = 0; i < NUM_LEDS_REARARMS; i++) {
-            leds[i + POS_LEDS_REARARMS[0]] = CHSV(0, 0, 0); 
-            leds[i + POS_LEDS_REARARMS[1]] = CHSV(39, 255, 255*dim); 
+            leds[i + POS_LEDS_REARARMS[0]] = CHSV(0, 0, 0);
+            leds[i + POS_LEDS_REARARMS[1]] = CHSV(39, 255, 255*dim);
           }
         }
         pos_RL++;
@@ -1167,8 +1177,8 @@ void rotor_lights(byte hue, float dim) {
       case 5:
         if (NUM_LEDS_REARARMS > 0) {
           for (int i = 0; i < NUM_LEDS_REARARMS; i++) {
-            leds[i + POS_LEDS_REARARMS[1]] = CHSV(0, 0, 0); 
-            leds[i + POS_LEDS_REARARMS[2]] = CHSV(39, 255, 255*dim); 
+            leds[i + POS_LEDS_REARARMS[1]] = CHSV(0, 0, 0);
+            leds[i + POS_LEDS_REARARMS[2]] = CHSV(39, 255, 255*dim);
           }
         }
         pos_RL++;
