@@ -1,41 +1,33 @@
 /*
- * Mavlink.ino (extraced from MavLink_FrSkySPort.ino) part of MavLink_FrSkySPort
- *  by
- *  Original Author: Jochen Tuchbreiter (2013)  under (GPL3)
- *  https://code.google.com/p/telemetry-convert/
- * 
- *  Improved by:   
- *    (2014) Rolf Blomgren   
- *    (2014) Christian Swahn
- *    https://github.com/chsw/MavLink_FrSkySPort   
- * 
- *    (2014) Luis Vale   
- *    https://github.com/lvale/MavLink_FrSkySPort
- *    
- *    (2015) Michael Wolkstein
- *    https://github.com/wolkstein/MavLink_FrSkySPort
- *    
- *    (2015) Fnoop Dogg
- *    https://github.com/fnoopdogg/MavLink_FrSkySPort
- *    
- *    (2015) Jochen Kielkopf
- *    https://github.com/Clooney82/MavLink_FrSkySPort
- * 
+ * Mavlink.ino part of MavLink_FrSkySPort
  * https://github.com/Clooney82/MavLink_FrSkySPort
- * 
- * This program is free software; you can redistribute it and/or modify 
+ *
+ * Copyright (C) 2015 Jochen Kielkopf
+ * https://github.com/Clooney82/MavLink_FrSkySPort
+ *
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY, without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ *
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this Program, or any covered work, by linking or
+ * combining it with FrSkySportTelemetry library (or a modified
+ * version of that library), containing parts covered by the terms
+ * of FrSkySportTelemetry library, the licensors of this Program
+ * grant you additional permission to convey the resulting work.
+ * {Corresponding Source for a non-source form of such a combination
+ * shall include the source code for the parts of FrSkySportTelemetry
+ * library used as well as that of the covered work.}
  *
  */
 
@@ -86,7 +78,7 @@ void Mavlink_send_heartbeat() {
     debugSerial.print(millis());
     debugSerial.println("\tSending heartbeat message.");
   #endif
-  
+
   //mavlink_msg_heartbeat_pack(123, 123, &msg, MAV_TYPE_ONBOARD_CONTROLLER, MAV_AUTOPILOT_INVALID, MAV_MODE_PREFLIGHT, <CUSTOM_MODE>, MAV_STATE_STANDBY);
   mavlink_msg_heartbeat_pack(mavlink_system.sysid, mavlink_system.compid, &msg, 18, 8, 0, 0, 4);
   len = mavlink_msg_to_send_buffer(buf, &msg);
@@ -104,15 +96,12 @@ void Mavlink_config_connection() {
     debugSerial.println("\tSetting up Mavlink streams");
   #endif
   digitalWrite(led,HIGH);
+  // mavlink_msg_request_data_stream_pack(0xFF,0xBE,&msg,1,1,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
   mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_EXTENDED_STATUS, MSG_RATE, START);
   len = mavlink_msg_to_send_buffer(buf, &msg);
   _MavLinkSerial.write(buf,len);
   delay(10);
   mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_EXTRA2, MSG_RATE, START);
-  len = mavlink_msg_to_send_buffer(buf, &msg);
-  _MavLinkSerial.write(buf,len);
-  delay(10);
-  mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_EXTRA3, MSG_RATE, START);
   len = mavlink_msg_to_send_buffer(buf, &msg);
   _MavLinkSerial.write(buf,len);
   delay(10);
@@ -188,10 +177,10 @@ void Mavlink_check_connection() {
  * *** Receive Mavlink Messages:                       ***
  * *******************************************************
  */
-void _MavLink_receive() { 
+void _MavLink_receive() {
 
-  while(_MavLinkSerial.available()) 
-  { 
+  while(_MavLinkSerial.available())
+  {
     uint8_t c = _MavLinkSerial.read();
     if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status) && (AP_SYSID == msg.sysid && AP_CMPID == msg.compid)) // only proceed with autopilot messages
     {
@@ -203,7 +192,7 @@ void _MavLink_receive() {
       #ifdef DEBUG_APM_MAVLINK_MSGS
         debugSerial.print(millis());
         debugSerial.print("\tMSG: ");
-        debugSerial.print(msg.msgid);        
+        debugSerial.print(msg.msgid);
         debugSerial.println();
       #endif
       switch(msg.msgid)
@@ -225,9 +214,9 @@ void _MavLink_receive() {
             debugSerial.print(mavlink_msg_heartbeat_get_custom_mode(&msg));
             debugSerial.println();
           #endif
-          
-          hb_count++;   
-          MavLink_Connected_timer=millis() + 1500; 
+
+          hb_count++;
+          MavLink_Connected_timer=millis() + 1500;
           #ifdef DEBUG_APM_CONNECTION
             debugSerial.print(millis());
             debugSerial.print("\t\theartbeat count:");
@@ -252,7 +241,7 @@ void _MavLink_receive() {
           ap_battery_remaining = mavlink_msg_sys_status_get_battery_remaining(&msg); //battery capacity reported in %
           storeVoltageReading(ap_voltage_battery);
           storeCurrentReading(ap_current_battery);
-  
+
           #ifdef DEBUG_APM_BAT
             debugSerial.print(millis());
             debugSerial.print("\tMAVLINK_MSG_ID_SYS_STATUS: voltage_battery: ");
@@ -272,7 +261,7 @@ void _MavLink_receive() {
               else if (ap_voltage_battery > 4250)  temp_cell_count = 2;
               else temp_cell_count = 0;
               if (temp_cell_count > ap_cell_count)
-                ap_cell_count = temp_cell_count;          
+                ap_cell_count = temp_cell_count;
             }
           #else
             if(ap_voltage_battery > 21000) temp_cell_count = 6;
@@ -293,7 +282,7 @@ void _MavLink_receive() {
         case MAVLINK_MSG_ID_GPS_RAW_INT:
           ap_fixtype = mavlink_msg_gps_raw_int_get_fix_type(&msg);                               // 0 = No GPS, 1 =No Fix, 2 = 2D Fix, 3 = 3D Fix
           ap_sat_visible =  mavlink_msg_gps_raw_int_get_satellites_visible(&msg);          // numbers of visible satelites
-          gps_status = (ap_sat_visible*10) + ap_fixtype; 
+          gps_status = (ap_sat_visible*10) + ap_fixtype;
           ap_gps_hdop = mavlink_msg_gps_raw_int_get_eph(&msg);
           // Max 8 bit
           if(ap_gps_hdop == 0 || ap_gps_hdop > 255)
@@ -303,13 +292,13 @@ void _MavLink_receive() {
             ap_longitude = mavlink_msg_gps_raw_int_get_lon(&msg);
             ap_gps_altitude = mavlink_msg_gps_raw_int_get_alt(&msg);      // 1m = 1000
             ap_gps_speed = mavlink_msg_gps_raw_int_get_vel(&msg);         // 100 = 1m/s
-            ap_cog = mavlink_msg_gps_raw_int_get_cog(&msg)/100;          
+            ap_cog = mavlink_msg_gps_raw_int_get_cog(&msg)/100;
           }
           else
           {
-            ap_gps_speed = 0;  
+            ap_gps_speed = 0;
           }
-          #ifdef DEBUG_APM_GPS_RAW    
+          #ifdef DEBUG_APM_GPS_RAW
             debugSerial.print(millis());
             debugSerial.print("\tMAVLINK_MSG_ID_GPS_RAW_INT: fixtype: ");
             debugSerial.print(ap_fixtype);
@@ -323,7 +312,7 @@ void _MavLink_receive() {
             debugSerial.print(mavlink_msg_gps_raw_int_get_eph(&msg)/100.0);
             debugSerial.print(", alt: ");
             debugSerial.print(mavlink_msg_gps_raw_int_get_alt(&msg));
-            debugSerial.println();                                     
+            debugSerial.println();
           #endif
           break;
         /*
@@ -335,7 +324,7 @@ void _MavLink_receive() {
           storeAccX(mavlink_msg_raw_imu_get_xacc(&msg) / 10);
           storeAccY(mavlink_msg_raw_imu_get_yacc(&msg) / 10);
           storeAccZ(mavlink_msg_raw_imu_get_zacc(&msg) / 10);
-  
+
           #ifdef DEBUG_APM_ACC
             debugSerial.print(millis());
             debugSerial.print("\tMAVLINK_MSG_ID_RAW_IMU: xacc: ");
@@ -365,7 +354,7 @@ void _MavLink_receive() {
             ap_pitch_angle = 180-mavlink_msg_attitude_get_pitch(&msg)*180/3.1416; //value comes in rads, convert to deg
           }
           ap_yaw_angle = (mavlink_msg_attitude_get_yaw(&msg)+3.1416)*162.9747; //value comes in rads, add pi and scale to 0 to 1024
-        
+
           #ifdef DEBUG_APM_ATTITUDE
             debugSerial.print(millis());
             debugSerial.print("\tMAVLINK Roll Angle: ");
@@ -405,9 +394,9 @@ void _MavLink_receive() {
         #ifdef USE_RC_CHANNELS
         case MAVLINK_MSG_ID_RC_CHANNELS:
           ap_chancount = mavlink_msg_rc_channels_get_chancount(&msg);     // Number of RC Channels used
-          ap_chan_raw[1] = mavlink_msg_rc_channels_get_chan1_raw(&msg);   // The PPM values of the RC channels received. 
-          ap_chan_raw[2] = mavlink_msg_rc_channels_get_chan2_raw(&msg);   // The standard PPM modulation is as follows: 
-          ap_chan_raw[3] = mavlink_msg_rc_channels_get_chan3_raw(&msg);   // 1000 microseconds: 0%, 2000 microseconds: 100%. 
+          ap_chan_raw[1] = mavlink_msg_rc_channels_get_chan1_raw(&msg);   // The PPM values of the RC channels received.
+          ap_chan_raw[2] = mavlink_msg_rc_channels_get_chan2_raw(&msg);   // The standard PPM modulation is as follows:
+          ap_chan_raw[3] = mavlink_msg_rc_channels_get_chan3_raw(&msg);   // 1000 microseconds: 0%, 2000 microseconds: 100%.
           ap_chan_raw[4] = mavlink_msg_rc_channels_get_chan4_raw(&msg);   // Individual receivers/transmitters might violate this specification.
           ap_chan_raw[5] = mavlink_msg_rc_channels_get_chan5_raw(&msg);
           ap_chan_raw[6] = mavlink_msg_rc_channels_get_chan6_raw(&msg);
@@ -423,7 +412,7 @@ void _MavLink_receive() {
           ap_chan_raw[16] = mavlink_msg_rc_channels_get_chan16_raw(&msg);
           ap_chan_raw[17] = mavlink_msg_rc_channels_get_chan17_raw(&msg);
           ap_chan_raw[18] = mavlink_msg_rc_channels_get_chan18_raw(&msg);
-  
+
           #ifdef DEBUG_APM_RC_CHANNELS
           if (millis() > RC_DEBUG_TIMEOUT) {
             RC_DEBUG_TIMEOUT = millis() + 3000;
@@ -491,35 +480,6 @@ void _MavLink_receive() {
             debugSerial.print(ap_climb_rate);
             debugSerial.println();
           #endif
-          break; 
-        /*
-         * *****************************************************
-         * *** MAVLINK Message #241 - VIBRATION                 ***
-         * *****************************************************
-         */
-        case MAVLINK_MSG_ID_VIBRATION:
-          vibration_x   = mavlink_msg_vibration_get_vibration_x(&msg);
-          vibration_y = mavlink_msg_vibration_get_vibration_y(&msg);
-          vibration_z = mavlink_msg_vibration_get_vibration_z(&msg);
-          clipping_0 = mavlink_msg_vibration_get_clipping_0(&msg);
-          clipping_1 = mavlink_msg_vibration_get_clipping_1(&msg);
-          clipping_2 = mavlink_msg_vibration_get_clipping_2(&msg);
-          #ifdef DEBUG_APM_VIBRATION
-            debugSerial.print(millis());
-            debugSerial.print("\tMAVLINK_MSG_ID_VIBRATION: vibration_x: ");
-            debugSerial.print(vibration_x);
-            debugSerial.print(", vibration_y: ");
-            debugSerial.print(vibration_y);
-            debugSerial.print(", vibration_z: ");
-            debugSerial.print(vibration_z);
-            debugSerial.print(", clipping_0: ");
-            debugSerial.print(clipping_0);
-            debugSerial.print(", clipping_1: ");
-            debugSerial.print(clipping_1);
-            debugSerial.print(", clipping_2: ");
-            debugSerial.print(clipping_2);
-            debugSerial.println();
-          #endif
           break;
         /*
          * *****************************************************
@@ -569,7 +529,7 @@ void _MavLink_receive() {
             debugSerial.print(", custom_mode: ");
             debugSerial.print(mavlink_msg_heartbeat_get_custom_mode(&msg));
             debugSerial.println();
-          #endif              
+          #endif
           break;
       }
     } else
@@ -599,11 +559,9 @@ void _MavLink_receive() {
             debugSerial.print(", custom_mode: ");
             debugSerial.print(mavlink_msg_heartbeat_get_custom_mode(&msg));
             debugSerial.println();
-          #endif              
+          #endif
           break;
       }
-    }      
+    }
   }
 }
-
-

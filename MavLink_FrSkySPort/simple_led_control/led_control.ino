@@ -1,5 +1,6 @@
 /*
  * led_control.ino part of MavLink_FrSkySPort
+ * https://github.com/Clooney82/MavLink_FrSkySPort
  *
  * Copyright (C) 2015 Jochen Kielkopf
  * https://github.com/Clooney82/MavLink_FrSkySPort
@@ -15,29 +16,39 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ *
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this Program, or any covered work, by linking or
+ * combining it with FrSkySportTelemetry library (or a modified
+ * version of that library), containing parts covered by the terms
+ * of FrSkySportTelemetry library, the licensors of this Program
+ * grant you additional permission to convey the resulting work.
+ * {Corresponding Source for a non-source form of such a combination
+ * shall include the source code for the parts of FrSkySportTelemetry
+ * library used as well as that of the covered work.}
  *
  * ====================================================================================================
  *
  * Lighting Controller for ArduCopter based on Teensy 3.1 and
  * APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1
- * 
+ *
  * Teensy 3.1 PIN 6 is used for controlling WS2812B LEDs
  * Keep in mind teensy only provide 3.3V Output, to control WS2812B LEDs you need to shift this to 5V.
- * possible Solution:  *1: https://www.pjrc.com/teensy/td_libs_OctoWS2811.html                      
+ * possible Solution:  *1: https://www.pjrc.com/teensy/td_libs_OctoWS2811.html
  *                     *2: http://forums.adafruit.com/viewtopic.php?f=47&t=48908&p=246902#p246902
- * 
+ *
  * To Use this script in Simulation Mode (#define SIMULATION_MODE)
  * In SIMULATION_MODE script can run stand alone on your development environment, but no input is possible.
- * 
+ *
  * This is a simple Version of Led-Control addon for MavLink_FrSkySPort.
  * This can be used for a normal Quadcopter with identical number of LEDs per arm.
- * 
+ *
  * SIMPLE VERSION
- * 
+ *
  * IF YOU WANT TO USE IT, REPACE led_control.ino for upper dir with this version.
- * 
+ *
  */
 #ifdef USE_TEENSY_LED_SUPPORT
 //#####################################################################################################
@@ -92,7 +103,7 @@
 #define NUM_LEDS_GPS       1  // Number of LEDs used for GPS-STATUS
 #define NUM_LEDS_ARMED     1  // Number of LEDs used for ARMED-STATUS
 
-#define NUM_LEDS_TOTAL    38  // Sum of all LEDs ( NUM_ARMS * NUM_LEDS_PER_ARM ) + ( NUM_ARMS * NUM_LEDS_FLASH ) + NUM_LEDS_GPS + NUM_LEDS_ARMED 
+#define NUM_LEDS_TOTAL    38  // Sum of all LEDs ( NUM_ARMS * NUM_LEDS_PER_ARM ) + ( NUM_ARMS * NUM_LEDS_FLASH ) + NUM_LEDS_GPS + NUM_LEDS_ARMED
 
 
 //#####################################################################################################
@@ -191,19 +202,19 @@ void Teensy_LED_Init()  {   // comment in SIMULATION_MODE
 */
   POS_LEDS_ARMED   = 0;
   POS_LEDS_GPS     = POS_LEDS_ARMED    + NUM_LEDS_ARMED;
-  
+
   POS_LEDS_REARARMS[LEFT] = POS_LEDS_GPS      + NUM_LEDS_GPS;
   POS_LEDS_FLASH[0]  = POS_LEDS_REARARMS[LEFT]  + NUM_LEDS_PER_ARM;
-  
+
   POS_LEDS_REARARMS[RIGHT] = POS_LEDS_FLASH[0] + NUM_LEDS_FLASH;
   POS_LEDS_FLASH[1]  = POS_LEDS_REARARMS[RIGHT]  + NUM_LEDS_PER_ARM;
-  
+
   POS_LEDS_FRONTARMS[RIGHT] = POS_LEDS_FLASH[0] + NUM_LEDS_FLASH;
   POS_LEDS_FLASH[2]      = POS_LEDS_FRONTARMS[RIGHT]  + NUM_LEDS_PER_ARM;
 
   POS_LEDS_FRONTARMS[LEFT]  = POS_LEDS_FLASH[2] + NUM_LEDS_FLASH;
   POS_LEDS_FLASH[3]      = POS_LEDS_FRONTARMS[LEFT]   + NUM_LEDS_PER_ARM;
-  
+
   FastLED.addLeds<LEDTYPE, DATA_PIN, RGBORDER>(leds, NUM_LEDS_TOTAL);
   #ifdef standalone
     Serial.begin(9600);
@@ -351,7 +362,7 @@ byte rc_dimmer() {          // ppm to byte (min 0 / max 255)
   double factor = (PWM_MAX - PWM_MIN) / 255;
   /*
    * double ppm_val = ap_chan_raw[LED_DIMM_CHAN] - PWM_MIN;
-   * float dim = ppm_val / factor; 
+   * float dim = ppm_val / factor;
    */
   byte TARGET_DIM;
   if ( (ap_chan_raw[LED_DIMM_CHAN] - PWM_MIN ) / factor > 255 ) {
@@ -399,7 +410,7 @@ void fc_simulation_mode() {
       ap_fixtype = 2;
       ap_sat_visible = random(SIM_LOOP, 6);
     }
-    
+
     if (SIM_LOOP > 8) {
       ap_fixtype = 3;
       ap_sat_visible = random(6, 20);
@@ -431,14 +442,14 @@ void fc_simulation_mode() {
     if (SIM_LOOP > max_loops - 10) {
       ap_throttle = 0;
     }
-    
+
     if (SIM_LOOP > max_loops - 5) {
       ap_throttle = 0;
       ap_base_mode = 0;
       ap_custom_mode = 0;
       LED_MODE = 0;
     }
-    
+
     if (SIM_LOOP > max_loops) {
       SIM_LOOP = 0;
     } else {
@@ -497,32 +508,32 @@ void get_mode() {
    *  LED_MODE  TYPE
    *  1         NO_GPS Flight modes
    *  2         GPS    Flight modes
-   *  3         MANUAL Flight modes    
-   *  4         AUTO   Flight modes    
-   *  5         LAND    
-   *  6         BRAKE    
-   *  7         FLIP    
+   *  3         MANUAL Flight modes
+   *  4         AUTO   Flight modes
+   *  5         LAND
+   *  6         BRAKE
+   *  7         FLIP
    *  8         AUTO_TUNE, ...
    *  999       DISARMED
-   *      
+   *
    *  VALUE  MEANING    LED_MODE
-   *  0      Stabilize  1    
-   *  1      Acro       3    
-   *  2      AltHold    1    
-   *  3      Auto       4    
-   *  4      Guided     4    
-   *  5      Loiter     2    
-   *  6      RTL        4    
-   *  7      Circle     4    
-   *  9      Land       5    
-   *  11     Drift      3    
-   *  13     Sport      1    
-   *  14     Flip       7    
-   *  15     AutoTune   8    
-   *  16     PosHold    2    
+   *  0      Stabilize  1
+   *  1      Acro       3
+   *  2      AltHold    1
+   *  3      Auto       4
+   *  4      Guided     4
+   *  5      Loiter     2
+   *  6      RTL        4
+   *  7      Circle     4
+   *  9      Land       5
+   *  11     Drift      3
+   *  13     Sport      1
+   *  14     Flip       7
+   *  15     AutoTune   8
+   *  16     PosHold    2
    *  17     Brake      6
    *  ...    ...        ...
-   *  
+   *
    *  Mapping of AC Flight modes to LED lighting modes.
    */
   if (ap_base_mode == 1) {
@@ -578,13 +589,13 @@ void get_armed_status(int STATUS, float dim) {
     for (int i = 0; i < NUM_LEDS_ARMED; i++) {
       if (STATUS == 1) {
         switch (ap_base_mode) {
-          case 0:  
+          case 0:
             leds[i + POS_LEDS_ARMED] = CHSV(39,255,255*dim);
             break;
           case 1:
             leds[i + POS_LEDS_ARMED] = CHSV(96,255,255*dim);
             break;
-          default: 
+          default:
             leds[i + POS_LEDS_ARMED] = CHSV(0, 0, 0);
             break;
         }
@@ -620,7 +631,7 @@ void get_gps_status(int STATUS, float dim) {
         case 2: // green
           COLOR = CHSV(96,255,128*dim);
           FREQ = 750;
-          break;         
+          break;
         case 3: // const green
           COLOR = CHSV(96,255,255*dim);
           FREQ = 0;
@@ -710,7 +721,7 @@ void rear_arms(int STATUS, float dim) {
 //#####################################################################################################
 void flash_pos_light(int STATUS, float dim) {
   int DELAY = 1000;
-  
+
   if (dim < 0.3) dim = 0.3;
 
   if (currentmillis >= targetmillis_FLASH) {
@@ -734,7 +745,7 @@ void flash_pos_light(int STATUS, float dim) {
     }
     targetmillis_FLASH = lastmillis + DELAY;
   }
-  
+
 }
 
 //#####################################################################################################

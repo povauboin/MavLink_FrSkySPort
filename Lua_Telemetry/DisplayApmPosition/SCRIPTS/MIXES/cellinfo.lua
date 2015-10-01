@@ -2,7 +2,7 @@
 -- CellInfo lua
 --
 -- Copyright (C) 2014 Michael Wolkstein
--- 
+--
 -- https://github.com/Clooney82/MavLink_FrSkySPort
 --
 -- This program is free software; you can redistribute it and/or modify
@@ -16,8 +16,7 @@
 -- GNU General Public License for more details.
 --
 -- You should have received a copy of the GNU General Public License
--- along with this program; if not, write to the Free Software
--- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-- along with this program; if not, see <http://www.gnu.org/licenses>.
 --
 
 local inputs = { {"Crit,V/100", VALUE,300,350,340}, {"Use Horn", VALUE, 0, 3, 0}, {"Warn,V/100", VALUE, 310, 380, 350}, {"Rep, Sec", VALUE, 3, 30, 4},{"Drop, mV", VALUE, 1, 500, 100} }
@@ -56,11 +55,11 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 	if newtime-lastimeplaysound>=repeattime then
 		cellmin=getValue("Cmin") + 0.0001 --- 214 = cell-min
 		lastimeplaysound = newtime
-		
+
 		firstitem = math.floor(cellmin)
 		miditem = math.floor((cellmin-firstitem) * 10)
 		lastitem = round((((cellmin-firstitem) * 10)-math.floor(((cellmin-firstitem) * 10))) *10)
-	  
+
 		if cellmin<=2.0 then --silent
 		elseif cellmin<=voltcritcal/100 then --critical
 			if horn>0 then

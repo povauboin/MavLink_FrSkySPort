@@ -1,67 +1,78 @@
 /*
  * MavLink_FrSkySPort
  * https://github.com/Clooney82/MavLink_FrSkySPort
- * 
- *  Original Author: Jochen Tuchbreiter (2013)  under (GPL3)
- *  https://code.google.com/p/telemetry-convert/
- * 
- *  Improved by:   
- *    (2014) Rolf Blomgren   
+ *
+ * Copyright (C) 2014 Rolf Blomgren
+ *  http://diydrones.com/forum/topics/amp-to-frsky-x8r-sport-converter
+ *  Inspired by https://code.google.com/p/telemetry-convert/
+ *    (C) 2013 Jochen Tuchbreiter under (GPL3)
+ *
+ *  Improved by:
  *    (2014) Christian Swahn
- *    https://github.com/chsw/MavLink_FrSkySPort   
- * 
- *    (2014) Luis Vale   
+ *    https://github.com/chsw/MavLink_FrSkySPort
+ *
+ *    (2014) Luis Vale
  *    https://github.com/lvale/MavLink_FrSkySPort
- *    
+ *
  *    (2015) Michael Wolkstein
  *    https://github.com/wolkstein/MavLink_FrSkySPort
- *    
- *    (2015) Fnoop Dogg
- *    https://github.com/fnoopdogg/MavLink_FrSkySPort
- *    
+ *
  *    (2015) Jochen Kielkopf
  *    https://github.com/Clooney82/MavLink_FrSkySPort
- * 
- * This program is free software; you can redistribute it and/or modify 
+ *
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY, without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
  *
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this Program, or any covered work, by linking or
+ * combining it with FrSkySportTelemetry library (or a modified
+ * version of that library), containing parts covered by the terms
+ * of FrSkySportTelemetry library, the licensors of this Program
+ * grant you additional permission to convey the resulting work.
+ * {Corresponding Source for a non-source form of such a combination
+ * shall include the source code for the parts of FrSkySportTelemetry
+ * library used as well as that of the covered work.}
+ *
+ */
+/*
  * ====================================================================================================
- * 
- * APM2.5 Mavlink to FrSky X8R SPort interface using Teensy 3.1  http://www.pjrc.com/teensy/index.html
+ *
+ * Mavlink to FrSky X8R SPort Interface using Teensy 3.1
+ *     http://www.pjrc.com/teensy/index.html
  *  based on ideas found here http://code.google.com/p/telemetry-convert/
- * ******************************************************
- * 
+ * ========================================================================
+ *
  * Cut board on the backside to separate Vin from VUSB
- *   
+ *
  * Connection on Teensy 3.1:
- * ***********************************
+ * -----------------------------------
  *  SPort S --> TX1
  *  SPort + --> Vin
  *  SPort - --> GND
  *  APM Telemetry DF13-5 Pin 2 --> RX2
  *  APM Telemetry DF13-5 Pin 3 --> TX2
- *  APM Telemetry DF13-5 Pin 5 --> GND 
- * 
- * Note that when used with other telemetry device (3DR Radio 433 or 3DR Bluetooth tested) in parallel 
- * on the same port the Teensy should only Receive, so please remove it's TX output (RX input on PixHawk or APM) 
- * 
- * Analog input  --> A0 (pin14) on Teensy 3.1 ( max 3.3 V ) - Not used 
- * 
+ *  APM Telemetry DF13-5 Pin 5 --> GND
+ *
+ * Note that when used with other telemetry device (3DR Radio 433 or 3DR Bluetooth tested) in parallel
+ * on the same port the Teensy should only Receive, so please remove it's TX output (RX input on PixHawk or APM)
+ *
+ * Analog input  --> A0 (pin14) on Teensy 3.1 ( max 3.3 V ) - Not used
+ *
  * This is the data we send to FrSky, you can change this to have your own set of data
- * ******************************************************
+ * ----------------------------------------------------------------------------------------------------
  * Data transmitted to FrSky Taranis:
- * Cell            ( Voltage of Cell=Cells/(Number of cells). [V]) 
+ * Cell            ( Voltage of Cell=Cells/(Number of cells). [V])
  * Cells           ( Voltage from LiPo [V] )
  * A2              ( HDOP value * 25 - 8 bit resolution)
  * A3              ( Roll angle from -Pi to +Pi radians, converted to a value between 0 and 1024)
@@ -82,7 +93,7 @@
  * AccX            ( X Axis average vibration m/s?)
  * AccY            ( Y Axis average vibration m/s?)
  * AccZ            ( Z Axis average vibration m/s?)
- * ******************************************************
+ * ====================================================================================================
  */
 /*
  * *******************************************************
@@ -123,7 +134,7 @@
 //#define USE_TEENSY_LED_SUPPORT                          // Enable LED-Controller functionality
 #define SEND_STATUS_TEXT_MESSAGE
 
-/* 
+/*
  * *******************************************************
  * *** Debug Options:                                  ***
  * *******************************************************
@@ -141,8 +152,7 @@
 //#define DEBUG_APM_GLOBAL_POSITION_INT_COV   // MSG #63  - planned - currently not implemented - not supported by APM
 //#define DEBUG_APM_RC_CHANNELS               // MSG #65
 //#define DEBUG_APM_VFR_HUD                   // MSG #74
-//#define DEBUG_APM_VIBRATION                 // MSG #241
-//#define DEBUG_APM_STATUSTEXT                // MSG #254 - 
+//#define DEBUG_APM_STATUSTEXT                // MSG #254 -
 //#define DEBUG_APM_PARSE_STATUSTEXT
 //#define DEBUG_GIMBAL_HEARTBEAT
 //#define DEBUG_OTHER_HEARTBEAT
@@ -165,7 +175,7 @@
 //#define DEBUG_LIPO_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
 
 
-/* 
+/*
  * *******************************************************
  * *** Variables Definitions:                          ***
  * *******************************************************
@@ -174,12 +184,12 @@
 // if you build an six cell network then MAXCELLS is 6
 #define MAXCELLS 3
 
-/* 
+/*
  * *******************************************************
  * *** Mavlink Definitions:                            ***
  * *******************************************************
  */
-/* 
+/*
  * *******************************************************
  * *** Message #0  HEARTHBEAT                          ***
  * *******************************************************
@@ -191,7 +201,7 @@ int32_t     ap_custom_mode        = -1;
 //uint8_t     ap_system_status      =  0;
 uint8_t     ap_mavlink_version    =  0;
 
-/* 
+/*
  * *******************************************************
  * *** Message #1  SYS_STATUS                          ***
  * *******************************************************
@@ -199,22 +209,22 @@ uint8_t     ap_mavlink_version    =  0;
 uint16_t    ap_voltage_battery    = 0;    // 1000 = 1V | Battery voltage, in millivolts (1 = 1 millivolt)
 int16_t     ap_current_battery    = 0;    //   10 = 1A | Battery current, in 10*milliamperes (1 = 10 milliampere),
                                           //              -1: autopilot does not measure the current.
-int8_t      ap_battery_remaining  = 0;    // Remaining battery energy: (0%: 0, 100%: 100), 
+int8_t      ap_battery_remaining  = 0;    // Remaining battery energy: (0%: 0, 100%: 100),
                                           //              -1: autopilot estimate the remaining battery
 
-/* 
+/*
  * *******************************************************
  * *** Message #24  GPS_RAW_INT                        ***
  * *******************************************************
  */
-uint8_t     ap_fixtype            =   0;    // 0 = No GPS, 1 = No Fix, 2 = 2D Fix, 3 = 3D Fix, 4 = DGPS, 5 = RTK. 
-                                            // Some applications will not use the value of this field unless it is at least two, 
+uint8_t     ap_fixtype            =   0;    // 0 = No GPS, 1 = No Fix, 2 = 2D Fix, 3 = 3D Fix, 4 = DGPS, 5 = RTK.
+                                            // Some applications will not use the value of this field unless it is at least two,
                                             // so always correctly fill in the fix.
 uint8_t     ap_sat_visible        =   0;    // Number of visible Satelites
-// FrSky Taranis uses the first recieved lat/long as homeposition. 
+// FrSky Taranis uses the first recieved lat/long as homeposition.
 int32_t     ap_latitude           =   0;    // Latitude (WGS84), in degrees * 1E7
 int32_t     ap_longitude          =   0;    // Longitude (WGS84), in degrees * 1E7
-int32_t     ap_gps_altitude       =   0;    // Altitude (AMSL, NOT WGS84), in meters * 1000 (positive for up). 
+int32_t     ap_gps_altitude       =   0;    // Altitude (AMSL, NOT WGS84), in meters * 1000 (positive for up).
                                             // Note that virtually all GPS modules provide the AMSL altitude in addition to the WGS84 altitude.
 //int32_t latitude  = 0;
 //int32_t longitude = 0;
@@ -223,7 +233,7 @@ uint16_t    ap_gps_hdop           = 255;    // GPS HDOP horizontal dilution of p
 //uint16_t    ap_gps_vdop           =   0;    // GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
 uint32_t    ap_cog                =   0;    // Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
 
-/* 
+/*
  * *******************************************************
  * *** Message #30  ATTITUDE                           ***
  * *** needed to use current Angles and axis speeds    ***
@@ -236,26 +246,26 @@ uint32_t    ap_roll_speed         = 0;      // Roll angular speed (rad/s)
 uint32_t    ap_pitch_speed        = 0;      // Pitch angular speed (rad/s)
 uint32_t    ap_yaw_speed          = 0;      // Yaw angular speed (rad/s)
 
-/* 
+/*
  * *******************************************************
  * *** Message #63  GLOBAL_POSITION_INT_COV            ***
  * *** Needed for Date/Time submission to RC           ***
  * *******************************************************
  */
-time_t      ap_gps_time_unix_utc  = 0;      // Timestamp (microseconds since UNIX epoch) in UTC. 
-                                            // 0 for unknown. 
+time_t      ap_gps_time_unix_utc  = 0;      // Timestamp (microseconds since UNIX epoch) in UTC.
+                                            // 0 for unknown.
                                             // Commonly filled by the precision time source of a GPS receiver.
 
 // Message #65 RC_CHANNELS
 #ifdef USE_RC_CHANNELS
-uint8_t     ap_chancount          = 0;      // Total number of RC channels being received. 
+uint8_t     ap_chancount          = 0;      // Total number of RC channels being received.
                                             // This can be larger than 18, indicating that more channels are available but
                                             // not given in this message. This value should be 0 when no RC channels are available.
-uint16_t    ap_chan_raw[18]       = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};  // RC channel x input value, in microseconds. 
+uint16_t    ap_chan_raw[18]       = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};  // RC channel x input value, in microseconds.
                                                                             // A value of UINT16_MAX (65535U) implies the channel is unused.
 #endif
 
-/* 
+/*
  * *******************************************************
  * *** Message #74  VFR_HUD                            ***
  * *******************************************************
@@ -269,19 +279,7 @@ int32_t     ap_bar_altitude       = 0;    // 100 = 1m
 int32_t     ap_climb_rate         = 0;    // 100 = 1m/s
 
 
-/* 
- * *******************************************************
- * *** Message #24  VIBRATION                          ***
- * *******************************************************
- */
-float vibration_x                 = 0; /*< Vibration levels on X-axis*/
-float vibration_y                 = 0; /*< Vibration levels on Y-axis*/
-float vibration_z                 = 0; /*< Vibration levels on Z-axis*/
-uint32_t clipping_0               = 0; /*< first accelerometer clipping count*/
-uint32_t clipping_1               = 0; /*< second accelerometer clipping count*/
-uint32_t clipping_2               = 0; /*< third accelerometer clipping count*/
-
-/* 
+/*
  * *******************************************************
  * *** Message #253  MAVLINK_MSG_ID_STATUSTEXT         ***
  * *******************************************************
@@ -303,19 +301,19 @@ mavlink_statustext_t statustext;
 */
 
 
-/* 
+/*
  * *******************************************************
  * *** These are special for FrSky:                    ***
  * *******************************************************
  */
 
 int32_t     gps_status            = 0;    // (ap_sat_visible * 10) + ap_fixtype
-                                          // ex. 83 = 8 sattelites visible, 3D lock 
+                                          // ex. 83 = 8 sattelites visible, 3D lock
 uint8_t     ap_cell_count         = 0;
 
-/* 
+/*
  * *******************************************************
- * *** Variables needed for Mavlink Connection Status  ***                    
+ * *** Variables needed for Mavlink Connection Status  ***
  * *** and starting FrSkySPort Telemetry               ***
  * *******************************************************
  */
@@ -344,13 +342,13 @@ bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initial
 #endif
 
 
-/* 
+/*
  * *******************************************************
  * *** End of Variables definition                     ***
  * *******************************************************
  */
 
-/* 
+/*
  * *******************************************************
  * *** Setup:                                          ***
  * *******************************************************
@@ -358,11 +356,11 @@ bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initial
 void setup()  {
 
  // delay(100000);
- 
+
   #ifdef USE_SINGLE_CELL_MONITOR
     // Set your custom values (double) for LSCM software divider here.
     // Dependent to your resistor network you can call this function with 1-12 parameter.
-    
+
     //lscm.setCustomCellDivider(1905.331599479, 929.011553273, 615.667808219); // This is an example for three cells
   #endif
 
@@ -370,23 +368,23 @@ void setup()  {
   #ifdef DEBUG_LIPO_SINGLE_CELL_MONITOR
     lscm.setDebug(true);                      // Enable LSCM debug
   #endif
-  
-  
+
+
   #ifdef USE_TEENSY_LED_SUPPORT
     Teensy_LED_Init();                      // Init LED Controller
   #endif
-  
+
   Mavlink_setup();                          // Init Mavlink
-  
+
 }
 
-/* 
+/*
  * *******************************************************
  * *** Main Loop:                                      ***
  * *******************************************************
  */
 void loop()  {
-  
+
   #ifdef USE_SINGLE_CELL_MONITOR
     lscm.process();                         // Read Lipo Cell Informations from Network
   #endif

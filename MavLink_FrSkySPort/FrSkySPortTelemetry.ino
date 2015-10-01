@@ -1,10 +1,10 @@
 /*
  * FrSkySPortTelemetry.ino part of MavLink_FrSkySPort
  * https://github.com/Clooney82/MavLink_FrSkySPort
- * 
+ *
  * Copyright (C) 2015 Jochen Kielkopf
  * https://github.com/Clooney82/MavLink_FrSkySPort
- * 
+ *
  * Improved by:
  *    (2015) Michael Wolkstein
  *    https://github.com/wolkstein/MavLink_FrSkySPort
@@ -20,12 +20,22 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/*
- * 
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ *
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this Program, or any covered work, by linking or
+ * combining it with FrSkySportTelemetry library (or a modified
+ * version of that library), containing parts covered by the terms
+ * of FrSkySportTelemetry library, the licensors of this Program
+ * grant you additional permission to convey the resulting work.
+ * {Corresponding Source for a non-source form of such a combination
+ * shall include the source code for the parts of FrSkySportTelemetry
+ * library used as well as that of the covered work.}
+ *
  */
 
-/* 
+/*
  * *******************************************************
  * *** Inclueds needed for FrSkySPortTelemetry         ***
  * *******************************************************
@@ -43,7 +53,7 @@
 #include "FrSkySportSingleWireSerial.h"
 #include "FrSkySportTelemetry.h"
 
-/* 
+/*
  * *******************************************************
  * *** Define FrSkySPortTelemetry Sensors:             ***
  * *******************************************************
@@ -60,7 +70,7 @@ FrSkySportSensorFuel fuel;                             // Create FUEL sensor wit
 
 #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
   FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
-  #if (MAXCELLS > 6) 
+  #if (MAXCELLS > 6)
     FrSkySportSensorFlvss flvss2(FrSkySportSensor::ID15);  // Create FLVSS sensor with given ID
   #endif
 #endif
@@ -73,7 +83,7 @@ FrSkySportSensorVario vario;                           // Create Variometer sens
 FrSkySportTelemetry telemetry;                         // Create Variometer telemetry object
 
 
-/* 
+/*
  * *******************************************************
  * *** Define some Variables:                          ***
  * *******************************************************
@@ -102,7 +112,7 @@ uint32_t handle_A2_A3_value(uint32_t value)
 }
 
 unsigned long GPS_debug_time = 500;
-/* 
+/*
  * *******************************************************
  * *** Initialize FrSkySPortTelemetry                  ***
  * *******************************************************
@@ -157,14 +167,14 @@ void FrSkySPort_Init()
   #endif
 }
 
-/* 
+/*
  * *******************************************************
  * *** Process and Transmit FrSkySPortTelemetry Data   ***
  * *******************************************************
  */
 void FrSkySPort_Process()
 {
-  /* 
+  /*
    * *****************************************************
    * *** Send the telemetry data                       ***
    * *****************************************************
@@ -172,70 +182,70 @@ void FrSkySPort_Process()
    * that are being polled at given moment
    */
   telemetry.send();
-  /* 
+  /*
    * *****************************************************
    * *** Set current/voltage sensor (FAS) data         ***
    * *****************************************************
    */
   FrSkySportTelemetry_FAS();
 
-  /* 
+  /*
    * *****************************************************
    * *** Set current/voltage sensor (FAS) data         ***
    * *****************************************************
    */
   FrSkySportTelemetry_FLVSS();
-  
-  /* 
+
+  /*
    * *****************************************************
    * *** Set GPS data                                  ***
    * *****************************************************
    */
   FrSkySportTelemetry_GPS();
-  
-  /* 
+
+  /*
    * *****************************************************
    * *** Set RPM/Temperature sensor data               ***
    * *****************************************************
    */
   FrSkySportTelemetry_RPM();
-  
-  /* 
+
+  /*
    * *****************************************************
    * *** Set SP2UART sensor data ( A3 & A4 )           ***
    * *****************************************************
    */
   FrSkySportTelemetry_A3A4();
-  
-  /* 
+
+  /*
    * *****************************************************
    * *** Set variometer data                           ***
    * *****************************************************
    */
   FrSkySportTelemetry_VARIO();
-  
-  /* 
+
+  /*
    * *****************************************************
    * *** Set Accelerometer data                        ***
    * *****************************************************
    */
   FrSkySportTelemetry_ACC();
-  
-  /* 
+
+  /*
    * *****************************************************
    * *** Set Fuel sensor data (Flight Mode)            ***
    * *****************************************************
    */
   FrSkySportTelemetry_FUEL();
 
-  /* 
+  /*
    * *****************************************************
    * *** Set TextMsg sensor data ()                    ***
    * *****************************************************
    */
   FrSkySportTelemetry_TXTMSG();
-  
-  /* 
+
+  /*
    * *****************************************************
    * *** Send the telemetry data                       ***
    * *****************************************************
@@ -247,7 +257,7 @@ void FrSkySPort_Process()
 
 
 
-/* 
+/*
  * *******************************************************
  * *** Set current/voltage sensor (FAS) data           ***
  * *******************************************************
@@ -275,7 +285,7 @@ void FrSkySportTelemetry_FAS() {
   #endif
 }
 
-/* 
+/*
  * *******************************************************
  * *** Set current/voltage sensor (FAS) data           ***
  * *******************************************************
@@ -295,10 +305,10 @@ void FrSkySportTelemetry_FLVSS() {
         debugSerial.print("]: ");
         debugSerial.print(lscm.getCellVoltageAsUint32_T(i) / 1000.0);
         debugSerial.println("Volt");
-        
+
       }
     #endif
-    
+
     switch(lscm.getCellsInUse()) {
       case 1:
         flvss1.setData(lscm.getCellVoltageAsUint32_T(0) / 1000.0);
@@ -358,7 +368,7 @@ void FrSkySportTelemetry_FLVSS() {
         debugSerial.print("]: ");
         debugSerial.print(fake_cell_voltage);
         debugSerial.println("Volt");
-        
+
       }
     #endif
     switch (ap_cell_count) {
@@ -406,36 +416,36 @@ void FrSkySportTelemetry_FLVSS() {
         flvss2.setData(fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage, fake_cell_voltage);
         break;
       #endif
-    }    
+    }
   #endif
 }
 
-/* 
+/*
  * *******************************************************
  * *** Set GPS data                                    ***
  * *******************************************************
  */
 void FrSkySportTelemetry_GPS() {
-  if(ap_fixtype==3) 
+  if(ap_fixtype==3)
   {
     /*
     if(ap_longitude < 0)
       longitude=((abs(ap_longitude)/100)*6);//  | 0xC0000000;
     else
       longitude=((abs(ap_longitude)/100)*6);//  | 0x80000000;
-    
+
       if(ap_latitude < 0 )
       latitude=((abs(ap_latitude)/100)*6);// | 0x40000000;
     else
       latitude=((abs(ap_latitude)/100)*6);
-    */      
+    */
     gps.setData(ap_latitude / 1E7, ap_longitude / 1E7,    // Latitude and longitude in degrees decimal (positive for N/E, negative for S/W)
               ap_gps_altitude / 10.0,         // Altitude (AMSL, NOT WGS84), in meters * 1000 (positive for up). Note that virtually all GPS modules provide the AMSL altitude in addition to the WGS84 altitude.
               ap_gps_speed * 10.0,// / 100.0,            // GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
               ap_heading ,                     // Heading, in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
               ap_gps_hdop);                   // GPS HDOP horizontal dilution of position in cm (m*100)
 //              ap_cog,                         // Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
-  
+
     #ifdef DEBUG_FrSkySportTelemetry_GPS
       if (millis() > GPS_debug_time) {
         debugSerial.print(millis());
@@ -455,11 +465,11 @@ void FrSkySportTelemetry_GPS() {
         debugSerial.print("\tGPSSpeed: ");
         debugSerial.print((ap_gps_speed / 100.0 ));
         debugSerial.print("m/s");
-        
+
         debugSerial.print("\tCog: ");
         debugSerial.print(ap_cog);
         debugSerial.print("°");
-        
+
         debugSerial.print("\tHeading: ");
         debugSerial.print(ap_heading);
         debugSerial.print("°");
@@ -487,12 +497,12 @@ void FrSkySportTelemetry_GPS() {
   }
 }
 
-/* 
+/*
  * *******************************************************
  * *** Set RPM/Temperature sensor data                 ***
  * *******************************************************
- * 
- * 16 bit value: 
+ *
+ * 16 bit value:
  * * bit 1     : armed
  * * bit 2 -  5: severity +1 (0 means no message)
  * * bit 6 - 15: number representing a specific text
@@ -514,7 +524,7 @@ void FrSkySportTelemetry_RPM() {
     if(ap_status_send_count == 0)
     {
        // Reset severity and text-message after we have sent the message
-       ap_status_severity = 0; 
+       ap_status_severity = 0;
        ap_status_text_id = 0;
     }
   }
@@ -547,13 +557,13 @@ void FrSkySportTelemetry_RPM() {
   }
 
   rpm.setData(ap_throttle * 200+ap_battery_remaining*2,    // * 2 if number of blades on Taranis is set to 2 + First 4 digits reserved for battery remaining in %
-              gps_status,         // (ap_sat_visible * 10) + ap_fixtype eg. 83 = 8 sattelites visible, 3D lock 
+              gps_status,         // (ap_sat_visible * 10) + ap_fixtype eg. 83 = 8 sattelites visible, 3D lock
               my_dequeue_status_value);   // Armed Status + Severity + Statustext
 
 
 }
 
-/* 
+/*
  * *****************************************************
  * *** Set SP2UART sensor data ( A3 & A4 )           ***
  * *****************************************************
@@ -572,7 +582,7 @@ void FrSkySportTelemetry_A3A4() {
 
 }
 
-/* 
+/*
  * *******************************************************
  * *** Set variometer data                             ***
  * *******************************************************
@@ -592,7 +602,7 @@ void FrSkySportTelemetry_VARIO() {
                 ap_climb_rate);   // Current climb rate in meters/second
 }
 
-/* 
+/*
  * *******************************************************
  * *** Set Accelerometer data                          ***
  * *******************************************************
@@ -613,7 +623,7 @@ void FrSkySportTelemetry_ACC() {
               fetchAccZ());       // Z acceleration (raw)
 }
 
-/* 
+/*
  * *****************************************************
  * *** Set Fuel sensor data                          ***
  * *****************************************************
@@ -631,7 +641,7 @@ void FrSkySportTelemetry_FUEL() {
   }
 }
 
-/* 
+/*
  * *****************************************************
  * *** Set TextMsg sensor data ()                    ***
  * *****************************************************
@@ -641,14 +651,14 @@ void FrSkySportTelemetry_TXTMSG() {
     uint16_t data_word;
     data_word = telem_text_get_word();
     #ifdef DEBUG_FrSkySportTelemetry_TXTMSG
-      
+
       debugSerial.print(millis());
       debugSerial.print("\tTextMessage: ");
       debugSerial.print(data_word);
       debugSerial.println();
-      
+
       //debug_print("FRSKY SENSOR_ID_RPM: %d", data_word);
-  
+
     #endif
     txtmsg.setData(data_word);
   #endif
@@ -694,4 +704,3 @@ int32_t statusDequeue () {
      return val;
   }
 }
-
