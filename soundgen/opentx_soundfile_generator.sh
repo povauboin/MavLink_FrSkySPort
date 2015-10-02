@@ -89,7 +89,10 @@ SOURCE_DIRECTORY="$(dirname $0)"
 SOURCE_FILE="$1"
 DESTINATION_DIRECTORY_SOUNDS="$SOURCE_DIRECTORY/SOUNDS"
 VOICE="Samantha"
+#VOICE="Anna"
 LANG="en"		# supported languages: en, de, pt
+#LANG="de"
+#LANG="pt"
 Hz="32000"  # sample rate to encode the audio at, noted in Hz. 32000Hz = 32KHz. Higher is higher quality (16000, 22000, 32000).
 
 # =================================================================================================
@@ -126,38 +129,47 @@ if [ -f "$SOURCE_FILE" ]; then				# Check Soure File
 		TEXT="Hello, my name is $VOICE, I will be the voice of your sound pack. Building Sound Pack now."
 		echo "$TEXT"
 		say -v "$VOICE" "$TEXT"
+		i=0
 	elif [ "$LANG" == "de" ]; then
 		TEXT="Hallo, mein Name ist $VOICE, Ich werde die Stimme Deines Sound Paket sein. Erstelle Sound Paket jetzt."
 		echo "$TEXT"
 		say -v "$VOICE" "$TEXT"
+		i=1
 	elif [ "$LANG" == "pt" ]; then
-			TEXT="Olá, meu nome é $VOICE, eu vou ser a voz de seu pacote de som. Edifício pacote de som agora."
-			echo "$TEXT"
-			say -v "$VOICE" "$TEXT"
+		TEXT="Olá, meu nome é $VOICE, eu vou ser a voz de seu pacote de som. Edifício pacote de som agora."
+		echo "$TEXT"
+		say -v "$VOICE" "$TEXT"
+		i=2
 	else
 		LANG="en"
+		i=0
 		TEXT="Hello, my name is $VOICE, I will be the voice of your sound pack. Your Language is not supported. Building English Sound Pack now."
 		echo "$TEXT"
 		say -v "$VOICE" "$TEXT"
 	fi
+echo $LANG
 	echo "================================================================================"
 	checkFolder "$DESTINATION_DIRECTORY_SOUNDS"							# Check Destination Folder
 
 	# Read and proccess CSV file
-	IFS=","  # File Delimiter
-	while read directory file_name text_to_say[en] text_to_say[de] text_to_say[pt]; do
+	IFS=";"  # File Delimiter
+	while read directory file_name text_to_say_en text_to_say_de text_to_say_pt; do
 		directory="$LANG/$VOICE$directory"
+		text_to_say[0]="$text_to_say_en"
+		text_to_say[1]="$text_to_say_de"
+		text_to_say[2]="$text_to_say_pt"
+
 		# Check that varable contain data
-		if [ "$directory" != "Directory" ] && [ -n "$directory" ] && [ -n "$file_name" ] && [ -n "${text_to_say[$LANG]}" ]; then
-			echo "$DESTINATION_DIRECTORY_SOUNDS/$directory/$file_name.wav\t|\t${text_to_say[$LANG]}"
+		if [ "$directory" != "Directory" ] && [ -n "$directory" ] && [ -n "$file_name" ] && [ -n "${text_to_say[$i]}" ] && [ "${text_to_say[$i]}" != "NOT_AVAILABLE" ]; then
+			echo "$DESTINATION_DIRECTORY_SOUNDS/$directory/$file_name.wav\t|\t${text_to_say[$i]}"
 
 			# Check and Create Folder
 			checkFolder "$DESTINATION_DIRECTORY_SOUNDS/$directory"
 
 			# Create Voice File
-			say -o "$DESTINATION_DIRECTORY_SOUNDS/$directory/$file_name.wav" -v "$VOICE" --data-format=LEI16@32000 "${text_to_say[$LANG]}"
+			say -o "$DESTINATION_DIRECTORY_SOUNDS/$directory/$file_name.wav" -v "$VOICE" --data-format=LEI16@32000 "${text_to_say[$i]}"
 		else
-			echo "[ $directory ] $file_name ... ${text_to_say[$LANG]}"
+			echo "[ $directory ] $file_name ... ${text_to_say[$i]}"
 		fi
 	done < "$SOURCE_FILE"
 	say -o "$DESTINATION_DIRECTORY_SOUNDS/$LANG/tada.wav" -v "$VOICE" --data-format=LEI16@32000 "tada!!!"

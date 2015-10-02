@@ -1,12 +1,259 @@
-PATH,FileName,EN,DE,PT
-/system,0000,0,0,0
-/system,0001,1,1,1
-/system,0002,2,2,2
-/system,0003,3,3,3
-/system,0004,4,4,4
-/system,0005,5,5,5
-/system,0006,6,6,6
-/system,0007,7,7,7
-/system,0008,8,8,8
-/system,0009,9,9,9
-/system,0010,10,10,10
+Path;FileName;EN;DE;PT
+/SYSTEM;0000;0;0;0
+/SYSTEM;0001;1;1;1
+/SYSTEM;0002;2;2;2
+/SYSTEM;0003;3;3;3
+/SYSTEM;0004;4;4;4
+/SYSTEM;0005;5;5;5
+/SYSTEM;0006;6;6;6
+/SYSTEM;0007;7;7;7
+/SYSTEM;0008;8;8;8
+/SYSTEM;0009;9;9;9
+/SYSTEM;0010;10;10;10
+/SYSTEM;0011;11;11;11
+/SYSTEM;0012;12;12;12
+/SYSTEM;0013;13;13;13
+/SYSTEM;0014;14;14;14
+/SYSTEM;0015;15;15;15
+/SYSTEM;0016;16;16;16
+/SYSTEM;0017;17;17;17
+/SYSTEM;0018;18;18;18
+/SYSTEM;0019;19;19;19
+/SYSTEM;0020;20;20;20
+/SYSTEM;0021;21;21;21
+/SYSTEM;0022;22;22;22
+/SYSTEM;0023;23;23;23
+/SYSTEM;0024;24;24;24
+/SYSTEM;0025;25;25;25
+/SYSTEM;0026;26;26;26
+/SYSTEM;0027;27;27;27
+/SYSTEM;0028;28;28;28
+/SYSTEM;0029;29;29;29
+/SYSTEM;0030;30;30;30
+/SYSTEM;0031;31;31;31
+/SYSTEM;0032;32;32;32
+/SYSTEM;0033;33;33;33
+/SYSTEM;0034;34;34;34
+/SYSTEM;0035;35;35;35
+/SYSTEM;0036;36;36;36
+/SYSTEM;0037;37;37;37
+/SYSTEM;0038;38;38;38
+/SYSTEM;0039;39;39;39
+/SYSTEM;0040;40;40;40
+/SYSTEM;0041;41;41;41
+/SYSTEM;0042;42;42;42
+/SYSTEM;0043;43;43;43
+/SYSTEM;0044;44;44;44
+/SYSTEM;0045;45;45;45
+/SYSTEM;0046;46;46;46
+/SYSTEM;0047;47;47;47
+/SYSTEM;0048;48;48;48
+/SYSTEM;0049;49;49;49
+/SYSTEM;0050;50;50;50
+/SYSTEM;0051;51;51;51
+/SYSTEM;0052;52;52;52
+/SYSTEM;0053;53;53;53
+/SYSTEM;0054;54;54;54
+/SYSTEM;0055;55;55;55
+/SYSTEM;0056;56;56;56
+/SYSTEM;0057;57;57;57
+/SYSTEM;0058;58;58;58
+/SYSTEM;0059;59;59;59
+/SYSTEM;0060;60;60;60
+/SYSTEM;0061;61;61;61
+/SYSTEM;0062;62;62;62
+/SYSTEM;0063;63;63;63
+/SYSTEM;0064;64;64;64
+/SYSTEM;0065;65;65;65
+/SYSTEM;0066;66;66;66
+/SYSTEM;0067;67;67;67
+/SYSTEM;0068;68;68;68
+/SYSTEM;0069;69;69;69
+/SYSTEM;0070;70;70;70
+/SYSTEM;0071;71;71;71
+/SYSTEM;0072;72;72;72
+/SYSTEM;0073;73;73;73
+/SYSTEM;0074;74;74;74
+/SYSTEM;0075;75;75;75
+/SYSTEM;0076;76;76;76
+/SYSTEM;0077;77;77;77
+/SYSTEM;0078;78;78;78
+/SYSTEM;0079;79;79;79
+/SYSTEM;0080;80;80;80
+/SYSTEM;0081;81;81;81
+/SYSTEM;0082;82;82;82
+/SYSTEM;0083;83;83;83
+/SYSTEM;0084;84;84;84
+/SYSTEM;0085;85;85;85
+/SYSTEM;0086;86;86;86
+/SYSTEM;0087;87;87;87
+/SYSTEM;0088;88;88;88
+/SYSTEM;0089;89;89;89
+/SYSTEM;0090;90;90;90
+/SYSTEM;0091;91;91;91
+/SYSTEM;0092;92;92;92
+/SYSTEM;0093;93;93;93
+/SYSTEM;0094;94;94;94
+/SYSTEM;0095;95;95;95
+/SYSTEM;0096;96;96;96
+/SYSTEM;0097;97;97;97
+/SYSTEM;0098;98;98;98
+/SYSTEM;0099;99;99;99
+/SYSTEM;0100;100;hundert;100
+/SYSTEM;0101;200;tausend;cento
+/SYSTEM;0102;300;comma;duzentos
+/SYSTEM;0103;400;und;trezentos
+/SYSTEM;0104;500;minus;quatrocentos
+/SYSTEM;0105;600;uhr;quinhentos
+/SYSTEM;0106;700;minute;seiscentos
+/SYSTEM;0107;800;minuten;setecentos
+/SYSTEM;0108;900;sekunde;oitocentos
+/SYSTEM;0109;thousand;sekunden;novecentos
+/SYSTEM;0110;and;NOT_AVAILABLE;mil
+/SYSTEM;0111;minus;Volt;virgula
+/SYSTEM;0112;point;Ampere;uma
+/SYSTEM;0113;NOT_AVAILABLE;MilliAmpere;duas
+/SYSTEM;0114;NOT_AVAILABLE;Knoten;e
+/SYSTEM;0115;volt;Meter pro sekunde;menos
+/SYSTEM;0116;volts;Fuesse pro sekunde;hora
+/SYSTEM;0117;amp;kilometer pro stunde;horas
+/SYSTEM;0118;amps;Meilen pro Stunde;minuto
+/SYSTEM;0119;milliamp;Meter;minutos
+/SYSTEM;0120;milliamps;Fuesse;segundo
+/SYSTEM;0121;knot;Grad;segundos
+/SYSTEM;0122;knots;Grad Fahrenheit;Volt
+/SYSTEM;0123;meter per second;Prozent;ampére
+/SYSTEM;0124;meters per second;Milliampere pro stunde;metros por segundo
+/SYSTEM;0125;foot per second;Watt;NOT_AVAILABLE
+/SYSTEM;0126;feet per second;db;quilômetros por hora
+/SYSTEM;0127;kilometer per hour;R P M;metros
+/SYSTEM;0128;kilometers per hour;g;graus
+/SYSTEM;0129;mile per hour;Milliliter;cento
+/SYSTEM;0130;miles per hour;Unze;miliamperes
+/SYSTEM;0131;meter;Uhr;miliamperes por hora
+/SYSTEM;0132;meters;Minuten;watt
+/SYSTEM;0133;foot;Secunden;db
+/SYSTEM;0134;feet;Timer;pés
+/SYSTEM;0135;degree celsius;Timer;nós
+/SYSTEM;0136;degrees celsius;Sendung;horas
+/SYSTEM;0137;degree fahrenheit;Empfang;minutos
+/SYSTEM;0138;degrees fahrenheit;A1;segundos
+/SYSTEM;0139;percent;A2;RPM
+/SYSTEM;0140;percent;Hoehe;g
+/SYSTEM;0141;milliamp-hour;Motor;mililitri
+/SYSTEM;0142;milliamp-hours;Treibstoff;onças
+/SYSTEM;0143;watt;Temperatur;transmissão
+/SYSTEM;0144;watts;Temperatur;recepção
+/SYSTEM;0145;db;Geschwindigkeit;A1
+/SYSTEM;0146;db;Ferne;A2
+/SYSTEM;0147;r p m;Hoehe;altitude
+/SYSTEM;0148;r p m;Lipo-Zelle;motor
+/SYSTEM;0149;g;Zellen gesamt;combustível
+/SYSTEM;0150;g;Spannung;temperatura
+/SYSTEM;0151;degree;Strom;temperatura
+/SYSTEM;0152;degrees;Verbrauch;velocidade
+/SYSTEM;0153;milliliter;Power;distância
+/SYSTEM;0154;milliliters;Beschleunigung X;altitude
+/SYSTEM;0155;fluid ounce;Beschleunigung Y;célula lipo
+/SYSTEM;0156;fluid ounces;Beschleunigung Z;Total lipo
+/SYSTEM;0157;hour;Richtung;tensão
+/SYSTEM;0158;hours;Variometer;corrente
+/SYSTEM;0159;minute;Minimum;consumo
+/SYSTEM;0160;minutes;Maximum;potência
+/SYSTEM;0161;second;NOT_AVAILABLE;aceleração X
+/SYSTEM;0162;seconds;NOT_AVAILABLE;aceleração Y
+/SYSTEM;0163;NOT_AVAILABLE;NOT_AVAILABLE;aceleração Z
+/SYSTEM;0164;NOT_AVAILABLE;NOT_AVAILABLE;Direcção
+/SYSTEM;0165;point zero;NOT_AVAILABLE;variómetro
+/SYSTEM;0166;point one;NOT_AVAILABLE;mínimo
+/SYSTEM;0167;point two;NOT_AVAILABLE;máximo
+/SYSTEM;0168;point three;NOT_AVAILABLE;NOT_AVAILABLE
+/SYSTEM;0169;point four;NOT_AVAILABLE;NOT_AVAILABLE
+/SYSTEM;0170;point five;NOT_AVAILABLE;NOT_AVAILABLE
+/SYSTEM;0171;point six;NOT_AVAILABLE;NOT_AVAILABLE
+/SYSTEM;0172;point seven;NOT_AVAILABLE;NOT_AVAILABLE
+/SYSTEM;0173;point eight;NOT_AVAILABLE;NOT_AVAILABLE
+/SYSTEM;0174;point nine;NOT_AVAILABLE;NOT_AVAILABLE
+/SYSTEM;a1_org;A1,low;A1 schlecht!;Alarme A1
+/SYSTEM;a1_red;A1,critical;A1 kritisch!;A1 critica
+/SYSTEM;a2_org;A2,low;A2 schlecht!;Alarme A2
+/SYSTEM;a2_red;A2,critical;A2 kritisch!;A2 critica
+/SYSTEM;a3_org;A3,low;A3 schlecht!;NOT_AVAILABLE
+/SYSTEM;a3_red;A3,critical;A3 kritisch!;NOT_AVAILABLE
+/SYSTEM;a4_org;A4,low;A4 schlecht!;NOT_AVAILABLE
+/SYSTEM;a4_red;A4,critical;A4 kritisch!;NOT_AVAILABLE
+/SYSTEM;eebad;bad eeprom;Das EEPROM ist fehlerhaft;eeprom corrompida
+/SYSTEM;eeformat;NOT_AVAILABLE;Das EEPROM ist immer formatiert;formatação da eeprom em curso
+/SYSTEM;endtrim;maximum trim reached;Maximale trimmung erreicht;trim no máximo
+/SYSTEM;error;NOT_AVAILABLE;fehler;erro
+/SYSTEM;highmah;NOT_AVAILABLE;Senderstrom ist zu hoch!;assorbimento elevato
+/SYSTEM;hightemp;NOT_AVAILABLE;Sendertemperatur ist zu hoch!;temperatura elevata
+/SYSTEM;inactiv;inactivity alarm;Sender ist inaktiv,bitte Ueberpruefen Sie;atenção, o rádio foi esquecido ligado, por favor desligue-o
+/SYSTEM;lowbatt;transmitter battery low;Senderakku niedrig;bateria do rádio fraca
+/SYSTEM;midpot;NOT_AVAILABLE;Poti zentriert;potenciómetro centrado
+/SYSTEM;midtrim;trim center;Trim zentriert;trim centrado
+/SYSTEM;rssi_org;RF signal, low;Funksignal schlecht!;recepção de sinal muito baixa
+/SYSTEM;rssi_red;RF signal, critical;Funksignal kritisch!;recepção de sinal crítica
+/SYSTEM;swalert;switch warning;Schalten fehlpositioniert, bitte pruefen;atenção, certifique-se que os interruptores estão na posição certa
+/SYSTEM;swr_red;radio antenna defective;Problem mit der sender Antenna;Problema com a antena do transmissor
+/SYSTEM;tada;Welcome to open tea ex!;NOT_AVAILABLE;NOT_AVAILABLE
+/SYSTEM;telemko;telemetry lost;Telemetrie verloren;NOT_AVAILABLE
+/SYSTEM;telemok;telemetry recovered;Telemetrie wiederhergestellt;NOT_AVAILABLE
+/SYSTEM;thralert;throttle warning;Gaskanal nicht Null, bitte pruefen;atenção,acelerador não está no mínimo
+/SYSTEM;timer20;twenty. seconds;20 sekunden;20 segundos
+/SYSTEM;timer30;thirty. seconds;30 sekunden;30 segundos
+/SYSTEM;trainko;trainer signal lost;Schülersignal verloren;NOT_AVAILABLE
+/SYSTEM;trainok;trainer signal recovered;Schülersignal wiederhergestellt;NOT_AVAILABLE
+;acro;acro. mode!, on;NOT_AVAILABLE;NOT_AVAILABLE
+;attero;NOT_AVAILABLE;Landung;aterragem
+;crowof;crow!, off!;crow aus;crou, desligado
+;crowon;crow!, on!;crow ein;crou, activo
+;engoff;engine!, off!;Motor aus;motor desligado
+;flapdn;flaps!, down!;Klappen ausgefahren;flaps estendidos
+;flapup;flaps!, up!;Klappen eingefahren;flaps recolhidos
+;fltmd1;NOT_AVAILABLE;Regime 1;fase de voo 1
+;fltmd2;NOT_AVAILABLE;Regime 2;fase de voo 2
+;fltmd3;NOT_AVAILABLE;Regime 3;fase de voo 3
+;fltmd4;NOT_AVAILABLE;Regime 4;fase de voo 4
+;fltmd5;NOT_AVAILABLE;Regime 5;fase de voo 5
+;fltmd6;NOT_AVAILABLE;Regime 6;fase de vôo 6
+;fltmd7;NOT_AVAILABLE;Regime 7;fase de voo 7
+;fltmd8;NOT_AVAILABLE;Regime 8;fase de voo 8
+;fltmd9;NOT_AVAILABLE;Regime 9;fase de voo 9
+;fm-1;flight. mode!, one;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-2;flight. mode!, two;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-3;flight. mode!, three;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-4;flight. mode!, four;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-5;flight. mode!, five;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-6;flight. mode!, six;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-7;flight. mode!, seven;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-8;flight. mode!, eight;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-acr;flight mode!, acro;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-crs;flight mode!, cruise;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-flt;flight mode!, float;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-fst;flight mode!, fast;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-lch;flight mode!, launch;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-lnd;flight mode!, land;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-nrm;flight mode!, normal;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-png;flight mode!, ping;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-pwr;flight mode!, power;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-rce;flight mode!, race;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-spd;flight mode!, speed;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-thm;flight mode!, thermal;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-thml;flight mode!, thermal left;NOT_AVAILABLE;NOT_AVAILABLE
+;fm-thmr;flight mode!, thermal right;NOT_AVAILABLE;NOT_AVAILABLE
+;geardn;gear!, down!;Fahrwerk ausgefahren;trem, em baixo.
+;gearup;gear!, up!;Fahrwerk eingezogen;trem, em cima.
+;lnding;landing. mode!, on;NOT_AVAILABLE;NOT_AVAILABLE
+;lowbat;low. battery!;Batterie schwach;bateria fraca
+;nrmmod;normal. mode!, on;Normal-Modus ist aktiviert;modo de voo normal
+;sigcrt;rf. signal!, critical!;NOT_AVAILABLE;NOT_AVAILABLE
+;siglow;rf. signal!, low!;NOT_AVAILABLE;NOT_AVAILABLE
+;spdmod;high. speed. mode!, active;Schnell-Modus ist aktiviert;modo de velocidade
+;splrdn;spoiler!, down!;NOT_AVAILABLE;NOT_AVAILABLE
+;splrup;spoiler!, up!;NOT_AVAILABLE;NOT_AVAILABLE
+;thmmod;thermal. mode!, on;Thermik-Modus ist aktiviert;modo de térmica
+;tohigh;too. high!;zu hoch;muito alto
+;tolow;too. low!;zu niedrig;muito baixo
+;trnoff;trainer!, off!;Trainer-Modus aus;modo de treino desligado
+;trnon;trainer!, on!;Trainer-Modus ein;modo de treino ligado
