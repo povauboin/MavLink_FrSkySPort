@@ -1,0 +1,222 @@
+Found in File;SEVERITY;Statustext
+AntennaTracker/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;command received:
+AntennaTracker/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;Initialising APM...
+AntennaTracker/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;new HOME received
+AntennaTracker/sensors.cpp;MAV_SEVERITY_WARNING;barometer calibration complete
+AntennaTracker/sensors.cpp;MAV_SEVERITY_WARNING;Calibrating barometer
+AntennaTracker/system.cpp;MAV_SEVERITY_WARNING;\nReady to track.
+AntennaTracker/system.cpp;MAV_SEVERITY_WARNING;ignoring invalid START_LATITUDE or START_LONGITUDE parameter
+APMrover2/commands.cpp;MAV_SEVERITY_WARNING;init home
+APMrover2/commands.cpp;MAV_SEVERITY_WARNING;Resetting prev_WP
+APMrover2/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;command received:
+APMrover2/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;Initialising APM...
+APMrover2/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;PX4:
+APMrover2/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;Unsupported preflight calibration
+APMrover2/Log.cpp;MAV_SEVERITY_WARNING;No dataflash card inserted
+APMrover2/navigation.cpp;MAV_SEVERITY_CRITICAL;<navigate> WP error - distance < 0
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Collective too high
+APMrover2/sensors.cpp;MAV_SEVERITY_WARNING;barometer calibration complete
+APMrover2/sensors.cpp;MAV_SEVERITY_WARNING;Calibrating barometer
+APMrover2/Steering.cpp;MAV_SEVERITY_WARNING;AUTO triggered off
+APMrover2/Steering.cpp;MAV_SEVERITY_WARNING;Triggered AUTO with pin
+APMrover2/system.cpp;MAV_SEVERITY_WARNING;\n\n Ready to drive.
+APMrover2/system.cpp;MAV_SEVERITY_WARNING;<startup_ground> GROUND START
+APMrover2/system.cpp;MAV_SEVERITY_WARNING;<startup_ground> With Delay
+APMrover2/system.cpp;MAV_SEVERITY_ALERT;"Beginning INS calibration ;  do not move plane"
+APMrover2/system.cpp;MAV_SEVERITY_ALERT;Warming up ADC...
+ArduCopter/AP_State.cpp;MAV_SEVERITY_INFO;Simple:OFF
+ArduCopter/AP_State.cpp;MAV_SEVERITY_INFO;Simple:ON
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Throttle too high
+ArduCopter/AP_State.cpp;MAV_SEVERITY_INFO;SuperSimple:ON
+ArduCopter/control_autotune.cpp;MAV_SEVERITY_CRITICAL;AutoTune: Failed
+ArduCopter/control_autotune.cpp;MAV_SEVERITY_CRITICAL;AutoTune: Saved Gains
+ArduCopter/control_autotune.cpp;MAV_SEVERITY_CRITICAL;AutoTune: Started
+ArduCopter/control_autotune.cpp;MAV_SEVERITY_CRITICAL;AutoTune: Stopped
+ArduCopter/control_autotune.cpp;MAV_SEVERITY_CRITICAL;AutoTune: Success
+ArduCopter/crash_check.cpp;MAV_SEVERITY_CRITICAL;Parachute: Landed
+ArduCopter/crash_check.cpp;MAV_SEVERITY_CRITICAL;Parachute: Released!
+ArduCopter/crash_check.cpp;MAV_SEVERITY_CRITICAL;Parachute: Too Low
+ArduCopter/ekf_check.cpp;MAV_SEVERITY_CRITICAL;EKF variance
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;bad fence point
+ArduCopter/esc_calibration.cpp;MAV_SEVERITY_CRITICAL;ESC Calibration: auto calibration
+ArduCopter/esc_calibration.cpp;MAV_SEVERITY_CRITICAL;ESC Calibration: push safety switch
+ArduCopter/esc_calibration.cpp;MAV_SEVERITY_CRITICAL;ESC Calibration: restart board
+ArduCopter/events.cpp;MAV_SEVERITY_CRITICAL;Low Battery!
+ArduCopter/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;bad rally point index
+ArduCopter/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;bad rally point message count
+ArduCopter/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;bad rally point message ID
+ArduCopter/GCS_Mavlink.cpp;MAV_SEVERITY_CRITICAL;error setting rally point
+ArduCopter/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;failed to set rally point
+ArduCopter/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;Frame:
+ArduCopter/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;Initialising APM...
+ArduCopter/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;PX4:
+ArduCopter/Log.cpp;MAV_SEVERITY_CRITICAL;Log erase complete\n
+ArduCopter/Log.cpp;MAV_SEVERITY_CRITICAL;No dataflash inserted
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Accelerometers not healthy
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Altitude disparity
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Barometer not healthy
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Check Battery
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: check fence
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Collective below Failsafe
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Gyro calibration failed
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Gyros not healthy
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: gyros still settling
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Leaning
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Mode not armable
+libraries/APM_OBC/APM_OBC.cpp;MAV_SEVERITY_CRITICAL;Dual loss TERMINATE
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Motor Emergency Stopped
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Motor Interlock Enabled
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Rotor is Spinning
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Safety Switch
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Throttle below Failsafe
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Arm: Waiting for Nav Checks
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;ARMING MOTORS
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;DISARMING MOTORS
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;Locate Copter Alarm!
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm:
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Accelerometers not healthy
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Accels not calibrated
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: ACRO_BAL_ROLL/PITCH
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Altitude disparity
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Barometer not healthy
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Check ANGLE_MAX
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Check Battery
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Check Board Voltage
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: check fence
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Check FS_THR_VALUE
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Check mag field
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: check range finder
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Collective below Failsafe
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Duplicate Aux Switch Options
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: EKF-home variance
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Gyros not healthy
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: gyros still settling
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: High GPS HDOP
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: inconsistent Accelerometers
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: inconsistent Gyros
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Interlock/E-Stop Conflict
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Motor Emergency Stopped
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Motor Interlock Enabled
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;IGN MISSION_ITEM: Busy
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Need 3D Fix
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: RC not calibrated
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Throttle below Failsafe
+ArduCopter/motors.cpp;MAV_SEVERITY_CRITICAL;PreArm: Waiting for Nav Checks
+ArduCopter/sensors.cpp;MAV_SEVERITY_WARNING;barometer calibration complete
+ArduCopter/sensors.cpp;MAV_SEVERITY_WARNING;Calibrating barometer
+ArduCopter/switches.cpp;MAV_SEVERITY_CRITICAL;Trim saved
+ArduCopter/system.cpp;MAV_SEVERITY_WARNING;Waiting for first HIL_STATE message
+ArduPlane/ArduPlane.cpp;MAV_SEVERITY_CRITICAL;Disable fence failed (autodisable)
+ArduPlane/ArduPlane.cpp;MAV_SEVERITY_CRITICAL;Disable fence floor failed (autodisable)
+ArduPlane/ArduPlane.cpp;MAV_SEVERITY_WARNING;FBWA tdrag mode\n
+ArduPlane/ArduPlane.cpp;MAV_SEVERITY_CRITICAL;Fence disabled (autodisable)
+ArduPlane/ArduPlane.cpp;MAV_SEVERITY_CRITICAL;Fence floor disabled (auto disable)
+ArduPlane/arming_checks.cpp;MAV_SEVERITY_CRITICAL;PreArm: invalid THR_FS_VALUE for rev throttle
+ArduPlane/arming_checks.cpp;MAV_SEVERITY_CRITICAL;PreArm: LIM_PITCH_MAX too small
+ArduPlane/arming_checks.cpp;MAV_SEVERITY_CRITICAL;PreArm: LIM_PITCH_MIN too large
+ArduPlane/arming_checks.cpp;MAV_SEVERITY_CRITICAL;PreArm: LIM_ROLL_CD too small
+ArduPlane/Attitude.cpp;MAV_SEVERITY_WARNING;Demo Servos!
+ArduPlane/commands.cpp;MAV_SEVERITY_WARNING;init home
+ArduPlane/commands.cpp;MAV_SEVERITY_WARNING;Resetting prev_WP
+ArduPlane/control_modes.cpp;MAV_SEVERITY_WARNING;PX4IO Override disabled
+ArduPlane/control_modes.cpp;MAV_SEVERITY_WARNING;PX4IO Override enable failed
+ArduPlane/control_modes.cpp;MAV_SEVERITY_WARNING;PX4IO Override enabled
+ArduPlane/events.cpp;MAV_SEVERITY_WARNING;Failsafe - Long event on,
+ArduPlane/events.cpp;MAV_SEVERITY_WARNING;Failsafe - Short event off
+ArduPlane/events.cpp;MAV_SEVERITY_WARNING;Failsafe - Short event on,
+ArduPlane/events.cpp;MAV_SEVERITY_CRITICAL;No GCS heartbeat.
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;bad rally point index
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;bad rally point message count
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;bad rally point message ID
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;command received:
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;failed to set rally point
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_CRITICAL;Fence floor disabled.
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;fencing must be disabled
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_CRITICAL;Go around command accepted.
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;Initialising APM...
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;invalid fence point, lat or lng too large
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;PX4:
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_CRITICAL;Rejected go around command.
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_WARNING;Unsupported preflight calibration
+ArduPlane/geofence.cpp;MAV_SEVERITY_WARNING;geo-fence loaded
+ArduPlane/geofence.cpp;MAV_SEVERITY_WARNING;geo-fence OK
+ArduPlane/geofence.cpp;MAV_SEVERITY_CRITICAL;geo-fence setup error
+ArduPlane/geofence.cpp;MAV_SEVERITY_WARNING;geo-fence triggered
+ArduPlane/is_flying.cpp;MAV_SEVERITY_CRITICAL;Crash Detected
+ArduPlane/is_flying.cpp;MAV_SEVERITY_CRITICAL;Crash Detected - no action taken
+ArduPlane/is_flying.cpp;MAV_SEVERITY_CRITICAL;Hard Landing Detected
+ArduPlane/is_flying.cpp;MAV_SEVERITY_CRITICAL;Hard Landing Detected - no action taken
+ArduPlane/landing.cpp;MAV_SEVERITY_WARNING;Auto-Disarmed
+ArduPlane/landing.cpp;MAV_SEVERITY_WARNING;Landing sequence begun.
+ArduPlane/landing.cpp;MAV_SEVERITY_CRITICAL;Unable to start landing sequence.
+ArduPlane/Log.cpp;MAV_SEVERITY_WARNING;Log erase complete
+ArduPlane/Log.cpp;MAV_SEVERITY_WARNING;No dataflash card inserted
+ArduPlane/sensors.cpp;MAV_SEVERITY_WARNING;barometer calibration complete
+ArduPlane/sensors.cpp;MAV_SEVERITY_WARNING;Calibrating barometer
+ArduPlane/sensors.cpp;MAV_SEVERITY_WARNING;zero airspeed calibrated
+ArduPlane/system.cpp;MAV_SEVERITY_WARNING;\n\n Ready to FLY.
+ArduPlane/system.cpp;MAV_SEVERITY_WARNING;<startup_ground> GROUND START
+ArduPlane/system.cpp;MAV_SEVERITY_WARNING;<startup_ground> With Delay
+ArduPlane/system.cpp;MAV_SEVERITY_ALERT;"Beginning INS calibration ;  do not move plane"
+ArduPlane/system.cpp;MAV_SEVERITY_WARNING;NO airspeed
+ArduPlane/system.cpp;MAV_SEVERITY_WARNING;Waiting for first HIL_STATE message
+ArduPlane/takeoff.cpp;MAV_SEVERITY_WARNING;FBWA tdrag off
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm:
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: 3D accel cal needed
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: accels not healthy!
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: AHRS not healthy!
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: airspeed not healthy
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: Bad GPS Position
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: Barometer not healthy!
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: Battery failsafe on.
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: Check mag field
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: gyros not calibrated!
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: gyros not healthy!
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: Hardware Safety Switch
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: inconsistent Accelerometers
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: inconsistent gyros
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;PreArm: Radio failsafe on
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;Throttle armed!
+libraries/AP_Arming/AP_Arming.cpp;MAV_SEVERITY_CRITICAL;Throttle disarmed!
+libraries/AP_Motors/AP_MotorsHeli.cpp;MAV_SEVERITY_CRITICAL;PreArm: H_RSC_CRITICAL too large
+libraries/AP_Motors/AP_MotorsHeli.cpp;MAV_SEVERITY_CRITICAL;PreArm: H_RSC_IDLE too large
+libraries/AP_Motors/AP_MotorsHeli.cpp;MAV_SEVERITY_CRITICAL;PreArm: H_RSC_MODE invalid
+libraries/AP_Motors/AP_MotorsHeli.cpp;MAV_SEVERITY_CRITICAL;PreArm: H_RUNUP_TIME too small
+libraries/AP_NavEKF2/AP_NavEKF2.cpp;MAV_SEVERITY_CRITICAL;NavEKF2: allocation failed
+libraries/AP_Terrain/AP_Terrain.cpp;MAV_SEVERITY_CRITICAL;Terrain: allocation failed
+libraries/APM_OBC/APM_OBC.cpp;MAV_SEVERITY_CRITICAL;Fence TERMINATE
+libraries/APM_OBC/APM_OBC.cpp;MAV_SEVERITY_CRITICAL;GCS OK
+libraries/APM_OBC/APM_OBC.cpp;MAV_SEVERITY_CRITICAL;GPS OK
+libraries/APM_OBC/APM_OBC.cpp;MAV_SEVERITY_CRITICAL;RC failure terminate
+libraries/APM_OBC/APM_OBC.cpp;MAV_SEVERITY_CRITICAL;Starting AFS_AUTO
+libraries/APM_OBC/APM_OBC.cpp;MAV_SEVERITY_CRITICAL;State DATA_LINK_LOSS
+libraries/APM_OBC/APM_OBC.cpp;MAV_SEVERITY_CRITICAL;State GPS_LOSS
+modules/PX4Firmware/src/modules/mavlink/mavlink_ftp.cpp;MAV_SEVERITY_CRITICAL;FTP: can't open path (file system corrupted?)
+modules/PX4Firmware/src/modules/mavlink/mavlink_ftp.cpp;MAV_SEVERITY_CRITICAL;FTP: list readdir_r failure
+modules/PX4Firmware/src/modules/mavlink/mavlink_main_posix.cpp;MAV_SEVERITY_CRITICAL;Save params and reboot to change COMPID
+modules/PX4Firmware/src/modules/mavlink/mavlink_main_posix.cpp;MAV_SEVERITY_CRITICAL;Save params and reboot to change SYSID
+modules/PX4Firmware/src/modules/mavlink/mavlink_main.cpp;MAV_SEVERITY_CRITICAL;Save params and reboot to change COMPID
+modules/PX4Firmware/src/modules/mavlink/mavlink_main.cpp;MAV_SEVERITY_CRITICAL;Save params and reboot to change SYSID
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;ERROR: can't save mission state
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;ERROR: Waypoint index exceeds list capacity
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;ERROR: wp index out of bounds
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;IGN MISSION_ITEM_REQUEST: No active transfer
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;IGN MISSION_ITEM: No transfer
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;IGN REQUEST LIST: Busy
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;Operation timeout
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;REJ. WP CMD: partner id mismatch
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;Unable to read from micro SD
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;Unable to write on micro SD
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_INFO;WP CMD OK TRY AGAIN
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_INFO;WPM: COUNT 0: CLEAR MISSION
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: ERR: not all items sent -> IDLE
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: IGN CLEAR CMD: Busy
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: IGN MISSION_COUNT: Busy
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: IGN WP CURR CMD: Busy
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_INFO;WPM: mission is empty
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: REJ. CMD: Busy
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: REJ. CMD: partner id mismatch
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: REJ. CMD: Req. WP was unexpected
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_INFO;WPM: Transfer complete.
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: WP CURR CMD: Error setting ID
+modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp;MAV_SEVERITY_CRITICAL;WPM: WP CURR CMD: Not in list
