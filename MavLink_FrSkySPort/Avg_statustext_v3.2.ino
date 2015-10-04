@@ -30,7 +30,7 @@
  * library used as well as that of the covered work.}
  *
  */
-void parseStatusText_ac32(int32_t severity, String text)
+void parseStatusText_v3_2(int32_t severity, String text)
 {
   uint16_t textId = 0;
 
