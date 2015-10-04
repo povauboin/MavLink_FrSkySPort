@@ -60,7 +60,7 @@ ArduCopter/motors.cpp,SEVERITY_HIGH,Arm: Waiting for Nav Checks
 ArduCopter/motors.cpp,SEVERITY_HIGH,Arm: check fence
 ArduCopter/motors.cpp,SEVERITY_HIGH,DISARMING MOTORS
 ArduCopter/motors.cpp,SEVERITY_HIGH,Locate Copter Alarm!
-ArduCopter/motors.cpp,SEVERITY_HIGH,PreArm:
+ArduCopter/motors.cpp,SEVERITY_HIGH,PreArm: ,s
 ArduCopter/motors.cpp,SEVERITY_HIGH,PreArm: ACRO_BAL_ROLL/PITCH
 ArduCopter/motors.cpp,SEVERITY_HIGH,PreArm: Accelerometers not healthy
 ArduCopter/motors.cpp,SEVERITY_HIGH,PreArm: Accels not calibrated
