@@ -280,7 +280,7 @@ void _MavLink_receive() {
          * *****************************************************
          */
         case MAVLINK_MSG_ID_GPS_RAW_INT:
-          ap_fixtype = mavlink_msg_gps_raw_int_get_fix_type(&msg);                               // 0 = No GPS, 1 =No Fix, 2 = 2D Fix, 3 = 3D Fix
+          ap_fixtype = mavlink_msg_gps_raw_int_get_fix_type(&msg);                               // 0 = No GPS, 1 =No Fix, 2 = 2D Fix, 3 = 3D Fix, 4 = DGPS, 5 = RTK
           ap_sat_visible =  mavlink_msg_gps_raw_int_get_satellites_visible(&msg);          // numbers of visible satelites
           gps_status = (ap_sat_visible*10) + ap_fixtype;
           ap_gps_hdop = mavlink_msg_gps_raw_int_get_eph(&msg);

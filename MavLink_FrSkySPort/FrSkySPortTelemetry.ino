@@ -387,7 +387,7 @@ void FrSkySportTelemetry_FLVSS() {
  * *******************************************************
  */
 void FrSkySportTelemetry_GPS() {
-  if(ap_fixtype==3)
+  if(ap_fixtype>=3)
   {
     /*
     if(ap_longitude < 0)
