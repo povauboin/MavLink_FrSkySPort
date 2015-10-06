@@ -1,0 +1,261 @@
+APMrover2/Steering.cpp;MAV_SEVERITY_UNKNOWN;Triggered AUTO;startsWith
+APMrover2/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Cruise speed:;startsWith
+APMrover2/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Cruise throttle:;startsWith
+APMrover2/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Executing command ID;startsWith
+APMrover2/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;No commands. Can't set AUTO - setting HOLD
+APMrover2/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Passed Waypoint;startsWith
+APMrover2/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Reached Destination: Distance away;startsWith
+APMrover2/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Reached Waypoint;startsWith
+APMrover2/sensors.cpp;MAV_SEVERITY_UNKNOWN;Obstacle passed
+APMrover2/sensors.cpp;MAV_SEVERITY_UNKNOWN;Sonar obstacle;startsWith
+APMrover2/sensors.cpp;MAV_SEVERITY_UNKNOWN;Sonar1 obstacle;startsWith
+APMrover2/sensors.cpp;MAV_SEVERITY_UNKNOWN;Sonar2 obstacle;startsWith
+APMrover2/system.cpp;MAV_SEVERITY_UNKNOWN;Failsafe ended
+APMrover2/system.cpp;MAV_SEVERITY_UNKNOWN;Failsafe trigger;startsWith
+ArduCopter/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Reached Command;startsWith
+ArduPlane/Attitude.cpp;MAV_SEVERITY_UNKNOWN;Throttle unsuppressed - altitude;startsWith
+ArduPlane/Attitude.cpp;MAV_SEVERITY_UNKNOWN;Throttle unsuppressed - speed;startsWith
+ArduPlane/GCS_Mavlink.cpp;MAV_SEVERITY_UNKNOWN;set home to;startsWith
+ArduPlane/commands.cpp;MAV_SEVERITY_UNKNOWN;gps alt:;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Executing nav command ID;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Fence floor disabled.;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Holding course;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Reached descent rate;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Returning to Home
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Set airspeed;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Set fence enabled state to;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Set groundspeed;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Set inverted;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Set throttle;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Takeoff complete at;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Unable to set fence enabled state to;startsWith
+ArduPlane/commands_logic.cpp;MAV_SEVERITY_UNKNOWN;Unabled to disable fence floor.;startsWith
+ArduPlane/events.cpp;MAV_SEVERITY_UNKNOWN;Low Battery;startsWith
+ArduPlane/landing.cpp;MAV_SEVERITY_UNKNOWN;Distance from LAND point;startsWith
+ArduPlane/landing.cpp;MAV_SEVERITY_UNKNOWN;Flare crash detected:;startsWith
+ArduPlane/landing.cpp;MAV_SEVERITY_UNKNOWN;Flare;startsWith
+ArduPlane/radio.cpp;MAV_SEVERITY_UNKNOWN;MSG FS OFF;startsWith
+ArduPlane/radio.cpp;MAV_SEVERITY_UNKNOWN;MSG FS ON;startsWith
+ArduPlane/takeoff.cpp;MAV_SEVERITY_UNKNOWN;Armed AUTO;startsWith
+ArduPlane/takeoff.cpp;MAV_SEVERITY_UNKNOWN;Bad Launch AUTO
+ArduPlane/takeoff.cpp;MAV_SEVERITY_UNKNOWN;Timeout AUTO
+ArduPlane/takeoff.cpp;MAV_SEVERITY_UNKNOWN;Timer Interrupted AUTO
+ardupilot_texts_V3.3.csv;APMrover2/GCS_Mavlink.cpp:                    send_text_P(MAV_SEVERITY_LOW;Unsupported preflight calibration
+ardupilot_texts_V3.3.csv;APMrover2/GCS_Mavlink.cpp:            send_text_P(MAV_SEVERITY_LOW;command received:
+ardupilot_texts_V3.3.csv;APMrover2/GCS_Mavlink.cpp:        MAV_SEVERITY_LOW;Initialising APM...
+ardupilot_texts_V3.3.csv;APMrover2/Log.cpp:        MAV_SEVERITY_LOW;ERASING LOGS
+ardupilot_texts_V3.3.csv;APMrover2/Log.cpp:        MAV_SEVERITY_LOW;No dataflash card inserted
+ardupilot_texts_V3.3.csv;APMrover2/Steering.cpp:            gcs_send_text_fmt(PSTR("Triggered AUTO;startsWith
+ardupilot_texts_V3.3.csv;APMrover2/Steering.cpp:        MAV_SEVERITY_LOW;AUTO triggered off
+ardupilot_texts_V3.3.csv;APMrover2/Steering.cpp:        MAV_SEVERITY_LOW;Triggered AUTO with pin
+ardupilot_texts_V3.3.csv;APMrover2/commands.cpp:	MAV_SEVERITY_LOW;init home
+ardupilot_texts_V3.3.csv;APMrover2/commands.cpp:        MAV_SEVERITY_LOW;Resetting prev_WP
+ardupilot_texts_V3.3.csv;APMrover2/commands_logic.cpp:		MAV_SEVERITY_LOW;Reached Destination
+ardupilot_texts_V3.3.csv;APMrover2/commands_logic.cpp:            MAV_SEVERITY_HIGH;verify_conditon: Unsupported command
+ardupilot_texts_V3.3.csv;APMrover2/commands_logic.cpp:        gcs_send_text_fmt(PSTR("No commands. Can't set AUTO - setting HOLD
+ardupilot_texts_V3.3.csv;APMrover2/navigation.cpp:		MAV_SEVERITY_HIGH;<navigate> WP error - distance < 0
+ardupilot_texts_V3.3.csv;APMrover2/sensors.cpp:    MAV_SEVERITY_LOW;Calibrating barometer
+ardupilot_texts_V3.3.csv;APMrover2/sensors.cpp:    MAV_SEVERITY_LOW;barometer calibration complete
+ardupilot_texts_V3.3.csv;APMrover2/system.cpp:		MAV_SEVERITY_LOW;<startup_ground> With Delay
+ardupilot_texts_V3.3.csv;APMrover2/system.cpp:	MAV_SEVERITY_LOW;<startup_ground> GROUND START
+ardupilot_texts_V3.3.csv;APMrover2/system.cpp:	MAV_SEVERITY_LOW;Ready to drive.;endsWith
+ardupilot_texts_V3.3.csv;APMrover2/system.cpp:    MAV_SEVERITY_MEDIUM;Beginning INS calibration; do not move vehicle
+ardupilot_texts_V3.3.csv;APMrover2/system.cpp:    MAV_SEVERITY_MEDIUM;Warming up ADC...
+ardupilot_texts_V3.3.csv;AntennaTracker/GCS_Mavlink.cpp:            send_text_P(MAV_SEVERITY_LOW;new HOME received
+ardupilot_texts_V3.3.csv;AntennaTracker/system.cpp:    MAV_SEVERITY_LOW;Ready to track.;endsWith
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:            send_text_P(MAV_SEVERITY_HIGH;error setting rally point
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:            send_text_P(MAV_SEVERITY_LOW;bad rally point index
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:            send_text_P(MAV_SEVERITY_LOW;bad rally point message ID
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:            send_text_P(MAV_SEVERITY_LOW;bad rally point message count
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:           send_text_P(MAV_SEVERITY_LOW;failed to set rally point
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:        //send_text_P(MAV_SEVERITY_HIGH;## getting rally point in GCS_Mavlink.cpp 1")); //;startsWith
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:        //send_text_P(MAV_SEVERITY_HIGH;## getting rally point in GCS_Mavlink.cpp 2")); //;startsWith
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:        //send_text_P(MAV_SEVERITY_HIGH;## getting rally point in GCS_Mavlink.cpp 3")); //;startsWith
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:        //send_text_P(MAV_SEVERITY_HIGH;## getting rally point in GCS_Mavlink.cpp 4")); //;startsWith
+ardupilot_texts_V3.3.csv;ArduCopter/GCS_Mavlink.cpp:        //send_text_P(MAV_SEVERITY_HIGH;## getting rally point in GCS_Mavlink.cpp 5")); //;startsWith
+ardupilot_texts_V3.3.csv;ArduCopter/Log.cpp:        MAV_SEVERITY_HIGH;No dataflash inserted
+ardupilot_texts_V3.3.csv;ArduCopter/Log.cpp:    MAV_SEVERITY_HIGH;Erasing logs;startsWith
+ardupilot_texts_V3.3.csv;ArduCopter/Log.cpp:    MAV_SEVERITY_HIGH;Log erase complete;startsWith
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:            gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;check compass
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;CURRENT
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;Calibration Successful!
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;Failed!
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;Not landed
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;RC not calibrated
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;THROTTLE
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;compass disabled;startsWith
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;thr not zero
+ardupilot_texts_V3.3.csv;ArduCopter/compassmot.cpp:    gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;STARTING CALIBRATION
+ardupilot_texts_V3.3.csv;ArduCopter/control_autotune.cpp:            MAV_SEVERITY_HIGH;AutoTune: Failed
+ardupilot_texts_V3.3.csv;ArduCopter/control_autotune.cpp:            MAV_SEVERITY_HIGH;AutoTune: Saved Gains
+ardupilot_texts_V3.3.csv;ArduCopter/control_autotune.cpp:            MAV_SEVERITY_HIGH;AutoTune: Started
+ardupilot_texts_V3.3.csv;ArduCopter/control_autotune.cpp:            MAV_SEVERITY_HIGH;AutoTune: Stopped
+ardupilot_texts_V3.3.csv;ArduCopter/control_autotune.cpp:            MAV_SEVERITY_HIGH;AutoTune: Success
+ardupilot_texts_V3.3.csv;ArduCopter/crash_check.cpp:        MAV_SEVERITY_HIGH;Crash: Disarming
+ardupilot_texts_V3.3.csv;ArduCopter/crash_check.cpp:        MAV_SEVERITY_HIGH;Parachute: Landed
+ardupilot_texts_V3.3.csv;ArduCopter/crash_check.cpp:        MAV_SEVERITY_HIGH;Parachute: Too Low
+ardupilot_texts_V3.3.csv;ArduCopter/crash_check.cpp:    MAV_SEVERITY_HIGH;Parachute: Released!
+ardupilot_texts_V3.3.csv;ArduCopter/ekf_check.cpp:                    MAV_SEVERITY_HIGH;EKF variance
+ardupilot_texts_V3.3.csv;ArduCopter/esc_calibration.cpp:                MAV_SEVERITY_HIGH;ESC Calibration: restart board
+ardupilot_texts_V3.3.csv;ArduCopter/esc_calibration.cpp:            MAV_SEVERITY_HIGH;ESC Calibration: push safety switch
+ardupilot_texts_V3.3.csv;ArduCopter/esc_calibration.cpp:    MAV_SEVERITY_HIGH;ESC Calibration: auto calibration
+ardupilot_texts_V3.3.csv;ArduCopter/esc_calibration.cpp:    MAV_SEVERITY_HIGH;ESC Calibration: passing pilot throttle to ESCs
+ardupilot_texts_V3.3.csv;ArduCopter/events.cpp:    MAV_SEVERITY_HIGH;Low Battery!
+ardupilot_texts_V3.3.csv;ArduCopter/motor_test.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;Motor Test: RC not calibrated
+ardupilot_texts_V3.3.csv;ArduCopter/motor_test.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;Motor Test: Safety Switch
+ardupilot_texts_V3.3.csv;ArduCopter/motor_test.cpp:        gcs[chan-MAVLINK_COMM_0].send_text_P(MAV_SEVERITY_HIGH;Motor Test: vehicle not landed
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                        MAV_SEVERITY_HIGH;PreArm: inconsistent Accelerometers
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                        MAV_SEVERITY_HIGH;PreArm: inconsistent Gyros
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                        MAV_SEVERITY_HIGH;PreArm: inconsistent compasses
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                    MAV_SEVERITY_HIGH;Arm: Collective too high
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                    MAV_SEVERITY_HIGH;Arm: Throttle too high
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                    MAV_SEVERITY_HIGH;PreArm: Altitude disparity
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                    MAV_SEVERITY_HIGH;PreArm: Check FS_THR_VALUE
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Arm: Accelerometers not healthy
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Arm: Altitude disparity
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Arm: Barometer not healthy
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Arm: Check Battery
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Arm: Collective below Failsafe
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Arm: Gyros not healthy
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Arm: Leaning
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Arm: Throttle below Failsafe
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;Locate Copter Alarm!
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: ACRO_BAL_ROLL/PITCH
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Accelerometers not healthy
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Accels not calibrated
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Barometer not healthy
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Check ANGLE_MAX
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Check Battery
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Check Board Voltage
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Check Heli Parameters
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Check mag field
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Collective below Failsafe
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Compass not calibrated
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Compass not healthy
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Compass offsets too high
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Duplicate Aux Switch Options
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Gyros not healthy
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Need 3D Fix
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: Throttle below Failsafe
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                MAV_SEVERITY_HIGH;PreArm: check range finder
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;Arm: Gyro calibration failed
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;Arm: Mode not armable
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;Arm: Rotor Control Engaged
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;Arm: Safety Switch
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;Arm: Waiting for Nav Checks
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;Arm: check fence
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: EKF compass variance
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: EKF-home variance
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: High GPS HDOP
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: Interlock/E-Stop Conflict
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: Motor Emergency Stopped
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: Motor Interlock Enabled
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: RC not calibrated
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: Waiting for Nav Checks
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:            MAV_SEVERITY_HIGH;PreArm: check fence
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:        MAV_SEVERITY_HIGH;Arm: Motor Emergency Stopped
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:        MAV_SEVERITY_HIGH;Arm: Motor Interlock Enabled
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:    MAV_SEVERITY_HIGH;ARMING MOTORS
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:    MAV_SEVERITY_HIGH;DISARMING MOTORS
+ardupilot_texts_V3.3.csv;ArduCopter/switches.cpp:    MAV_SEVERITY_HIGH;Trim saved
+ardupilot_texts_V3.3.csv;ArduCopter/system.cpp:        MAV_SEVERITY_LOW;Waiting for first HIL_STATE message
+ardupilot_texts_V3.3.csv;ArduCopter/system.cpp:    MAV_SEVERITY_LOW;GROUND START
+ardupilot_texts_V3.3.csv;ArduPlane/ArduPlane.cpp:                    MAV_SEVERITY_LOW;FBWA tdrag mode;startsWith
+ardupilot_texts_V3.3.csv;ArduPlane/ArduPlane.cpp:                MAV_SEVERITY_HIGH;Disable fence failed (autodisable)
+ardupilot_texts_V3.3.csv;ArduPlane/ArduPlane.cpp:                MAV_SEVERITY_HIGH;Disable fence floor failed (autodisable)
+ardupilot_texts_V3.3.csv;ArduPlane/ArduPlane.cpp:                MAV_SEVERITY_HIGH;Fence disabled (autodisable)
+ardupilot_texts_V3.3.csv;ArduPlane/ArduPlane.cpp:                MAV_SEVERITY_HIGH;Fence floor disabled (auto disable)
+ardupilot_texts_V3.3.csv;ArduPlane/Attitude.cpp:        MAV_SEVERITY_LOW;Demo Servos!
+ardupilot_texts_V3.3.csv;ArduPlane/GCS_Mavlink.cpp:                        plane.MAV_SEVERITY_HIGH;Fence floor disabled.
+ardupilot_texts_V3.3.csv;ArduPlane/GCS_Mavlink.cpp:                plane.MAV_SEVERITY_HIGH;Go around command accepted.
+ardupilot_texts_V3.3.csv;ArduPlane/GCS_Mavlink.cpp:                plane.MAV_SEVERITY_HIGH;Rejected go around command.
+ardupilot_texts_V3.3.csv;ArduPlane/GCS_Mavlink.cpp:            send_text_P(MAV_SEVERITY_LOW;bad fence point
+ardupilot_texts_V3.3.csv;ArduPlane/GCS_Mavlink.cpp:            send_text_P(MAV_SEVERITY_LOW;fencing must be disabled
+ardupilot_texts_V3.3.csv;ArduPlane/Log.cpp:    MAV_SEVERITY_LOW;Erasing logs
+ardupilot_texts_V3.3.csv;ArduPlane/Log.cpp:    MAV_SEVERITY_LOW;Log erase complete
+ardupilot_texts_V3.3.csv;ArduPlane/arming_checks.cpp:            MAV_SEVERITY_HIGH;PreArm: LIM_PITCH_MAX too small
+ardupilot_texts_V3.3.csv;ArduPlane/arming_checks.cpp:            MAV_SEVERITY_HIGH;PreArm: LIM_PITCH_MIN too large
+ardupilot_texts_V3.3.csv;ArduPlane/arming_checks.cpp:            MAV_SEVERITY_HIGH;PreArm: LIM_ROLL_CD too small
+ardupilot_texts_V3.3.csv;ArduPlane/arming_checks.cpp:            MAV_SEVERITY_HIGH;PreArm: invalid THR_FS_VALUE for rev throttle
+ardupilot_texts_V3.3.csv;ArduPlane/commands_logic.cpp:			MAV_SEVERITY_LOW;Reached home
+ardupilot_texts_V3.3.csv;ArduPlane/commands_logic.cpp:                MAV_SEVERITY_HIGH;Enable fence failed (cannot autoenable
+ardupilot_texts_V3.3.csv;ArduPlane/commands_logic.cpp:                MAV_SEVERITY_HIGH;Fence enabled. (autoenabled)
+ardupilot_texts_V3.3.csv;ArduPlane/commands_logic.cpp:            MAV_SEVERITY_HIGH;verify_nav: Invalid or no current Nav cmd
+ardupilot_texts_V3.3.csv;ArduPlane/commands_logic.cpp:        MAV_SEVERITY_HIGH;verify_conditon: Invalid or no current Condition cmd
+ardupilot_texts_V3.3.csv;ArduPlane/commands_logic.cpp:        MAV_SEVERITY_LOW;Reached altitude
+ardupilot_texts_V3.3.csv;ArduPlane/commands_logic.cpp:        MAV_SEVERITY_LOW;verify_nav: LOITER orbits complete
+ardupilot_texts_V3.3.csv;ArduPlane/commands_logic.cpp:        MAV_SEVERITY_LOW;verify_nav: LOITER time complete
+ardupilot_texts_V3.3.csv;ArduPlane/control_modes.cpp:                MAV_SEVERITY_LOW;PX4IO Override enable failed
+ardupilot_texts_V3.3.csv;ArduPlane/control_modes.cpp:                MAV_SEVERITY_LOW;PX4IO Override enabled
+ardupilot_texts_V3.3.csv;ArduPlane/control_modes.cpp:            MAV_SEVERITY_LOW;PX4IO Override disabled
+ardupilot_texts_V3.3.csv;ArduPlane/events.cpp:        MAV_SEVERITY_HIGH;No GCS heartbeat.
+ardupilot_texts_V3.3.csv;ArduPlane/events.cpp:    MAV_SEVERITY_LOW;Failsafe - Long event on
+ardupilot_texts_V3.3.csv;ArduPlane/events.cpp:    MAV_SEVERITY_LOW;Failsafe - Short event off
+ardupilot_texts_V3.3.csv;ArduPlane/events.cpp:    MAV_SEVERITY_LOW;Failsafe - Short event on
+ardupilot_texts_V3.3.csv;ArduPlane/geofence.cpp:            MAV_SEVERITY_LOW;geo-fence OK
+ardupilot_texts_V3.3.csv;ArduPlane/geofence.cpp:    MAV_SEVERITY_HIGH;geo-fence setup error
+ardupilot_texts_V3.3.csv;ArduPlane/geofence.cpp:    MAV_SEVERITY_LOW;geo-fence loaded
+ardupilot_texts_V3.3.csv;ArduPlane/geofence.cpp:    MAV_SEVERITY_LOW;geo-fence triggered
+ardupilot_texts_V3.3.csv;ArduPlane/landing.cpp:                MAV_SEVERITY_LOW;Auto-Disarmed
+ardupilot_texts_V3.3.csv;ArduPlane/landing.cpp:            MAV_SEVERITY_LOW;Landing sequence begun.
+ardupilot_texts_V3.3.csv;ArduPlane/landing.cpp:    MAV_SEVERITY_HIGH;Unable to start landing sequence.
+ardupilot_texts_V3.3.csv;ArduPlane/sensors.cpp:    MAV_SEVERITY_LOW;zero airspeed calibrated
+ardupilot_texts_V3.3.csv;ArduPlane/system.cpp:        MAV_SEVERITY_LOW;NO airspeed
+ardupilot_texts_V3.3.csv;ArduPlane/system.cpp:        MAV_SEVERITY_MEDIUM;Beginning INS calibration; do not move plane
+ardupilot_texts_V3.3.csv;ArduPlane/system.cpp:    MAV_SEVERITY_LOW;Ready to FLY.;endsWith
+ardupilot_texts_V3.3.csv;ArduPlane/takeoff.cpp:        MAV_SEVERITY_LOW;FBWA tdrag off
+ardupilot_texts_V3.3.csv;libraries/APM_OBC/APM_OBC.cpp:                GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;Dual loss TERMINATE
+ardupilot_texts_V3.3.csv;libraries/APM_OBC/APM_OBC.cpp:            GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;Fence TERMINATE
+ardupilot_texts_V3.3.csv;libraries/APM_OBC/APM_OBC.cpp:            GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;GCS OK
+ardupilot_texts_V3.3.csv;libraries/APM_OBC/APM_OBC.cpp:            GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;GPS OK
+ardupilot_texts_V3.3.csv;libraries/APM_OBC/APM_OBC.cpp:            GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;RC failure terminate
+ardupilot_texts_V3.3.csv;libraries/APM_OBC/APM_OBC.cpp:            GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;Starting AFS_AUTO
+ardupilot_texts_V3.3.csv;libraries/APM_OBC/APM_OBC.cpp:            GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;State DATA_LINK_LOSS
+ardupilot_texts_V3.3.csv;libraries/APM_OBC/APM_OBC.cpp:            GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;State GPS_LOSS
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                        MAV_SEVERITY_HIGH;PreArm: inconsistent gyros
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: 3D accel cal needed
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: AHRS not healthy!
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: Bad GPS Position
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: Barometer not healthy!
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: Battery failsafe on.
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: Compass not healthy!
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: Radio failsafe on
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: accels not healthy!
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: airspeed not healthy
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: gyros not calibrated!
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: gyros not healthy!
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:                MAV_SEVERITY_HIGH;PreArm: logging not available
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:            MAV_SEVERITY_HIGH;PreArm: Hardware Safety Switch
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:        MAV_SEVERITY_HIGH;Throttle armed!
+ardupilot_texts_V3.3.csv;libraries/AP_Arming/AP_Arming.cpp:    MAV_SEVERITY_HIGH;Throttle disarmed!
+ardupilot_texts_V3.3.csv;libraries/GCS_MAVLink/GCS_Common.cpp:        send_text_P(MAV_SEVERITY_LOW;flight plan received
+ardupilot_texts_V3.3.csv;libraries/GCS_MAVLink/GCS_Common.cpp:        send_text_P(MAV_SEVERITY_LOW;flight plan update rejected
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_ftp.cpp:			MAV_SEVERITY_CRITICAL;FTP: list readdir_r failure
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_ftp.cpp:		MAV_SEVERITY_CRITICAL;FTP: can't open path (file system corrupted?)
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_main.cpp:		MAV_SEVERITY_CRITICAL;Save params and reboot to change COMPID
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_main.cpp:		MAV_SEVERITY_CRITICAL;Save params and reboot to change SYSID
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:					MAV_SEVERITY_CRITICAL;WPM: ERR: not all items sent -> IDLE
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:					MAV_SEVERITY_CRITICAL;WPM: REJ. CMD: Req. WP was unexpected
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:					MAV_SEVERITY_CRITICAL;WPM: WP CURR CMD: Error setting ID
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:				MAV_SEVERITY_CRITICAL;IGN MISSION_ITEM_REQUEST: No active transfer
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:				MAV_SEVERITY_CRITICAL;WPM: REJ. CMD: Busy
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:				MAV_SEVERITY_CRITICAL;WPM: WP CURR CMD: Not in list
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:				MAV_SEVERITY_INFO;WP CMD OK TRY AGAIN
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:				MAV_SEVERITY_INFO;WPM: COUNT 0: CLEAR MISSION
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:				MAV_SEVERITY_INFO;WPM: mission is empty
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;IGN MISSION_ITEM: Busy
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;IGN MISSION_ITEM: No transfer
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;IGN REQUEST LIST: Busy
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;REJ. WP CMD: partner id mismatch
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;Unable to write on micro SD
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;WPM: IGN CLEAR CMD: Busy
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;WPM: IGN MISSION_COUNT: Busy
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;WPM: IGN WP CURR CMD: Busy
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_CRITICAL;WPM: REJ. CMD: partner id mismatch
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:			MAV_SEVERITY_INFO;WPM: Transfer complete.
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:		MAV_SEVERITY_CRITICAL;ERROR: Waypoint index exceeds list capacity
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:		MAV_SEVERITY_CRITICAL;ERROR: can't save mission state
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:		MAV_SEVERITY_CRITICAL;ERROR: wp index out of bounds
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:		MAV_SEVERITY_CRITICAL;Operation timeout
+ardupilot_texts_V3.3.csv;modules/PX4Firmware/src/modules/mavlink/mavlink_mission.cpp:		MAV_SEVERITY_CRITICAL;Unable to read from micro SD
+ardupilot_texts_V3.3.csv;ArduCopter/motors.cpp:                GCS_MAVLINK::send_statustext_all(MAV_SEVERITY_HIGH;PreArm:;startsWith
