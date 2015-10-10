@@ -287,7 +287,7 @@ void _MavLink_receive() {
           // Max 8 bit
           if(ap_gps_hdop == 0 || ap_gps_hdop > 255)
             ap_gps_hdop = 255;
-          if(ap_fixtype == 3)  {
+          if(ap_fixtype >= 3)  {
             ap_latitude = mavlink_msg_gps_raw_int_get_lat(&msg);
             ap_longitude = mavlink_msg_gps_raw_int_get_lon(&msg);
             ap_gps_altitude = mavlink_msg_gps_raw_int_get_alt(&msg);      // 1m = 1000
