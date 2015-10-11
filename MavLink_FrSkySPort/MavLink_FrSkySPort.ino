@@ -153,7 +153,7 @@
 //#define DEBUG_APM_GLOBAL_POSITION_INT_COV   // MSG #63  - planned - currently not implemented - not supported by APM
 //#define DEBUG_APM_RC_CHANNELS               // MSG #65
 //#define DEBUG_APM_VFR_HUD                   // MSG #74
-#define DEBUG_APM_STATUSTEXT                // MSG #254 -
+//#define DEBUG_APM_STATUSTEXT                // MSG #254 -
 //#define DEBUG_APM_PARSE_STATUSTEXT
 //#define DEBUG_GIMBAL_HEARTBEAT
 //#define DEBUG_OTHER_HEARTBEAT
