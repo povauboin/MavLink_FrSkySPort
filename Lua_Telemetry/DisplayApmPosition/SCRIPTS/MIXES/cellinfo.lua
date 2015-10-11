@@ -48,7 +48,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 	drop = celldropmvolts/10
 	hornfile=""
 	if horn>0 then
-		hornfile="SOUNDS/en/ALARM"..horn.."K.wav"
+		hornfile="SOUNDS/en/TELEM/ALARM"..horn.."K.wav"
 	end
 
 	newtime=getTime()
