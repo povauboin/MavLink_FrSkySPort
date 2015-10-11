@@ -490,13 +490,21 @@ void _MavLink_receive() {
           mavlink_msg_statustext_decode(&msg,&statustext);
           ap_status_severity = statustext.severity;
           ap_status_send_count = 1; // since messages are queued we only need one send_count
-          parseStatusText(statustext.severity, statustext.text);
+          if ( AC_VERSION == "3.3") {
+            parseStatusText_v3_3(statustext.severity, statustext.text);
+          } else {
+            parseStatusText_v3_2(statustext.severity, statustext.text);
+          }
 
           #ifdef DEBUG_APM_STATUSTEXT
             debugSerial.print(millis());
-            debugSerial.print("\tMAVLINK_MSG_ID_STATUSTEXT: severity ");
+            debugSerial.print("\tAC_VERSION: ");
+            debugSerial.print(AC_VERSION);
+            debugSerial.print("\t textId: ");
+            debugSerial.print(ap_status_text_id);
+            debugSerial.print("\tMAVLINK_MSG_ID_STATUSTEXT - severity: ");
             debugSerial.print(statustext.severity);
-            debugSerial.print(", text");
+            debugSerial.print(", text: ");
             debugSerial.print(statustext.text);
             debugSerial.println();
           #endif

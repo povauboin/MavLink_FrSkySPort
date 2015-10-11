@@ -1,0 +1,68 @@
+/.cpp:/!d
+/SIM_JSBSim.cpp/d
+/"/!d
+
+#/simplegcs.cpp/d
+#/GCS_Common.cpp/d
+#/.txt/d
+#/.log/d
+#/.xml/d
+#/.mas/d
+#/.msg/d
+#/.pas/d
+#/.uavcan/d
+#/.c:/d
+#/.py/d
+#/.h:/d
+#/void/d
+#/(chan)/d
+#/:[[:space:]]*\/\//d
+#/send_text_P(severity, str)/d
+#/PSTR(FIRMWARE_STRING)/d
+#/s->severity/d
+#/gcs\[0\].pending_status.severity/d
+
+s/,[[:space:]]PSTR/,PSTR/
+s/_mavlink->send_statustext_critical("/MAV_SEVERITY_CRITICAL;/
+s/send_statustext_critical("/MAV_SEVERITY_CRITICAL;/
+s/_mavlink->send_statustext(MAV_SEVERITY_CRITICAL, "/MAV_SEVERITY_CRITICAL;/
+s/_mavlink->send_statustext_info("/MAV_SEVERITY_INFO;/
+s/(SEVERITY/(MAV_SEVERITY/
+s/gcs_send_text_P(//
+s/:[[:space:]]*/;/
+s/;gcs\[chan-MAVLINK_COMM_0\]./;/
+s/;send_text_P(/;/
+/cpp;\/\//d
+s/;GCS_MAVLINK::send_statustext_all(/;/
+s/;tracker./;/
+s/;plane./;/
+s/;gcs_send_text_fmt(PSTR("/;MAV_SEVERITY_UNKNOWN;/
+s/,PSTR("/;/
+
+s/[[:blank:]]*$//
+
+s/ "));$//
+s/"));$//
+s/));$//
+s/);$//
+s/"$//
+
+/FRAME_CONFIG_STRING/d
+/NUTTX_GIT_VERSION/d
+/G_Dt_max/d
+/flight mode/d
+/SLEW/d
+/PERF/d
+s/ = /=/
+s/\\n\\n \(.*\)/\1;endsWith/
+s/\\n$/;startsWith/
+s/;\\n/;;\\n/
+s/;\\n\(.*\)/\1;endsWith/
+s/ #.*/;startsWith/
+s/ 0x%x.*/;startsWith/
+s/ %.*/;startsWith/
+s/,//
+s/ xaccel.*/;startsWith/
+s/ speed=.*/;startsWith/
+s/ GPSspd=.*/;startsWith/
+s/=%.*/;startsWith/

@@ -447,15 +447,15 @@
 	    lastarmed=apmarmed
 	    if apmarmed==1 then
 	      model.setTimer(0,{ mode=1, start=0, value= SumFlight, countdownBeep=0, minuteBeep=1, persistent=1 })
-	      playFile("SOUNDS/en/SARM.wav")
-	      playFile("/SOUNDS/en/AVFM"..(FmodeNr-1).."A.wav")
+	      playFile("/SOUNDS/en/TELEM/SARM.wav")
+	      playFile("/SOUNDS/en/TELEM/AVFM"..(FmodeNr-1).."A.wav")
 
 	    else
 
 	      SumFlight = model.getTimer(0).value
 	      model.setTimer(0,{ mode=0, start=0, value= model.getTimer(0).value, countdownBeep=0, minuteBeep=1, persistent=1 })
 
-	      playFile("SOUNDS/en/SDISAR.wav")
+	      playFile("/SOUNDS/en/TELEM/SDISAR.wav")
 	    end
 
 	  end
@@ -485,7 +485,7 @@
 	  -- play sound
 	  if apm_status_message.textnr >0 then
 	    if last_apm_message_played ~= apm_status_message.textnr then
-	      playFile("SOUNDS/en/MSG"..apm_status_message.textnr..".wav")
+	      playFile("/SOUNDS/en/TELEM/MSG"..apm_status_message.textnr..".wav")
 	      last_apm_message_played = apm_status_message.textnr
 	    end
 	  end
@@ -500,7 +500,7 @@
 	  end
 
 	  if FmodeNr~=last_flight_mode then
-	    playFile("/SOUNDS/en/AVFM"..(FmodeNr-1).."A.wav")
+	    playFile("/SOUNDS/en/TELEM/AVFM"..(FmodeNr-1).."A.wav")
 	    last_flight_mode=FmodeNr
 	  end
 	end
@@ -512,7 +512,7 @@
 	  if (watthours  + ( watthours * ( model.getGlobalVariable(8, 1)/100) ) ) >= maxconsume then
 	    localtimetwo = localtimetwo + (getTime() - oldlocaltimetwo)
 	    if localtimetwo >=800 then --8s
-	      playFile("/SOUNDS/en/ALARM3K.wav")
+	      playFile("/SOUNDS/en/TELEM/ALARM3K.wav")
 	      localtimetwo = 0
 	    end
 	    oldlocaltimetwo = getTime()

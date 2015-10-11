@@ -48,7 +48,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 	drop = celldropmvolts/10
 	hornfile=""
 	if horn>0 then
-		hornfile="SOUNDS/en/ALARM"..horn.."K.wav"
+		hornfile="SOUNDS/en/TELEM/ALARM"..horn.."K.wav"
 	end
 
 	newtime=getTime()
@@ -64,20 +64,20 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 		elseif cellmin<=voltcritcal/100 then --critical
 			if horn>0 then
 				playFile(hornfile)
-				playFile("/SOUNDS/en/CRICMK.wav")
+				playFile("/SOUNDS/en/TELEM/CRICM.wav")
 			else
-				playFile("/SOUNDS/en/CRICM.wav")
+				playFile("/SOUNDS/en/TELEM/CRICM.wav")
 			end
 			playNumber(firstitem, 0, 0)
-			playFile("/SOUNDS/en/POINT.wav")
+			playFile("/SOUNDS/en/TELEM/POINT.wav")
 			playNumber(miditem, 0, 0)
 			if lastitem ~= 0 then
 				playNumber(lastitem, 0, 0)
 			end
 		elseif cellmin<=voltwarnlevel/100 then --warnlevel
-			playFile("/SOUNDS/en/WARNCM.wav")
+			playFile("/SOUNDS/en/TELEM/WARNCM.wav")
 			playNumber(firstitem, 0, 0)
-			playFile("/SOUNDS/en/POINT.wav")
+			playFile("/SOUNDS/en/TELEM/POINT.wav")
 			playNumber(miditem, 0, 0)
 			if lastitem ~= 0 then
 				playNumber(lastitem, 0, 0)
@@ -87,9 +87,9 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 				oldcellvoltage = cellmin
 			end
 			if oldcellvoltage*100 - cellmin*100 >= drop then
-				playFile("/SOUNDS/en/CELLMIN.wav")
+				playFile("/SOUNDS/en/TELEM/CELLMIN.wav")
 				playNumber(firstitem, 0, 0)
-				playFile("/SOUNDS/en/POINT.wav")
+				playFile("/SOUNDS/en/TELEM/POINT.wav")
 				playNumber(miditem, 0, 0)
 				if lastitem ~= 0 then
 					playNumber(lastitem, 0, 0)

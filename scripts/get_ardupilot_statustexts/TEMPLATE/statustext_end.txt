@@ -1,0 +1,17 @@
+
+  // Unknown text (textId = 1023)
+  else                                                                    textId = 1023;
+
+  ap_status_text_id = textId;
+
+  #ifdef DEBUG_APM_PARSE_STATUSTEXT
+    debugSerial.print(millis());
+    debugSerial.print("\tparseStatusText. severity: ");
+    debugSerial.print(severity);
+    debugSerial.print(", text: \"");
+    debugSerial.print(text);
+    debugSerial.print("\" textId: ");
+    debugSerial.print(textId);
+    debugSerial.println();
+  #endif
+}

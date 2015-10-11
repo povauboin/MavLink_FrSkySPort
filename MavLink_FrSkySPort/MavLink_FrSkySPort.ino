@@ -121,6 +121,8 @@
 #define GB_SYSID            71      // gimbal system id
 #define GB_CMPID            67      // gimbal component id
 
+//#define AC_VERSION          "3.2"
+#define AC_VERSION          "3.3"
 /*
  * *******************************************************
  * *** Enable Addons:                                  ***
