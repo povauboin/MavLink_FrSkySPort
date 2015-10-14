@@ -490,7 +490,7 @@ void _MavLink_receive() {
           mavlink_msg_statustext_decode(&msg,&statustext);
           ap_status_severity = statustext.severity;
           ap_status_send_count = 1; // since messages are queued we only need one send_count
-          if ( AC_VERSION == "3.3") {
+          if ( AC_VERSION == 3.3) {
             parseStatusText_v3_3(statustext.severity, statustext.text);
           } else {
             parseStatusText_v3_2(statustext.severity, statustext.text);
