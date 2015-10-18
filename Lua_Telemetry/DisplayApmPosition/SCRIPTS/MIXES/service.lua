@@ -72,7 +72,7 @@ local function run_func(mainservice, serviceone, servicetwo, servicethree, repea
             -- uncomment next three lines (if than) to test timer function in a loop. set "service 1" to something modulo 10.
             -- than set yor local timer to 10h and start the timer
             -- if testone == 0 then
-            --    model.setTimer(1,{ mode=1, start=0,value=model.getTimer(1).value -200, countdownBeep=0, minuteBeep=0, persistent=2 })
+            --    model.setTimer(1,{ mode=1, start=0,value=model.getTimer(1).value -200, countdownBeep=0, minuteBeep=false, persistent=2 })
             -- end
         end
 
@@ -92,7 +92,7 @@ local function run_func(mainservice, serviceone, servicetwo, servicethree, repea
 
             -- reset servicetime
             if mainreached == 0 then
-                model.setTimer(1,{ mode=0, start=0,value=0, countdownBeep=0, minuteBeep=0, persistent=2 })
+                model.setTimer(1,{ mode=0, start=0,value=0, countdownBeep=0, minuteBeep=false, persistent=2 })
             end
         end
 

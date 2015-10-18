@@ -92,11 +92,11 @@
 
 	--Timer 0 is time while vehicle is armed
 
-	model.setTimer(0, {mode=0, start=0, value= 0, countdownBeep=0, minuteBeep=1, persistent=1})
+	model.setTimer(0, {mode=0, start=0, value=0, countdownBeep=0, minuteBeep=true, persistent=1})
 
 	--Timer 1 is accumulated time per flight mode
 
-	--model.setTimer(1, {mode=0, start=0, value= 0, countdownBeep=0, minuteBeep=0, persistent=1})
+	--model.setTimer(1, {mode=0, start=0, value=0, countdownBeep=0, minuteBeep=false, persistent=1})
 
 --Init Flight Tables
 	local FlightMode = {
@@ -444,16 +444,16 @@
 	  if lastarmed~=apmarmed then
 	    lastarmed=apmarmed
 	    if apmarmed==1 then
-	      model.setTimer(0,{ mode=1, start=0, value= SumFlight, countdownBeep=0, minuteBeep=1, persistent=1 })
-              model.setTimer(1,{ mode=1, start=0, value= PersitentSumFlight, countdownBeep=0, minuteBeep=0, persistent=2 })
+	      model.setTimer(0,{ mode=1, start=0, value=SumFlight, countdownBeep=0, minuteBeep=true, persistent=1 })
+              model.setTimer(1,{ mode=1, start=0, value=PersitentSumFlight, countdownBeep=0, minuteBeep=false, persistent=2 })
 	      playFile("/SOUNDS/en/TELEM/SARM.wav")
 	      playFile("/SOUNDS/en/TELEM/AVFM"..(FmodeNr-1).."A.wav")
 
 	    else
 
 	      SumFlight = model.getTimer(0).value
-	      model.setTimer(0,{ mode=0, start=0, value= model.getTimer(0).value, countdownBeep=0, minuteBeep=1, persistent=1 })
-              model.setTimer(1,{ mode=0, start=0, value= model.getTimer(1).value, countdownBeep=0, minuteBeep=0, persistent=2 })
+	      model.setTimer(0,{ mode=0, start=0, value=model.getTimer(0).value, countdownBeep=0, minuteBeep=true, persistent=1 })
+              model.setTimer(1,{ mode=0, start=0, value=model.getTimer(1).value, countdownBeep=0, minuteBeep=false, persistent=2 })
 
 	      playFile("/SOUNDS/en/TELEM/SDISAR.wav")
 	    end
