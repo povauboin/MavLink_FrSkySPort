@@ -1,9 +1,13 @@
 --
--- Service lua
+-- service.lua part of of MavLink_FrSkySPort
+--		https://github.com/Clooney82/MavLink_FrSkySPort
 --
 -- Copyright (C) 2015 Michael Wolkstein
+--	 https://github.com/Clooney82/MavLink_FrSkySPort
 --
--- https://github.com/Clooney82/MavLink_FrSkySPort
+-- modified by
+--	(c) 2015 Jochen Kielkopf
+--	 https://github.com/Clooney82/MavLink_FrSkySPort
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by

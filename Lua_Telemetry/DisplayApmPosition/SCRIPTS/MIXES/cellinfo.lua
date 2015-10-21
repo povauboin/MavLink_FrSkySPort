@@ -1,9 +1,13 @@
 --
--- CellInfo lua
+-- cellinfo.lua part of of MavLink_FrSkySPort
+--		https://github.com/Clooney82/MavLink_FrSkySPort
 --
 -- Copyright (C) 2014 Michael Wolkstein
+--	 https://github.com/Clooney82/MavLink_FrSkySPort
 --
--- https://github.com/Clooney82/MavLink_FrSkySPort
+-- modified by
+--	(c) 2015 Jochen Kielkopf
+--	 https://github.com/Clooney82/MavLink_FrSkySPort
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -32,6 +36,7 @@ local miditem=0
 local lastitem=0
 local mult=0
 local newtime=0
+local used_flightmode=8
 
 local function init_func()
 	lastimeplaysound=getTime()
@@ -53,7 +58,12 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 
 	newtime=getTime()
 	if newtime-lastimeplaysound>=repeattime then
-		cellmin=getValue("Cmin") + 0.0001 --- 214 = cell-min
+		if getValue("Cmin") == nil then
+			cellmin = data.cmin + 0.0001
+		else
+			cellmin=getValue("Cmin") + 0.0001 --- 214 = cell-min
+		end
+
 		lastimeplaysound = newtime
 
 		firstitem = math.floor(cellmin)
@@ -87,12 +97,14 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 				oldcellvoltage = cellmin
 			end
 			if oldcellvoltage*100 - cellmin*100 >= drop then
-				playFile("/SOUNDS/en/TELEM/CELLMIN.wav")
-				playNumber(firstitem, 0, 0)
-				playFile("/SOUNDS/en/TELEM/POINT.wav")
-				playNumber(miditem, 0, 0)
-				if lastitem ~= 0 then
-					playNumber(lastitem, 0, 0)
+				if model.getGlobalVariable(7, used_flightmode) == 1 then
+					playFile("/SOUNDS/en/TELEM/CELLMIN.wav")
+					playNumber(firstitem, 0, 0)
+					playFile("/SOUNDS/en/TELEM/POINT.wav")
+					playNumber(miditem, 0, 0)
+					if lastitem ~= 0 then
+						playNumber(lastitem, 0, 0)
+					end
 				end
 				oldcellvoltage = cellmin
 			end
