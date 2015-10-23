@@ -38,7 +38,8 @@ local used_flightmode=8
 
 --local function run_func(offsetmah, offsetwatth, batcapwh, batcapmah)
 local function run_func(offsetmah, offsetwatth, batcapwh)
-	if oldoffsetmah ~= offsetmah or oldoffsetwatth ~= offsetwatth or oldbatcapwh ~= batcapwh or oldbatcapmah ~= batcapmah then
+	--if oldoffsetmah ~= offsetmah or oldoffsetwatth ~= offsetwatth or oldbatcapwh ~= batcapwh or oldbatcapmah ~= batcapmah then
+	if oldoffsetmah ~= offsetmah or oldoffsetwatth ~= offsetwatth or oldbatcapwh ~= batcapwh then
 	  batcapmah = batcapmah / 100
 	  model.setGlobalVariable(1, used_flightmode, offsetmah)   --mA/h
     model.setGlobalVariable(2, used_flightmode, offsetwatth) --Wh
