@@ -58,11 +58,11 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 
 	newtime=getTime()
 	if newtime-lastimeplaysound>=repeattime then
-		if getValue("Cmin") == nil then
-			cellmin = data.cmin + 0.0001
-		else
+		--if getValue("Cmin") == nil then
+		--	cellmin = data.cmin + 0.0001
+		--else
 			cellmin=getValue("Cmin") + 0.0001 --- 214 = cell-min
-		end
+		--end
 
 		lastimeplaysound = newtime
 

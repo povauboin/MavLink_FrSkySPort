@@ -308,6 +308,7 @@ local function doTelemetry()
 			playSound("txt", "armed", "")
 	  else
 	    SumFlightTime = model.getTimer(0).value
+			PersitentSumFlight = model.getTimer(1).value
 			if model.getGlobalVariable(6, used_flightmode) == 1 then
 				model.setTimer(0,{ mode=0, start=0, value=model.getTimer(0).value, countdownBeep=0, minuteBeep=true, persistent=1 })
 			else
