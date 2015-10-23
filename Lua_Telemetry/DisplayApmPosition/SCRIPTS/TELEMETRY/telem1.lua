@@ -33,8 +33,7 @@
 --------------------------------------------------------------------------------
 -- Do some init tasks - PLEASE DO NOT EDIT
 --------------------------------------------------------------------------------
-_directory = {}
-Severity={}
+local _directory = {}
 
 --------------------------------------------------------------------------------
 -- User configurable part
@@ -81,9 +80,6 @@ FlightMode = {
 --------------------------------------------------------------------------------
 --            please do not edit below, unless you know what you do
 --------------------------------------------------------------------------------
-modelInfo = model.getInfo()
-modelName = modelInfo.name
-
 --------------------------------------------------------------------------------
 -- Variables Definitions
 --------------------------------------------------------------------------------
@@ -102,7 +98,6 @@ local apm_status_message = {severity = 0, textid = 0, timestamp = 0, last_played
 
 local lastArmed   		 = 0
 local last_flight_mode = 0
-local SumFlightTime    = 0
 local NumFlighModes 	 = 99
 
 local localtime      	 = 0
@@ -127,22 +122,22 @@ local arrowLine = {
 --------------------------------------------------------------------------------
 -- Helper functions
 --------------------------------------------------------------------------------
-local function getValueOrDefault(value)
-	local tmp = getValue(value)
-	if tmp == nil then
-		return 0
-	end
-	return tmp
-end
+--local function getValueOrDefault(value)
+--	local tmp = getValue(value)
+--	if tmp == nil then
+--		return 0
+--	end
+--	return tmp
+--end
 
-local function getTelemetryId(name)
-	field = getFieldInfo(name)
-	if field then
-		return field.id
-	else
-		return -1
-	end
-end
+--local function getTelemetryId(name)
+--	field = getFieldInfo(name)
+--	if field then
+--		return field.id
+--	else
+--		return -1
+--	end
+--end
 
 --------------------------------------------------------------------------------
 -- Play sounds function
@@ -173,8 +168,6 @@ local function getTelemetry()
 
 	local tmp = 0
 	local gpsLatLon = {}
-	local i = 0
-	local cells = {}
 
 	--local data = {}
 
@@ -279,9 +272,7 @@ local function getTelemetry()
 	--data.throttle    = data.rpm%200				-- Throttle in percent (0 = 0, 100, 100)							-- currently not used
 	--data.battremain  = (data.rpm - data.throttle)/2		-- Remaining Bat. capacitiy in percent		-- currently not used
 
-
 	--return data
-	return 0
 end
 
 --------------------------------------------------------------------------------
@@ -300,21 +291,19 @@ local function doTelemetry()
 	      home.time = getTime()
 	    end
 			if model.getGlobalVariable(6, used_flightmode) == 1 then
-				model.setTimer(0,{ mode=1, start=0, value=SumFlightTime, countdownBeep=0, minuteBeep=true, persistent=1 })
+				model.setTimer(0,{ mode=1, start=0, countdownBeep=0, minuteBeep=true, persistent=1 })
 			else
-				model.setTimer(0,{ mode=1, start=0, value=SumFlightTime, countdownBeep=0, minuteBeep=false, persistent=1 })
+				model.setTimer(0,{ mode=1, start=0, countdownBeep=0, minuteBeep=false, persistent=1 })
 			end
-	    model.setTimer(1,{ mode=1, start=0, value=PersitentSumFlight, countdownBeep=0, minuteBeep=false, persistent=2 })
+	    model.setTimer(1,{ mode=1, start=0, countdownBeep=0, minuteBeep=false, persistent=2 })
 			playSound("txt", "armed", "")
 	  else
-	    SumFlightTime = model.getTimer(0).value
-			PersitentSumFlight = model.getTimer(1).value
 			if model.getGlobalVariable(6, used_flightmode) == 1 then
-				model.setTimer(0,{ mode=0, start=0, value=model.getTimer(0).value, countdownBeep=0, minuteBeep=true, persistent=1 })
+				model.setTimer(0,{ mode=0, start=0, countdownBeep=0, minuteBeep=true, persistent=1 })
 			else
-				model.setTimer(0,{ mode=0, start=0, value=model.getTimer(0).value, countdownBeep=0, minuteBeep=false, persistent=1 })
+				model.setTimer(0,{ mode=0, start=0, countdownBeep=0, minuteBeep=false, persistent=1 })
 			end
-	    model.setTimer(1,{ mode=0, start=0, value=model.getTimer(1).value, countdownBeep=0, minuteBeep=false, persistent=2 })
+	    model.setTimer(1,{ mode=0, start=0, countdownBeep=0, minuteBeep=false, persistent=2 })
 			playSound("txt", "disarmed", "")
 	  end
 	  lastArmed = data.armed

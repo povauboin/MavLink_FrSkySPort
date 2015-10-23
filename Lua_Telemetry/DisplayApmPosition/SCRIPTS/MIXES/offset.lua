@@ -26,17 +26,18 @@
 local inputs = {
 	{"O-SET mAh% ", VALUE,-100, 100,   0},
 	{"O-SET Wh%",   VALUE,-100, 100,   0},
-	{"BatCap Wh",   VALUE,   0, 250,  30},
-	{"BatCap mAh",  VALUE,   0,15000,2700}
+	{"BatCap Wh",   VALUE,   0, 250,  30}
+--	{"BatCap mAh",  VALUE,   0,15000,2700}
 	}
 
 local oldoffsetmah=0
 local oldoffsetwatth=0
 local oldbatcapwh=0
-local oldbatcapmah=0
+--local oldbatcapmah=0
 local used_flightmode=8
 
-local function run_func(offsetmah, offsetwatth, batcapwh, batcapmah)
+--local function run_func(offsetmah, offsetwatth, batcapwh, batcapmah)
+local function run_func(offsetmah, offsetwatth, batcapwh)
 	if oldoffsetmah ~= offsetmah or oldoffsetwatth ~= offsetwatth or oldbatcapwh ~= batcapwh or oldbatcapmah ~= batcapmah then
 	  batcapmah = batcapmah / 100
 	  model.setGlobalVariable(1, used_flightmode, offsetmah)   --mA/h
@@ -48,7 +49,7 @@ local function run_func(offsetmah, offsetwatth, batcapwh, batcapmah)
 	  oldoffsetmah   = offsetmah
 	  oldoffsetwatth = offsetwatth
 	  oldbatcapwh    = batcapwh
-	  oldbatcapmah   = oldbatcapmah
+	  --oldbatcapmah   = oldbatcapmah
 	end
 end
 
