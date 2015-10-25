@@ -22,19 +22,16 @@
 local inputs = {
 	{"play sound", VALUE,   0,   1,   1},
 	{"timer beep", VALUE,   0,   1,   1},
-	{"cellinfo", VALUE,   0,   1,   1}
+	{"cellinfo",   VALUE,   0,   1,   1}
 	}
 
 -- Used Flight Mode for storeing config variables of telem script
 local used_flightmode = 8
-
 local old_playsound = 9
 local old_timerbeep = 9
 local old_cellinfo = 9
 
 local function run_func(playsound, timerbeep, cellinfo)
-	-- Write GLOBAL VARIABLE into Flightmode
-	-- used for config of telemetry script
 	if old_playsound ~= playsound then
 	  model.setGlobalVariable(0, used_flightmode, playsound)
 	  old_playsound = playsound

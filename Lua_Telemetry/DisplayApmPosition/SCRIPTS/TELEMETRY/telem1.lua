@@ -33,8 +33,6 @@
 --------------------------------------------------------------------------------
 -- Do some init tasks - PLEASE DO NOT EDIT
 --------------------------------------------------------------------------------
-local _directory = {}
-
 --------------------------------------------------------------------------------
 -- User configurable part
 --------------------------------------------------------------------------------
@@ -42,11 +40,7 @@ local _directory = {}
 local used_flightmode   = 8
 
 -- Setup Language you want. possibilities: en, de
-LANGUAGE = "en"
-
--- Setup Path of your Soundfiles and Images
-_directory.sounds = "/SOUNDS/"..LANGUAGE.."/TELEM/"
-_directory.pics   = "/SCRIPTS/BMP/"
+--LANGUAGE = "en"
 
 -- Available FlightModes
 FlightMode = {
@@ -146,17 +140,23 @@ local function playSound(sType, sValue, sValue2)
 	if model.getGlobalVariable(0, used_flightmode) == 1 then
 	  if sType == "txt" then
 	    if sValue == "armed" then
-	      playFile(_directory.sounds.."SARM.wav")
+				--playFile("/SOUNDS/"..LANGUAGE.."/TELEM/SARM.wav")
+				playFile("/SOUNDS/en/TELEM/SARM.wav")
 	    elseif sValue == "disarmed" then
-	      playFile(_directory.sounds.."SDISAR.wav")
+				--playFile("/SOUNDS/"..LANGUAGE.."/TELEM/SDISAR.wav")
+				playFile("/SOUNDS/en/TELEM/SDISAR.wav")
 	    elseif sValue == "maxWhReached" then
-	      playFile(_directory.sounds.."ALARM3K.wav")
+				--playFile("/SOUNDS/"..LANGUAGE.."/TELEM/ALARM3K.wav")
+				playFile("/SOUNDS/en/TELEM/ALARM3K.wav")
 	    end
 	  elseif sType == "FM" then
-	    playFile(_directory.sounds.."AVFM"..sValue.."A.wav") -- old: AVFM"..(FmodeNr-1).."A.wav
+			--playFile("/SOUNDS/"..LANGUAGE.."/TELEM/AVFM"..sValue.."A.wav") -- old: AVFM"..(FmodeNr-1).."A.wav
+			playFile("/SOUNDS/"..LANGUAGE.."/TELEM/AVFM"..sValue.."A.wav") -- old: AVFM"..(FmodeNr-1).."A.wav
 	  elseif sType == "APM_STATUS" then
-	    playFile(_directory.sounds.."SEV"..sValue..".wav")
-	    playFile(_directory.sounds.."MSG"..sValue2..".wav") -- old: MSG"..apm_status_message.textnr..".wav
+			--playFile("/SOUNDS/"..LANGUAGE.."/TELEM/SEV"..sValue..".wav")
+	    --playFile("/SOUNDS/"..LANGUAGE.."/TELEM/MSG"..sValue2..".wav") -- old: MSG"..apm_status_message.textnr..".wav
+			playFile("/SOUNDS/en/TELEM/SEV"..sValue..".wav")
+	    playFile("/SOUNDS/en/TELEM/MSG"..sValue2..".wav") -- old: MSG"..apm_status_message.textnr..".wav
 	  end
 	end
 end
@@ -194,16 +194,6 @@ local function getTelemetry()
 			--data.cells_num = index
 		end
 	end
-	--data.c1          = getValue("Z1")			-- 1. Cell											 -- not needed anymore
-	--data.c2          = getValue("Z2")			-- 2. Cell											 -- not needed anymore
-	--data.c3          = getValue("Z3")			-- 3. Cell											 -- not needed anymore
-	--data.c4          = getValue("Z4")			-- 4. Cell											 -- not needed anymore
-	--data.c5          = getValue("Z5")			-- 5. Cell											 -- not needed anymore
-	--data.c6          = getValue("Z6")			-- 6. Cell											 -- not needed anymore
-	--data.c7          = getValue("Z7")			-- 7. Cell											 -- not needed anymore
-	--data.c8          = getValue("Z8")			-- 8. Cell											 -- not needed anymore
-	--data.cmin        = getValue("Cmin")		-- lowest current Cell Voltage	 -- not needed anymore
-	--data.cmin_min    = getValue("Cmin-")	-- lowest Cell Voltage					 -- not needed anymore
 
 	-- Consumtion Values
 	data.mah         = getValue("mAh")			-- mAh
@@ -225,9 +215,7 @@ local function getTelemetry()
 	data.gps_heading = getValue("Hdg")			-- current heading
 	data.gps_speed   = getValue("GSpd")			-- GPS Speed (m/s)
 	--data.gps_alt     = getValue("GAlt")			-- GPS Alt						-- currently not used
-	--data.gps_altmax  = getValue("GAltM")			-- max. Alt					-- currently not used
 	--data.gps_altmax  = getValue("GAlt+")			-- max. GPS Alt			-- currently not used
-	--data.distance    = getValue("distance")			-- GPS distance		-- not used
 	data.hdop        = getValue("A2")/10			-- HDOP
 
 
@@ -237,7 +225,6 @@ local function getTelemetry()
 
 	-- Vario Sensor Values
 	data.alt         = getValue("Alt")			-- ap_bar_altitude
-	--data.altmax      = getValue("AltM")			-- max altitude				-- currently not used
 	data.altmax      = getValue("Alt+")			-- max altitude
 	data.vario       = getValue("VSpd")			-- ap_climb_rate
 
@@ -272,7 +259,6 @@ local function getTelemetry()
 	--data.throttle    = data.rpm%200				-- Throttle in percent (0 = 0, 100, 100)							-- currently not used
 	--data.battremain  = (data.rpm - data.throttle)/2		-- Remaining Bat. capacitiy in percent		-- currently not used
 
-	--return data
 end
 
 --------------------------------------------------------------------------------
@@ -321,7 +307,7 @@ local function doTelemetry()
 	end
 
   if data.FMod>NumFlighModes then
-  	data.FMod=13
+  	data.FMod=12
   end
   if data.FMod~=last_flight_mode then
 		playSound("FM", data.FMod, "")
@@ -380,7 +366,7 @@ end
 local function calcWattHs()
 	localtime = localtime + (getTime() - oldlocaltime)
 	if localtime >=10 then --100 ms
-	  watthours = watthours + ( getValue("Watt") * (localtime/360000) )
+	  watthours = watthours + ( data.watt * (localtime/360000) )
 	  localtime = 0
 	end
 	oldlocaltime = getTime()
@@ -617,14 +603,11 @@ end
 -- INIT FUNCTION
 --------------------------------------------------------------------------------
 local function init()
-	local i
-	for i=1, 99 do
-	  if FlightMode[i] == nil then
-	    NumFlighModes = i-1
-	  end
+	for index,value in pairs(FlightMode) do
+		NumFlighModes = index
 	end
 
-	data.cmin = 10
+	data.cmin = 5
 	data.cmin_min = data.cmin
 
 	if model.getGlobalVariable(6, used_flightmode) == 1 then

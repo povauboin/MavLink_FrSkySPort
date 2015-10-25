@@ -51,10 +51,6 @@ end
 local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, celldropmvolts)
 	repeattime = repeattimeseconds*100
 	drop = celldropmvolts/10
-	hornfile=""
-	if horn>0 then
-		hornfile="SOUNDS/en/TELEM/ALARM"..horn.."K.wav"
-	end
 
 	newtime=getTime()
 	if newtime-lastimeplaysound>=repeattime then
@@ -65,7 +61,6 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 		--end
 
 		lastimeplaysound = newtime
-
 		firstitem = math.floor(cellmin)
 		miditem = math.floor((cellmin-firstitem) * 10)
 		lastitem = round((((cellmin-firstitem) * 10)-math.floor(((cellmin-firstitem) * 10))) *10)
@@ -73,7 +68,7 @@ local function run_func(voltcritcal, horn, voltwarnlevel, repeattimeseconds, cel
 		if cellmin<=2.0 then --silent
 		elseif cellmin<=voltcritcal/100 then --critical
 			if horn>0 then
-				playFile(hornfile)
+				playFile("/SOUNDS/en/TELEM/ALARM"..horn.."K.wav")
 				playFile("/SOUNDS/en/TELEM/CRICM.wav")
 			else
 				playFile("/SOUNDS/en/TELEM/CRICM.wav")
