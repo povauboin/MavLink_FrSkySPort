@@ -92,7 +92,6 @@ local apm_status_message = {severity = 0, textid = 0, timestamp = 0, last_played
 
 local lastArmed   		 = 0
 local last_flight_mode = 0
-local NumFlighModes 	 = 99
 
 local localtime      	 = 0
 local oldlocaltime   	 = 0
@@ -306,7 +305,7 @@ local function doTelemetry()
 	  end
 	end
 
-  if data.FMod>NumFlighModes then
+  if FlightMode[data.FMod] == nil then
   	data.FMod=12
   end
   if data.FMod~=last_flight_mode then
@@ -381,7 +380,7 @@ function toppanel()
 	if data.armed == 1 then
 	  lcd.drawText(1, 0, (FlightMode[data.FMod]), INVERS)
 	else
-	  lcd.drawText(1, 0, (FlightMode[data.FMod]), INVERS+BLINK)
+		lcd.drawText(1, 0, (FlightMode[data.FMod]), INVERS+BLINK)
 	end
 	lcd.drawText(134, 0, "TX:", INVERS)
 	lcd.drawNumber(160, 0, data.txbt, 0+PREC1+INVERS)
@@ -603,9 +602,6 @@ end
 -- INIT FUNCTION
 --------------------------------------------------------------------------------
 local function init()
-	for index,value in pairs(FlightMode) do
-		NumFlighModes = index
-	end
 
 	data.cmin = 5
 	data.cmin_min = data.cmin
