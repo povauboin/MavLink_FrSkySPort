@@ -27,7 +27,7 @@
 --
 --------------------------------------------------------------------------------
 -- Date of last Change: 2015/09/22
--- Version: 0.40
+-- Version: 0.41
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ local function playSound(sType, sValue, sValue2)
 	    end
 	  elseif sType == "FM" then
 			--playFile("/SOUNDS/"..LANGUAGE.."/TELEM/AVFM"..sValue.."A.wav") -- old: AVFM"..(FmodeNr-1).."A.wav
-			playFile("/SOUNDS/"..LANGUAGE.."/TELEM/AVFM"..sValue.."A.wav") -- old: AVFM"..(FmodeNr-1).."A.wav
+			playFile("/SOUNDS/en/TELEM/AVFM"..sValue.."A.wav") -- old: AVFM"..(FmodeNr-1).."A.wav
 	  elseif sType == "APM_STATUS" then
 			--playFile("/SOUNDS/"..LANGUAGE.."/TELEM/SEV"..sValue..".wav")
 	    --playFile("/SOUNDS/"..LANGUAGE.."/TELEM/MSG"..sValue2..".wav") -- old: MSG"..apm_status_message.textnr..".wav

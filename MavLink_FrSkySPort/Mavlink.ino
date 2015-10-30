@@ -496,6 +496,11 @@ void _MavLink_receive() {
             parseStatusText_v3_2(statustext.severity, statustext.text);
           }
 
+          #ifdef SEND_STATUS_TEXT_MESSAGE
+            sprintf(status_text_buffer, "%d%s", statustext.severity & 0x7, statustext.text);
+            //frsky_send_text_message(status_text_buffer);
+          #endif
+
           #ifdef DEBUG_APM_STATUSTEXT
             debugSerial.print(millis());
             debugSerial.print("\tAC_VERSION: ");

@@ -134,6 +134,7 @@
 //#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
 //#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - enable if you use TEENSY_LED_SUPPORT.
 //#define USE_TEENSY_LED_SUPPORT                          // Enable LED-Controller functionality
+//#define SEND_STATUS_TEXT_MESSAGE                        // Enable sending Status Text Messages to RC
 
 /*
  * *******************************************************
@@ -169,6 +170,7 @@
 //#define DEBUG_FrSkySportTelemetry_VARIO
 //#define DEBUG_FrSkySportTelemetry_ACC
 //#define DEBUG_FrSkySportTelemetry_FLIGHTMODE
+//#define DEBUG_FrSkySportTelemetry_TXTMSG
 
 // *** DEBUG other things:
 //#define DEBUG_AVERAGE_VOLTAGE
@@ -331,6 +333,15 @@ bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initial
   LSCM lscm(MAXCELLS, 13, 0.99);
 #endif
 
+/*
+ * *******************************************************
+ * *** Needed Variable for Status Text Message         ***
+ * *******************************************************
+ */
+#ifdef SEND_STATUS_TEXT_MESSAGE
+  char status_text_buffer[128];
+#endif
+
 
 /*
  * *******************************************************
@@ -344,8 +355,6 @@ bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initial
  * *******************************************************
  */
 void setup()  {
-
- // delay(100000);
 
   #ifdef USE_SINGLE_CELL_MONITOR
     // Set your custom values (double) for LSCM software divider here.

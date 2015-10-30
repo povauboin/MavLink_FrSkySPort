@@ -52,6 +52,7 @@
 #include "FrSkySportSensorVario.h"
 #include "FrSkySportSingleWireSerial.h"
 #include "FrSkySportTelemetry.h"
+#include "FrSkySportSensorStatus.h"     // Statustext Message
 
 /*
  * *******************************************************
@@ -62,6 +63,11 @@
   FrSkySportSensorFas fas;                               // Create FAS sensor with default ID
 #endif
 FrSkySportSensorFuel fuel;                             // Create FUEL sensor with default ID
+
+#ifdef SEND_STATUS_TEXT_MESSAGE
+  FrSkySportSensorStatus txtmsg(FrSkySportSensor::ID9);                             // Create FUEL sensor with given ID
+#endif
+
 #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
   FrSkySportSensorFlvss flvss1;                          // Create FLVSS sensor with default ID
   #if (MAXCELLS > 6)
@@ -93,7 +99,7 @@ float FASCurrent = 0.0;
 float FASVoltage = 0.0;
 
 unsigned long FAS_timer = 0;
-int8_t transmit = 0;
+//int8_t transmit = 0;
 
 // Scale factor for roll/pitch:
 // We need to scale down 360 deg to fit when max value is 256, and 256 equals 362 deg
@@ -113,27 +119,25 @@ unsigned long GPS_debug_time = 500;
 void FrSkySPort_Init()
 {
   // Configure the telemetry serial port and sensors (remember to use & to specify a pointer to sensor)
+  telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &gps, &rpm, &sp2uart, &vario, &fuel, &acc);
+
+  #ifndef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
+    telemetry.addSensor( &fas );
+  #endif
+
   #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
     #if (MAXCELLS <= 6)
-      #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
-        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-      #else
-        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-      #endif
+      telemetry.addSensor( &flvss1 );
     #else
-      #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
-        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-      #else
-        telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &flvss1, &flvss2, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-      #endif
-    #endif
-  #else
-    #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
-      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
-    #else
-      telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &fas, &gps, &sp2uart, &rpm, &vario, &fuel, &acc);
+      telemetry.addSensor( &flvss1 );
+      telemetry.addSensor( &flvss2 );
     #endif
   #endif
+
+  #ifdef SEND_STATUS_TEXT_MESSAGE
+    telemetry.addSensor( &txtmsg );
+  #endif
+
 }
 
 /*
@@ -206,6 +210,14 @@ void FrSkySPort_Process()
    * *****************************************************
    */
   FrSkySportTelemetry_FUEL();
+
+  /*
+   * *****************************************************
+   * *** Set TextMsg sensor data ()                    ***
+   * *****************************************************
+   */
+  FrSkySportTelemetry_TXTMSG();
+
   /*
    * *****************************************************
    * *** Send the telemetry data                       ***
@@ -486,7 +498,7 @@ void FrSkySportTelemetry_RPM() {
     {
        // Reset severity and text-message after we have sent the message
        ap_status_severity = 0;
-       ap_status_text_id = 0;
+       //ap_status_text_id = 0;
     }
   }
 
@@ -600,6 +612,24 @@ void FrSkySportTelemetry_FUEL() {
   if(ap_custom_mode >= 0) {
     fuel.setData(ap_custom_mode);
   }
+}
+
+/*
+ * *****************************************************
+ * *** Set TextMsg sensor data ()                    ***
+ * *****************************************************
+ */
+void FrSkySportTelemetry_TXTMSG() {
+  #ifdef SEND_STATUS_TEXT_MESSAGE
+    #ifdef DEBUG_FrSkySportTelemetry_TXTMSG
+      txtmsg.setDebug(true);
+    #endif
+    if(ap_status_text_id != 0) {
+      txtmsg.send_text_message(status_text_buffer);
+      ap_status_text_id = 0;
+    }
+
+  #endif
 }
 
 
