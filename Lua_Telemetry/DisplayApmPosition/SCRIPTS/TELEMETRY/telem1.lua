@@ -180,9 +180,10 @@ local function getTelemetry()
 	data.curr        = getValue("Curr")			-- Current (mA)
 
 	-- FLVSS Sensor Values
+	data.cmin = 5
+	data.cells_num = 0
 	data.cells       = getValue("Cels")			-- Cells Voltage
 	if (type(data.cells) == "table") then
-		data.cmin = 10
 		for index,value in pairs(data.cells) do
 			if value < data.cmin then
 				data.cmin = value
@@ -190,7 +191,32 @@ local function getTelemetry()
 			if value < data.cmin_min then
 				data.cmin_min = value
 			end
-			--data.cells_num = index
+			data.cells_num = data.cells_num + 1
+		end
+	else
+		data.cells1       = getValue("Bat1")			-- Cells Voltage
+		data.cells2       = getValue("Bat2")			-- Cells Voltage
+		if (type(data.cells1) == "table") then
+			for index,value in pairs(data.cells1) do
+				if value < data.cmin then
+					data.cmin = value
+				end
+				if value < data.cmin_min then
+					data.cmin_min = value
+				end
+				data.cells_num = data.cells_num + 1
+			end
+		end
+		if (type(data.cells2) == "table") then
+			for index,value in pairs(data.cells2) do
+				if value < data.cmin then
+					data.cmin = value
+				end
+				if value < data.cmin_min then
+					data.cmin_min = value
+				end
+				data.cells_num = data.cells_num + 1
+			end
 		end
 	end
 
@@ -203,10 +229,10 @@ local function getTelemetry()
 	-- added on opentx commit c0dee366c0ae3f9776b3ba305cc3eb6bdeec593a
 	gpsLatLon        = getValue("GPS")			-- GPS Data
 	if (type(gpsLatLon) == "table") then
-	  if gpsLatLon["lat"] ~= NIL then
+	  if gpsLatLon["lat"] ~= nil then
 	    data.lat = gpsLatLon["lat"]
 	  end
-	  if gpsLatLon["lon"] ~= NIL then
+	  if gpsLatLon["lon"] ~= nil then
 	    data.lon = gpsLatLon["lon"]
 	  end
 	end
