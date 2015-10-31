@@ -498,7 +498,7 @@ void FrSkySportTelemetry_RPM() {
     {
        // Reset severity and text-message after we have sent the message
        ap_status_severity = 0;
-       //ap_status_text_id = 0;
+       ap_status_text_id = 0;
     }
   }
 
@@ -624,9 +624,9 @@ void FrSkySportTelemetry_TXTMSG() {
     #ifdef DEBUG_FrSkySportTelemetry_TXTMSG
       txtmsg.setDebug(true);
     #endif
-    if(ap_status_text_id != 0) {
+    if(status_text_buffer_id != 0) {
       txtmsg.send_text_message(status_text_buffer);
-      ap_status_text_id = 0;
+      status_text_buffer_id = 0;
     }
 
   #endif

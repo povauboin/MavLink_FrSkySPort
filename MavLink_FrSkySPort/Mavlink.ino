@@ -498,6 +498,7 @@ void _MavLink_receive() {
 
           #ifdef SEND_STATUS_TEXT_MESSAGE
             sprintf(status_text_buffer, "%d%s", statustext.severity & 0x7, statustext.text);
+            status_text_buffer_id = ap_status_text_id;
             //frsky_send_text_message(status_text_buffer);
           #endif
 

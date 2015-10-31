@@ -145,13 +145,17 @@ local function init()
     }
 end
 
-local function run()
-	local loopStartTime = getTime()
+local function background()
+  local loopStartTime = getTime()
 --  if loopStartTime > (lastTime + 500) then
   if loopStartTime > (lastTime + 100) then
       checkForNewMessage()
       lastTime = loopStartTime
   end
+end
+
+local function run()
+  background()
   lcd.clear()
   --toppanel()
   checkForNewMessage()
@@ -164,4 +168,4 @@ local function run()
   end
 end
 
-return {init=init, run=run}
+return {init=init, run=run, background=background}

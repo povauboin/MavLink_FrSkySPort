@@ -289,6 +289,7 @@ int32_t     ap_climb_rate         = 0;    // 100 = 1m/s
 uint16_t    ap_status_severity    = 255;
 uint16_t    ap_status_send_count  =   0;
 uint16_t    ap_status_text_id     =   0;
+uint16_t    status_text_buffer_id =   0;
 mavlink_statustext_t statustext;
 /*
   MAV_SEVERITY_EMERGENCY=0,     System is unusable. This is a "panic" condition.
