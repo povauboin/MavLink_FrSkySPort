@@ -117,7 +117,7 @@
 			    "Flip Mode",
 			    "Auto Tune",
 			    "Position Hold",
-                            "Brake"}
+                "Brake"}
 
 	local apm_status_message = {severity = 0, textnr = 0, timestamp=0}
 
@@ -495,7 +495,7 @@
 --FlightModes
 	local function Flight_modes()
           FmodeNr = getValue("Fuel")+1
-	  if FmodeNr<1 or FmodeNr>17 then
+	  if FmodeNr<1 or FmodeNr>18 then
 	    FmodeNr=13
 	  end
 
