@@ -115,7 +115,7 @@ unsigned long GPS_debug_time = 500;
 void FrSkySPort_Init()
 {
   // Configure the telemetry serial port and sensors (remember to use & to specify a pointer to sensor)
-  #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
+  #if defined USE_SINGLE_CELL_MONITOR || defined USE_FLVSS_FAKE_SENSOR_DATA
     #if (MAXCELLS <= 6)
       #ifdef USE_FAS_SENSOR_INSTEAD_OF_APM_DATA
         telemetry.begin(FrSkySportSingleWireSerial::SERIAL_1, &flvss1, &gps, &sp2uart, &rpm, &vario, &fuel, &acc, &ass);
