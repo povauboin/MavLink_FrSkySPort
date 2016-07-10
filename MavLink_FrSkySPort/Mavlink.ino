@@ -101,6 +101,14 @@ void Mavlink_config_connection() {
   len = mavlink_msg_to_send_buffer(buf, &msg);
   _MavLinkSerial.write(buf,len);
   delay(10);
+  mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_POSITION, MSG_RATE, START);
+  len = mavlink_msg_to_send_buffer(buf, &msg);
+  _MavLinkSerial.write(buf,len);
+  delay(10);
+  mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_EXTRA1, MSG_RATE, START);
+  len = mavlink_msg_to_send_buffer(buf, &msg);
+  _MavLinkSerial.write(buf,len);
+  delay(10);
   mavlink_msg_request_data_stream_pack(mavlink_system.sysid,mavlink_system.compid,&msg,AP_SYSID,AP_CMPID,MAV_DATA_STREAM_EXTRA2, MSG_RATE, START);
   len = mavlink_msg_to_send_buffer(buf, &msg);
   _MavLinkSerial.write(buf,len);
