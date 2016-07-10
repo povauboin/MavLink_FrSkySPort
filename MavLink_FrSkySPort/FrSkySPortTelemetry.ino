@@ -98,12 +98,10 @@ unsigned long FAS_timer = 0;
 int8_t transmit = 0;
 
 // Scale factor for roll/pitch:
-// We need to scale down 360 deg to fit when max value is 256, and 256 equals 362 deg
-float scalefactor = 360.0/((362.0/360.0)*256.0);
-
-uint32_t handle_A2_A3_value(uint32_t value)
+// Convert [-180,180] to [0,255]
+uint32_t convert_A3A4_angle(uint32_t value)
 {
-  return (value *330-165)/0xFF;
+  return (uint32_t)(((value + 180) % 360) / 360.0 * 256) % 256;
 }
 
 unsigned long GPS_debug_time = 500;
@@ -526,13 +524,13 @@ void FrSkySportTelemetry_A3A4() {
   #ifdef DEBUG_FrSkySportTelemetry_A3A4
     debugSerial.print(millis());
     debugSerial.print("\tRoll Angle (A3): ");
-    debugSerial.print(handle_A2_A3_value((ap_roll_angle+180)/scalefactor));
+    debugSerial.print(convert_A3A4_angle(ap_roll_angle));
     debugSerial.print("\tPitch Angle (A4): ");
-    debugSerial.print(handle_A2_A3_value((ap_pitch_angle+180)/scalefactor));
+    debugSerial.print(convert_A3A4_angle(ap_pitch_angle));
     debugSerial.println();
   #endif
-  sp2uart.setData(handle_A2_A3_value((ap_roll_angle+180)/scalefactor),     // Roll Angle
-                  handle_A2_A3_value((ap_pitch_angle+180)/scalefactor));   // Pitch Angle
+  sp2uart.setData(convert_A3A4_angle(ap_roll_angle),     // Roll Angle
+                  convert_A3A4_angle(ap_pitch_angle));   // Pitch Angle
 
 }
 
