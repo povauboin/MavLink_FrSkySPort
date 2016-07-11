@@ -121,8 +121,8 @@
 #define GB_SYSID            71      // gimbal system id
 #define GB_CMPID            67      // gimbal component id
 
-//#define AC_VERSION          3.2
-#define AC_VERSION          3.3
+#define AC_VERSION          3.2  // Arducopter Version
+//#define AC_VERSION          3.3
 /*
  * *******************************************************
  * *** Enable Addons:                                  ***
@@ -130,8 +130,8 @@
  */
 //#define USE_FAS_SENSOR_INSTEAD_OF_APM_DATA              // Enable  if you use a FrSky FAS   Sensor.
 //#define USE_FLVSS_FAKE_SENSOR_DATA                      // Enable  if you want send fake cell info calculated from VFAS, please set MAXCELLs according your Number of LiPo Cells
-//#define USE_SINGLE_CELL_MONITOR                         // Disable if you use a FrSky FLVSS Sensor. - Setup in LSCM Tab
-//#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
+#define USE_SINGLE_CELL_MONITOR                         // Disable if you use a FrSky FLVSS Sensor. - Setup in LSCM Tab
+#define USE_AP_VOLTAGE_BATTERY_FROM_SINGLE_CELL_MONITOR // Use this only with enabled USE_SINGLE_CELL_MONITOR
 //#define USE_RC_CHANNELS                                 // Use of RC_CHANNELS Informations ( RAW Input Valus of FC ) - enable if you use TEENSY_LED_SUPPORT.
 //#define USE_TEENSY_LED_SUPPORT                          // Enable LED-Controller functionality
 
@@ -328,7 +328,7 @@ bool          telemetry_initialized =     0;  // Is FrSkySPort Telemetry initial
  */
 #ifdef USE_SINGLE_CELL_MONITOR
   // construct and init LSCM (LipoSingleCellMonitor)
-  LSCM lscm(MAXCELLS, 13, 0.99);
+  LSCM lscm(MAXCELLS, 12, 0.99);
 #endif
 
 
@@ -350,8 +350,15 @@ void setup()  {
   #ifdef USE_SINGLE_CELL_MONITOR
     // Set your custom values (double) for LSCM software divider here.
     // Dependent to your resistor network you can call this function with 1-12 parameter.
-
-    //lscm.setCustomCellDivider(1905.331599479, 929.011553273, 615.667808219); // This is an example for three cells
+    /*
+    In [59]: 2**12 / 3.333 / (4700 + 1000) * 1000.0
+    Out[59]: 215.60050741916297
+    In [60]: 2**12 / 3.333 / (4700 + 10000) * 4700.0
+    Out[60]: 392.9209247455358
+    In [61]: 2**12 / 3.333 / (47000 + 10000) * 10000.0
+    Out[61]: 215.60050741916297
+    */
+    lscm.setCustomCellDivider(211.53, 393.32, 214.25); // Measured by experiment
   #endif
 
 
